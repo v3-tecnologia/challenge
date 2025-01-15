@@ -34,7 +34,7 @@ class GyroscopeService(private val sensorManager: SensorManager, database: Embar
 
     fun sendToAPI(data: GyroscopeData) {
         CoroutineScope(Dispatchers.Default).launch {
-            var gyroscopeDatas: List<GyroscopeData>  = gyroscopeRepository.readAllData.value as List<GyroscopeData>
+            var gyroscopeDatas: List<GyroscopeData> = gyroscopeRepository.GetAllGyroscope()
             Log.d("Total in database", gyroscopeDatas.count().toString())
             for(data in gyroscopeDatas){
                 Log.d("In Database", data.toString())

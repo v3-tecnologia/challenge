@@ -11,8 +11,8 @@ import androidx.room.Query
 interface GyroscopeDataDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(data: GyroscopeData): Long
+    fun insert(data: GyroscopeData): Long
 
     @Query("SELECT * FROM gyroscope ORDER BY timestamp DESC")
-    suspend fun GetAll(): LiveData<List<GyroscopeData>>
+    suspend fun GetAll(): List<GyroscopeData>
 }

@@ -18,7 +18,7 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        database = EmbarcadoDatabase.getInstance(applicationContext)
+        database = EmbarcadoDatabase.getInstance(this)
         orchestratorServices = OrchestratorService(getSystemService(SENSOR_SERVICE) as SensorManager, database)
 
         startSensorExecute()
