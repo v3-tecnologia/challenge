@@ -7,7 +7,7 @@ import java.sql.Timestamp
 @Entity(tableName = "photo")
 data class PhotoData(
     @PrimaryKey(autoGenerate = true) override val id: Long,
-    override val timestamp: Timestamp,
+    override val timestamp: Long,
     override val deviceId: String,
     val photoPath: String
 ) : BaseData(id, timestamp, deviceId)
