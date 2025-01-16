@@ -2,7 +2,6 @@ package Datas
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.sql.Timestamp
 
 @Entity(tableName = "gps")
 data class GpsData(
@@ -11,4 +10,8 @@ data class GpsData(
     override val deviceId: String,
     val latitude: Double,
     val longitude: Double,
-) : BaseData(id, timestamp, deviceId)
+) : BaseData(id, timestamp, deviceId){
+    override fun toString(): String {
+        return "Timestamp: ${timestamp} - Latitude: ${latitude}, Longitude: ${longitude}"
+    }
+}

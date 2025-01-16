@@ -4,22 +4,25 @@ import Database.EmbarcadoDatabase
 import Database.GyroscopeRepository
 import Datas.GyroscopeData
 import Devices.GyroscopeSensor
+import Network.ApiService
+import android.content.Context
 import android.hardware.SensorManager
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class GyroscopeService(private val sensorManager: SensorManager, database: EmbarcadoDatabase) : IService {
-    private val gyroscopeSensor = GyroscopeSensor(sensorManager)
+class GyroscopeService(private val context: Context, database: EmbarcadoDatabase) : IService {
+    private val gyroscopeSensor = GyroscopeSensor(context.getSystemService(Context.SENSOR_SERVICE) as SensorManager)
     private val gyroscopeRepository = GyroscopeRepository(database.gyroscopeDataDao())
+    private val api = ApiService()
 
     override fun Execute() {
         gyroscopeSensor.read{
             gyroscopeData ->
 
             saveOnDatabase(gyroscopeData)
-            sendToAPI(gyroscopeData)
+            sendToAPI()
         }
     }
 
@@ -32,14 +35,19 @@ class GyroscopeService(private val sensorManager: SensorManager, database: Embar
         }
     }
 
-    fun sendToAPI(data: GyroscopeData) {
+    fun sendToAPI() {
         CoroutineScope(Dispatchers.Default).launch {
             var gyroscopeDatas: List<GyroscopeData> = gyroscopeRepository.GetAllGyroscope()
-            Log.d("Total in database", gyroscopeDatas.count().toString())
+            Log.d("Total Gyroscope data in database", gyroscopeDatas.count().toString())
             for(data in gyroscopeDatas){
-                Log.d("In Database", data.toString())
+                try {
+                    //api.sendGyroscopeData(data)
+                    Log.d(javaClass.simpleName, "data: ${data.toString()}")
+                }
+                catch(ex: Exception){
+                    Log.e(ex.javaClass.simpleName, "Erro ao enviar dados ${ex.message}")
+                }
             }
         }
-
     }
 }

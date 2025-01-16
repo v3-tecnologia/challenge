@@ -19,7 +19,7 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
 
         database = EmbarcadoDatabase.getInstance(this)
-        orchestratorServices = OrchestratorService(getSystemService(SENSOR_SERVICE) as SensorManager, database)
+        orchestratorServices = OrchestratorService(this, database)
 
         startSensorExecute()
 

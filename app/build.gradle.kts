@@ -47,6 +47,7 @@ dependencies {
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.work:work-runtime-ktx:2.10.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -54,4 +55,5 @@ dependencies {
     implementation("androidx.camera:camera-core:1.4.0")
     implementation("androidx.camera:camera-lifecycle:1.4.0")
     implementation("androidx.camera:camera-view:1.4.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 }
