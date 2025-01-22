@@ -22,6 +22,17 @@ Está realizada a abstração arquitetural, inibindo algumas implementaçẽos
 puramente técnicas para esta resolução. Poderão ser observadas aos
 comentários.
 
+
+## Implementações
+
+Muitas implementações são de natureza arquiteturais, inibindo muitos outros detalhes de natureza puramente técnica na execução de determinados procedimentos.
+
+- implementação de Mediator de serviços de controlador de procedimentos concorrentes, e finalizador dos procedimentos concorrentes;
+- implementação de Decorator para procedimentos de requisições HTTP, e envio de requisições concorrentes;
+- implementação de Service para procedimentos de obter dados do sensor;
+- implementação de Service para procedimento de obter Mac do usuário;
+- implementação de service de operações de GPS;
+
 ## Execução
 
 Desenvolvido em ambiente trivial de execução como Android Studio.
