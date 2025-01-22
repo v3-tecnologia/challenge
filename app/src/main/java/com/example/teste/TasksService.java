@@ -25,7 +25,15 @@ public class TasksService extends Service {
     private Set<Callable<String>> callables = new HashSet<Callable<String>>();
     private int nRequestsSends = 0;
 
+    private MyGpsService myGpsService;
+    private SensorService sensorService;
+
     public TasksService() {
+    }
+
+    public TasksService(MyGpsService myGpsService, SensorService sensorService){
+        this.myGpsService = myGpsService;
+        this.sensorService = sensorService;
     }
 
     @Override
@@ -37,8 +45,14 @@ public class TasksService extends Service {
     /* \/:
      * introduzir listas de procedimentos a serem realizados concorrentemente;
      * */
-    private void addCallsTasks(){
+    void addCallsRequests(){
         RequestHTTPService request = new RequestHTTPService();
+
+        /*\/ */
+        double lat = myGpsService.getLatitude();
+        double lon = myGpsService.getLongitude();
+        /*\/ */
+        String cord = sensorService.getCordinates();
 
         callables.add(new Callable<String>() {
             public String call() throws Exception {
@@ -76,11 +90,13 @@ public class TasksService extends Service {
      * invocar todos os procedimentos a serem realizados concorrentemente;
      * */
     public void invokeAllTasks() throws ExecutionException, InterruptedException {
-        String result = executorService.invokeAny(callables);
-        System.out.println("result = " + result);
+        if(callables.size() > 0) {
+            String result = executorService.invokeAny(callables);
+            System.out.println("result = " + result);
 
-        /* finalizador dos procedimentos concorrentes; */
-        executorService.shutdown();
+            /* finalizador dos procedimentos concorrentes; */
+            executorService.shutdown();
+        }
     }
 
     /* Saber se todas as requisições foram enviadas com sucesso;

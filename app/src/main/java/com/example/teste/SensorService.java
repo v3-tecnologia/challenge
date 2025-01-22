@@ -23,6 +23,10 @@ import android.provider.Settings;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/* Service para procedimentos em obter dados de sensores android;
+ * Apenas uma arquiteura elementar do service, inibindo muitos outros detalhes
+ * de natureza puramente técnica;
+ * */
 public class SensorService extends Activity implements SensorEventListener {
 
     private SensorManager sensorManager = null;

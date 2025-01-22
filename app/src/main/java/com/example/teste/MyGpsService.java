@@ -17,6 +17,10 @@ import android.Manifest;
 
 import androidx.core.app.ActivityCompat;
 
+/* Service para procedimentos em obter dados de GPS do android;
+ * Apenas uma arquiteura elementar do service, inibindo muitos outros detalhes
+ * de natureza puramente técnica;
+ * */
 public class MyGpsService extends Service implements LocationListener {
 
     private Context mContext;

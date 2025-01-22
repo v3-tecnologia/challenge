@@ -47,7 +47,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
 //            getLocation();
-            getGyros();
+//            getGyros();
+
+            /*\/ inicialização de services para envio de requisições assíncronas ;*/
+            MyGpsService myGpsService = new MyGpsService(MainActivity.this);
+            SensorService sensorService = new SensorService();
+            TasksService tasks = new TasksService(myGpsService, sensorService);
+            tasks.addCallsRequests();
+            tasks.invokeAllTasks();
+
         } catch (Exception e){
             e.printStackTrace();
         }
