@@ -1,0 +1,66 @@
+[
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/xml_data_extraction_rules.xml.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/mipmap-anydpi/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/mipmap-anydpi/ic_launcher.xml"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/xml_backup_rules.xml.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.v3.desafioembarcado.app-release-50:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.v3.desafioembarcado.app-main-51:/mipmap-mdpi/ic_launcher.webp"
+    }
+]
