@@ -20,7 +20,7 @@ Este teste tem um **propósito** bastante simples:
 
 > Nós queremos avaliar como você consegue transformar problemas em soluções através de código!
 
-**🚨 IMPORTANTE!** Se você entende que já possui algum projeto pessoal, ou contribuição em um projeto _open-source_ que contemple conhecimentos equivalentes aos que existem neste desafio, então, basta submeter o repositório explicando essa correlação!
+**🚨 IMPORTANTE!** Se você entende que já possui algum projeto pessoal, ou contribuição em um projeto _open-source_ que contemple conhecimentos equivalentes aos que existem neste v3pb-desafio, então, basta submeter o repositório explicando essa correlação!
 
 ## 🚀 Bora nessa!
 
@@ -77,9 +77,9 @@ Essas informações, depois de armazenadas devem estar disponíveis através de 
 
 A aplicação Android deverá rodar em Background, e coletar e enviar as informações descritas a cada 10 segundos.
 
-### Qual parte do desafio devo realizar?
+### Qual parte do v3pb-desafio devo realizar?
 
-Você deve realizar somente o desafio para a vaga que se candidatou.
+Você deve realizar somente o v3pb-desafio para a vaga que se candidatou.
 
 Caso tenha sido a vaga de Android Embarcado, então resolva somente esta sessão.
 
