@@ -32,24 +32,26 @@ Content-Type: application/json
 
 ## 🚀 Bora nessa!
 
-Você deverá criar uma ferramenta CLI em Python para enviar comandos de ajuste de volume para os dispositivos embarcados.
+Você precisa automatizar o processo de ajuste de volume para os dispositivos embarcados. Como você fará isso? 
+
+Você pode criar uma ferramenta, um script, uma aplicação web, ou qualquer outra solução que considere adequada. Use a tecnologia que você tem mais familiaridade e que acredita ser a mais apropriada para resolver este problema.
 
 ## Níveis
 
 ### Nível 1
 
-Crie um programa que receba por parâmetro uma placa e um volume, e envie o comando para o dispositivo correspondente.
+Crie uma solução que permita ajustar o volume para um veículo específico.
 
 **Exemplo de uso:**
 ```
-python ajustar_volume.py --placa ABC1234 --volume 50
+./ajustar_volume --placa ABC1234 --volume 50
 ```
 
 ### Nível 2
 
-Modifique o programa para receber como parâmetro um arquivo CSV com todas as placas e os volumes correspondentes, e execute os comandos em batch.
+Modifique sua solução para processar múltiplos veículos de uma vez.
 
-**Exemplo de arquivo CSV:**
+**Exemplo de arquivo de entrada:**
 ```
 placa,volume
 ABC1234,50
@@ -59,18 +61,16 @@ GHI9012,40
 
 **Exemplo de uso:**
 ```
-python ajustar_volume.py --arquivo veiculos.csv
+./ajustar_volume --arquivo veiculos.csv
 ```
 
 ### Nível 3
 
 Implemente a execução paralela dos comandos para processar múltiplas requisições simultaneamente, tornando o processo mais eficiente.
 
-**Dica:** Utilize bibliotecas como `concurrent.futures` ou `asyncio` para implementar a paralelização.
-
 ### Nível 4
 
-Adicione validação de dados e tratamento de erros ao programa:
+Adicione validação de dados e tratamento de erros à sua solução:
 - Verifique se a placa está em um formato válido
 - Verifique se o volume está dentro do intervalo permitido (0-100)
 - Trate erros de conexão com o servidor
@@ -78,14 +78,14 @@ Adicione validação de dados e tratamento de erros ao programa:
 
 ### Nível 5
 
-Crie testes unitários para garantir que o programa funcione corretamente em diferentes cenários.
+Crie testes para garantir que sua solução funcione corretamente em diferentes cenários.
 
 ## 📝 Dicas
 
-- Utilize bibliotecas como `argparse` ou `click` para criar interfaces de linha de comando
-- Considere usar `pandas` para manipulação de arquivos CSV
+- Considere como sua solução será usada em um ambiente de produção
+- Pense na escalabilidade e manutenibilidade do código
 - Implemente um sistema de retry para lidar com falhas temporárias de conexão
-- Documente bem o código e crie um README explicando como usar a ferramenta
+- Documente bem o código e crie um README explicando como usar sua solução
 
 ## ⏰ Tempo para Entrega
 
