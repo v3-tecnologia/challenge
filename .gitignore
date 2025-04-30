@@ -1,0 +1,41 @@
+# Binaries
+/bin/
+/build/
+/dist/
+/*.exe
+/*.exe~
+/*.dll
+/*.so
+/*.dylib
+/*.test
+*.out
+
+# Go workspace files
+*.mod
+*.sum
+
+# IDE config
+.idea/
+*.iml
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env files
+.env
+.env.*
+
+# Test cache
+*.coverprofile
+*.test
+
+# AWS credentials (if accidentally placed)
+.aws/
+
+# Docker
+*.pid
+docker-compose.override.yml
