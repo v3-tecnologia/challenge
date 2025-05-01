@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "e8516664-e1a1-4f6a-b2ad-e4cbfb169b8e",
+		"name": "Challenge_Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44370260",
+		"_collection_link": "https://kaiquecampos.postman.co/workspace/Kaique-Campos's-Workspace~bb3a9b5b-ac3a-4cb8-8b16-4d1b3375aea2/collection/44370260-e8516664-e1a1-4f6a-b2ad-e4cbfb169b8e?action=share&source=collection_link&creator=44370260"
+	},
+	"item": [
+		{
+			"name": "http://127.0.0.1:8080/telemetry/gps",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"latitude\": -23.5475,\n    \"longitude\": 46.6361,\n    \"mac\": \"8C:16:45:8D:F3:7B\",\n    \"timestamp\": 1746110367207\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/telemetry/gps",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"telemetry",
+						"gps"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8080/telemetry/gyroscope",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"x\": 23.00,\n    \"y\": 52.00,\n    \"z\": 33.00,\n    \"mac\": \"8C:16:45:8D:F3:7B\",\n    \"timestamp\": 1746110367207\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/telemetry/gyroscope",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"telemetry",
+						"gyroscope"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8080/telemetry/photo",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"image_base_64\": \"iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABT0lEQVR4nO3ZsUoDQRBF0XcEJWJgEkVIsAcViMQFkpzDShvQhK4gYAvnQ5sHh51Znc7gUph/2Qzpd3Uz/d+dcBAAAAAAAAAAAAAPCxfMPu/O+zyPgL4Ir/w9YgHqwnV+Qj6kqY5H+aVVEY7VFEY7VVEY7VFEY7VVEY7VFEY7VVEY7VFEY7VVEY7VFEY7VXkofytVRGO1URjtVUQjtVURjtVUQjtVURjtVUQjtVURjtVUQjtVURjtVURrtf8c36Dfsddz6F+2fs/kl9wP6Ph3sQAAAAAAAAAAAAB8HP4BgA+6aY5J1s8sAAAAAElFTkSuQmCC\",\n    \"mac\": \"8C:16:45:8D:F3:7B\",\n    \"timestamp\": 1746110367207\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/telemetry/photo",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"telemetry",
+						"photo"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
