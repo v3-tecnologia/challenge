@@ -10,10 +10,6 @@
 /*.test
 *.out
 
-# Go workspace files
-*.mod
-*.sum
-
 # IDE config
 .idea/
 *.iml
