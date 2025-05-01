@@ -7,19 +7,25 @@ import (
 	"net/http"
 )
 
+var photoService = services.AddPhoto
+
+func SetPhotoService(service func(model models.PhotoModel) error) {
+	photoService = service
+}
+
 func SavePhoto(c *gin.Context) {
 	var photo models.PhotoModel
 
 	if err := c.ShouldBindJSON(&photo); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Incorrect or missing parameters"})
 		return
 	}
 
-	err := services.AddPhoto(photo)
+	err := photoService(photo)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving photo to database: " + err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"status": "Photo saved Successfully"})
+	c.JSON(http.StatusCreated, gin.H{"status": "Photo Saved Successfully"})
 }
