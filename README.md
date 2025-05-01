@@ -1,66 +1,68 @@
-<p align="center">
-    <img src="./.github/logo.png" width="200px">
-</p>
+# Cloud Challenge V3
 
-<h1 align="center" style="font-weight: bold;">Desafio Técnico da V3</h1>
+# Descrição
 
-## ❤️ Bem vindos
+Projeto realizado utilizando o framework GIN para a API rest.\
+Dados salvos em um database postgres dockerizado.\
+Testes unitários da api com httptest e do database com sqlmock
 
-Olá, tudo certo?
+Checagem de requisição com gin. Timestamps são enviados como UNIX int64 e convertidos ao salvar no database, somente MACs validos podem ser enviados.\
+Fotos são arquivadas como base64
 
-Seja bem vindo ao teste de seleção para novos colaboradores na V3!
 
-Estamos honrados que você tenha chegado até aqui!
+# Rodando Projeto
 
-Prepare aquele ☕️, e venha conosco codar e se divertir!
+## Configure o arquivo de ambiente:
+Pode utilizar .example.env removendo .example do nome do arquivo. Ou crie seu arquivo .env seguindo o exemplo.
 
-## 📚 Desafios Disponíveis
+## Rode o container
+```bash
+docker compose up --build
+```
 
-Este repositório contém três desafios diferentes, cada um focado em uma área específica:
+## Utilizando a API
+É possível importar ao postman a collection criada para esse projeto. [Challenge_Collection.postman_collection.json](Challenge_Collection.postman_collection.json)\
+Seguem as requisições em CURL:
+### 1. GPS
+```bash
+curl -X POST http://127.0.0.1:8080/telemetry/gps \
+  -H "Content-Type: application/json" \
+  -d '{
+    "latitude": -23.5475,
+    "longitude": 46.6361,
+    "mac": "8C:16:45:8D:F3:7B",
+    "timestamp": 1746110367207
+  }'
+```
 
-1. [Suporte Técnico](SUPPORT.md)
-2. [Desafio Backend](CLOUD.md)
-3. [Desafio Firmware](FIRMWARE.md)
-   
-## Poxa, outro teste?
+### 2. Gyroscope
+```bash
+curl -X POST http://127.0.0.1:8080/telemetry/gyroscope \
+  -H "Content-Type: application/json" \
+  -d '{
+    "x": 23.00,
+    "y": 52.00,
+    "z": 33.00,
+    "mac": "8C:16:45:8D:F3:7B",
+    "timestamp": 1746110367207
+  }'
 
-Nós sabemos que os processos de seleção podem ser ingratos! Você investe um tempão e no final pode não ser aprovado!
+```
 
-Aqui, nós presamos pela **transparência**!
+### 3. Photo
+```bash
+curl -X POST http://127.0.0.1:8080/telemetry/photo \
+  -H "Content-Type: application/json" \
+  -d '{
+    "image_base_64": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABT0lEQVR4nO3ZsUoDQRBF0XcEJWJgEkVIsAcViMQFkpzDShvQhK4gYAvnQ5sHh51Znc7gUph/2Qzpd3Uz/d+dcBAAAAAAAAAAAAAPCxfMPu/O+zyPgL4Ir/w9YgHqwnV+Qj6kqY5H+aVVEY7VFEY7VVEY7VFEY7VVEY7VFEY7VVEY7VFEY7VVEY7VFEY7VXkofytVRGO1URjtVUQjtVURjtVUQjtVUQjtVURjtVURjtVURrtf8c36Dfsddz6F+2fs/kl9wP6Ph3sQAAAAAAAAAAAAB8HP4BgA+6aY5J1s8sAAAAAElFTkSuQmCC",
+    "mac": "8C:16:45:8D:F3:7B",
+    "timestamp": 1746110367207
+  }'
+```
 
-Este teste tem um **propósito** bastante simples:
+## Rodando testes
+Testes foram criados para os handlers das apis e os services
 
-> Nós queremos avaliar como você consegue transformar problemas em soluções através de código!
-
-**🚨 IMPORTANTE!** Se você entende que já possui algum projeto pessoal, ou contribuição em um projeto _open-source_ que contemple conhecimentos equivalentes aos que existem neste desafio, então, basta submeter o repositório explicando essa correlação!
-
-## 🚀 Bora nessa!
-
-Este é um teste para analisarmos como você desempenha ao entender, traduzir, resolver e entregar um código que resolve um problema.
-
-### Dicas
-
-- Documente seu projeto;
-- Faça perguntas sobre os pontos que não ficaram claros para você;
-- Mostre a sua linha de raciocínio;
-- Trabalhe bem o seu README.md;
-  - Explique até onde implementou;
-  - Como o projeto pode ser executado;
-  - Como pode-se testar o projeto;
-
-### Como você deverá desenvolver?
-
-1. Faça um _fork_ deste projeto em seu GitHub pessoal;
-2. Realize as implementações de acordo com cada um dos níveis;
-3. Faça pequenos _commits_;
-4. Depois de sentir que fez o seu máximo, faça um PR para o repositório original.
-
-🚨 **IMPORTANTE!** Não significa que você precisa implementar **todos os níveis** para ser aprovado no processo! Faça até onde se sentir confortável.
-
-## ⏰ Tempo para Entrega
-
-Quanto antes você enviar, mais cuidado podemos ter na revisão do seu teste. Faça no seu tempo, mas mantenha a qualidade!
-
-**Mas não desista! Envie até onde conseguir.**
-
-Boa sorte! 🍀
+```bash
+go test ./...
+```
