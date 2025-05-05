@@ -19,11 +19,17 @@ func HandleErrorJSON(w http.ResponseWriter, err error) error {
 		payload.Name = "ErrorBadRequest"
 		WriteJSON(w, http.StatusBadRequest, payload)
 
+	case *appError.ErrorInternalServer:
+		payload.Action = customErr.GetAction()
+		payload.StatusCode = http.StatusInternalServerError
+		payload.Name = "ErrorInternalServer"
+		WriteJSON(w, http.StatusInternalServerError, payload)
+
 	default:
 		payload.Message = "internal server error"
 		payload.Action = "something went wrong on our end, please try again later"
 		payload.StatusCode = http.StatusInternalServerError
-		payload.Name = "ErrorInternalServerError"
+		payload.Name = "ErrorInternalServer"
 		WriteJSON(w, http.StatusInternalServerError, payload)
 	}
 
