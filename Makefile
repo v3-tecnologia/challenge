@@ -1,5 +1,5 @@
 MODULE=github.com/mkafonso/go-cloud-challenge
-PKG=./__tests__/entity
+PKG=./__tests__/entity ./__tests__/usecase
 
 .PHONY: test
 
