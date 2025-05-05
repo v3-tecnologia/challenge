@@ -25,13 +25,13 @@ func NewSaveGPSData(repo repository.GPSRepositoryInterface) *SaveGPSData {
 	return &SaveGPSData{repo: repo}
 }
 
-func (uc *SaveGPSData) Execute(ctx context.Context, req *SaveGPSDataRequest) (*SaveGPSDataResponse, error) {
-	timestamp, err := utils.ParseRFC3339(req.Timestamp)
+func (uc *SaveGPSData) Execute(ctx context.Context, data *SaveGPSDataRequest) (*SaveGPSDataResponse, error) {
+	timestamp, err := utils.ParseRFC3339(data.Timestamp)
 	if err != nil {
 		return nil, err
 	}
 
-	gps, err := entity.NewGPS(req.DeviceID, req.Latitude, req.Longitude, timestamp)
+	gps, err := entity.NewGPS(data.DeviceID, data.Latitude, data.Longitude, timestamp)
 	if err != nil {
 		return nil, err
 	}
