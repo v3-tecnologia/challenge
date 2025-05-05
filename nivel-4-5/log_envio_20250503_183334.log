@@ -1,0 +1,16 @@
+📘 Iniciando envio de comandos para o endpoint: https://httpbin.org/post
+📂 Lendo arquivo: veiculos-nok.csv
+--------------------------------------------
+[2025-05-03 18:33:34] 🚚 Processando veículo 1     : placa=ABC1234, volume=-1
+[2025-05-03 18:33:34] ⚠️  Volume inválido (-1) para placa ABC1234. Pulando...
+[2025-05-03 18:33:34] 🚚 Processando veículo 2     : placa=DEF5678, volume=200
+[2025-05-03 18:33:34] ⚠️  Volume inválido (200) para placa DEF5678. Pulando...
+[2025-05-03 18:33:34] 🚚 Processando veículo 3     : placa=GHI9012, volume=25
+[2025-05-03 18:33:34] 🚚 Processando veículo 4     : placa=EBP7Y!0, volume=12
+[2025-05-03 18:33:34] ⚠️  Placa inválida: EBP7Y!0. Pulando...
+[2025-05-03 18:33:35] ✅ Sucesso: comando enviado para GHI9012 (volume 25)
+--------------------------------------------
+📊 Execução finalizada.
+Total de veículos processados: 4
+Comandos enviados com sucesso: 1
+Falhas durante o envio:        3

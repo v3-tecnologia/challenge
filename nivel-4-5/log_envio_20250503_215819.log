@@ -1,0 +1,14 @@
+📘 Iniciando envio de comandos para o endpoint: http://localhost:8000/api/dispositivos/configurar
+📂 Lendo arquivo: veiculos-ok.csv
+--------------------------------------------
+[2025-05-03 21:58:19] 🚚 Processando veículo 1     : placa=ABC1234, volume=30
+[2025-05-03 21:58:19] 🚚 Processando veículo 3     : placa=GHI9012, volume=25
+[2025-05-03 21:58:19] 🚚 Processando veículo 2     : placa=DEF5678, volume=100
+[2025-05-03 21:58:19] ✅ Sucesso: comando enviado para ABC1234 (volume 30)
+[2025-05-03 21:58:19] ✅ Sucesso: comando enviado para GHI9012 (volume 25)
+[2025-05-03 21:58:19] ✅ Sucesso: comando enviado para DEF5678 (volume 100)
+--------------------------------------------
+📊 Execução finalizada.
+Total de veículos processados: 3
+Comandos enviados com sucesso: 3
+Falhas durante o envio:        0
