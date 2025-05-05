@@ -1,10 +1,10 @@
 package entity
 
 import (
-	"errors"
 	"time"
 
 	"github.com/google/uuid"
+	appError "github.com/mkafonso/go-cloud-challenge/usecase/errors"
 )
 
 type GPS struct {
@@ -18,10 +18,16 @@ type GPS struct {
 
 func NewGPS(deviceID string, latitude, longitude float64, timestamp time.Time) (*GPS, error) {
 	if deviceID == "" {
-		return nil, errors.New("deviceID cannot be empty")
+		return nil, appError.NewErrorBadRequest(
+			"device_id is required",
+			"please provide a valid device identifier",
+		)
 	}
 	if timestamp.IsZero() {
-		return nil, errors.New("timestamp is required")
+		return nil, appError.NewErrorBadRequest(
+			"timestamp is required",
+			"please provide a timestamp in RFC3339 format",
+		)
 	}
 
 	return &GPS{

@@ -1,10 +1,10 @@
 package entity
 
 import (
-	"errors"
 	"time"
 
 	"github.com/google/uuid"
+	appError "github.com/mkafonso/go-cloud-challenge/usecase/errors"
 )
 
 type Photo struct {
@@ -18,13 +18,22 @@ type Photo struct {
 
 func NewPhoto(deviceID, filePath string, timestamp time.Time, recognized bool) (*Photo, error) {
 	if deviceID == "" {
-		return nil, errors.New("deviceID cannot be empty")
+		return nil, appError.NewErrorBadRequest(
+			"device_id is required",
+			"please provide a valid device identifier",
+		)
 	}
 	if filePath == "" {
-		return nil, errors.New("filePath cannot be empty")
+		return nil, appError.NewErrorBadRequest(
+			"file_path is required",
+			"please provide a valid file path",
+		)
 	}
 	if timestamp.IsZero() {
-		return nil, errors.New("timestamp is required")
+		return nil, appError.NewErrorBadRequest(
+			"timestamp is required",
+			"please provide a timestamp in RFC3339 format",
+		)
 	}
 
 	return &Photo{

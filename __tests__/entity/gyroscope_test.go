@@ -17,7 +17,7 @@ func TestNewGyroscope_ValidData(t *testing.T) {
 func TestNewGyroscope_MissingDeviceID(t *testing.T) {
 	gyro, err := entity.NewGyroscope("", 1.0, 2.0, 3.0, time.Now())
 	assert.Nil(t, gyro)
-	assert.EqualError(t, err, "deviceID cannot be empty")
+	assert.EqualError(t, err, "device_id is required")
 }
 
 func TestNewGyroscope_ZeroTimestamp(t *testing.T) {

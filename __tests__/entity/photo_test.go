@@ -17,13 +17,13 @@ func TestNewPhoto_ValidData(t *testing.T) {
 func TestNewPhoto_EmptyDeviceID(t *testing.T) {
 	photo, err := entity.NewPhoto("", "/photos/img.jpg", time.Now(), false)
 	assert.Nil(t, photo)
-	assert.EqualError(t, err, "deviceID cannot be empty")
+	assert.EqualError(t, err, "device_id is required")
 }
 
 func TestNewPhoto_EmptyFilePath(t *testing.T) {
 	photo, err := entity.NewPhoto("device-123", "", time.Now(), false)
 	assert.Nil(t, photo)
-	assert.EqualError(t, err, "filePath cannot be empty")
+	assert.EqualError(t, err, "file_path is required")
 }
 
 func TestNewPhoto_ZeroTimestamp(t *testing.T) {
