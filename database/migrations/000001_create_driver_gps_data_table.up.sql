@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS driver_gps_data (
+    id UUID PRIMARY KEY,
+    device_id TEXT NOT NULL,
+    latitude DOUBLE PRECISION NOT NULL,
+    longitude DOUBLE PRECISION NOT NULL,
+    timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
