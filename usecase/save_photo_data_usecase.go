@@ -6,12 +6,13 @@ import (
 	"github.com/mkafonso/go-cloud-challenge/entity"
 	"github.com/mkafonso/go-cloud-challenge/recognition"
 	"github.com/mkafonso/go-cloud-challenge/repository"
+	"github.com/mkafonso/go-cloud-challenge/storage"
 	"github.com/mkafonso/go-cloud-challenge/utils"
 )
 
 type SavePhotoRequest struct {
 	DeviceID  string
-	FilePath  string
+	FileBytes []byte
 	Timestamp string
 }
 
@@ -22,15 +23,18 @@ type SavePhotoResponse struct {
 type SavePhoto struct {
 	repo       repository.PhotoRepositoryInterface
 	recognizer recognition.FaceRecognitionService
+	storage    storage.PhotoStorageService
 }
 
 func NewSavePhoto(
 	repo repository.PhotoRepositoryInterface,
 	recognizer recognition.FaceRecognitionService,
+	storage storage.PhotoStorageService,
 ) *SavePhoto {
 	return &SavePhoto{
 		repo:       repo,
 		recognizer: recognizer,
+		storage:    storage,
 	}
 }
 
@@ -40,15 +44,20 @@ func (uc *SavePhoto) Execute(ctx context.Context, data *SavePhotoRequest) (*Save
 		return nil, err
 	}
 
-	// ⚠️ Blocking request until Rekognition finishes
-	// ⚠️ Explanation: Required by challenge specification
-	// ⚠️ More details can be found here: `docs/documentacao-tecnica.md`
-	recognized, err := uc.recognizer.CompareWithHistory(ctx, data.FilePath, data.DeviceID)
+	path, err := uc.storage.Store(ctx, data.DeviceID, data.FileBytes)
 	if err != nil {
 		return nil, err
 	}
 
-	photo, err := entity.NewPhoto(data.DeviceID, data.FilePath, timestamp, recognized)
+	// ⚠️ Blocking request until Rekognition finishes
+	// ⚠️ Explanation: Required by challenge specification
+	// ⚠️ More details can be found here: `docs/documentacao-tecnica.md`
+	recognized, err := uc.recognizer.CompareWithHistory(ctx, path, data.DeviceID)
+	if err != nil {
+		return nil, err
+	}
+
+	photo, err := entity.NewPhoto(data.DeviceID, path, timestamp, recognized)
 	if err != nil {
 		return nil, err
 	}
