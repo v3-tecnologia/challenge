@@ -6,10 +6,12 @@ import (
 )
 
 func SetupCORS(router *chi.Mux) {
-	router.Use(cors.Handler(cors.Options{
+	corsOptions := cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
 		AllowedHeaders: []string{"Content-Type", "Authorization"},
 		MaxAge:         300,
-	}))
+	}
+
+	router.Use(cors.Handler(corsOptions))
 }
