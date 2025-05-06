@@ -5,8 +5,10 @@ import (
 	"net/http"
 
 	"github.com/mkafonso/go-cloud-challenge/api/rest"
+	"github.com/mkafonso/go-cloud-challenge/repository"
 	"github.com/mkafonso/go-cloud-challenge/usecase"
 	appError "github.com/mkafonso/go-cloud-challenge/usecase/errors"
+	factory "github.com/mkafonso/go-cloud-challenge/usecase/factories"
 )
 
 type SaveGPSDataRequest struct {
@@ -20,8 +22,9 @@ type SaveGPSDataHandler struct {
 	usecase *usecase.SaveGPSData
 }
 
-func NewSaveGPSDataHandler(uc *usecase.SaveGPSData) *SaveGPSDataHandler {
-	return &SaveGPSDataHandler{usecase: uc}
+func NewSaveGPSDataHandler(gpsRepo repository.GPSRepositoryInterface) *SaveGPSDataHandler {
+	usecase := factory.SaveGPSDataFactory(gpsRepo)
+	return &SaveGPSDataHandler{usecase: usecase}
 }
 
 func (h *SaveGPSDataHandler) Handle(w http.ResponseWriter, r *http.Request) {

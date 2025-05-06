@@ -8,7 +8,6 @@ import (
 	"github.com/mkafonso/go-cloud-challenge/recognition"
 	"github.com/mkafonso/go-cloud-challenge/repository"
 	"github.com/mkafonso/go-cloud-challenge/storage"
-	"github.com/mkafonso/go-cloud-challenge/usecase"
 )
 
 func TelemetryModuleRouter(
@@ -20,14 +19,14 @@ func TelemetryModuleRouter(
 ) http.Handler {
 	router := chi.NewRouter()
 
-	saveGPS := usecase.NewSaveGPSData(gpsRepo)
-	router.Post("/gps", controller.NewSaveGPSDataHandler(saveGPS).Handle)
+	saveGPS := controller.NewSaveGPSDataHandler(gpsRepo)
+	router.Post("/gps", saveGPS.Handle)
 
-	saveGyro := usecase.NewSaveGyroscopeData(gyroRepo)
-	router.Post("/gyroscope", controller.NewSaveGyroscopeDataHandler(saveGyro).Handle)
+	saveGyro := controller.NewSaveGyroscopeDataHandler(gyroRepo)
+	router.Post("/gyroscope", saveGyro.Handle)
 
-	savePhoto := usecase.NewSavePhoto(photoRepo, recognizer, storageService)
-	router.Post("/photo", controller.NewSavePhotoHandler(savePhoto).Handle)
+	savePhoto := controller.NewSavePhotoHandler(photoRepo, recognizer, storageService)
+	router.Post("/photo", savePhoto.Handle)
 
 	return router
 }

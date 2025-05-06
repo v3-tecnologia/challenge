@@ -5,16 +5,25 @@ import (
 	"net/http"
 
 	"github.com/mkafonso/go-cloud-challenge/api/rest"
+	"github.com/mkafonso/go-cloud-challenge/recognition"
+	"github.com/mkafonso/go-cloud-challenge/repository"
+	"github.com/mkafonso/go-cloud-challenge/storage"
 	"github.com/mkafonso/go-cloud-challenge/usecase"
 	appError "github.com/mkafonso/go-cloud-challenge/usecase/errors"
+	factory "github.com/mkafonso/go-cloud-challenge/usecase/factories"
 )
 
 type SavePhotoHandler struct {
 	usecase *usecase.SavePhoto
 }
 
-func NewSavePhotoHandler(uc *usecase.SavePhoto) *SavePhotoHandler {
-	return &SavePhotoHandler{usecase: uc}
+func NewSavePhotoHandler(
+	repo repository.PhotoRepositoryInterface,
+	recognizer recognition.FaceRecognitionService,
+	storage storage.PhotoStorageService,
+) *SavePhotoHandler {
+	usecase := factory.SavePhotoDataFactory(repo, recognizer, storage)
+	return &SavePhotoHandler{usecase: usecase}
 }
 
 func (h *SavePhotoHandler) Handle(w http.ResponseWriter, r *http.Request) {

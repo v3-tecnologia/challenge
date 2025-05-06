@@ -5,8 +5,10 @@ import (
 	"net/http"
 
 	"github.com/mkafonso/go-cloud-challenge/api/rest"
+	"github.com/mkafonso/go-cloud-challenge/repository"
 	"github.com/mkafonso/go-cloud-challenge/usecase"
 	appError "github.com/mkafonso/go-cloud-challenge/usecase/errors"
+	factory "github.com/mkafonso/go-cloud-challenge/usecase/factories"
 )
 
 type SaveGyroscopeDataRequest struct {
@@ -21,8 +23,9 @@ type SaveGyroscopeDataHandler struct {
 	usecase *usecase.SaveGyroscopeData
 }
 
-func NewSaveGyroscopeDataHandler(uc *usecase.SaveGyroscopeData) *SaveGyroscopeDataHandler {
-	return &SaveGyroscopeDataHandler{usecase: uc}
+func NewSaveGyroscopeDataHandler(gyroRepo repository.GyroscopeRepositoryInterface) *SaveGyroscopeDataHandler {
+	usecase := factory.SaveGyroscopeDataFactory(gyroRepo)
+	return &SaveGyroscopeDataHandler{usecase: usecase}
 }
 
 func (h *SaveGyroscopeDataHandler) Handle(w http.ResponseWriter, r *http.Request) {
