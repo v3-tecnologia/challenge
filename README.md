@@ -34,11 +34,13 @@
 
 ## Como rodar localmente
 
-Primeiro instale as dependências do projeto
+Primeiro instale as dependências do projeto.
 
 ```shell
 go mod install
 ```
+
+Agora é necessário criar o arquivo `.env` no diretório raiz do projeto, copie o exemplo `.env.example` e preencha com as credenciais da AWS para funcionar o AWS Rekognition.
 
 Você pode rodar essa aplicação localmente utilizando o docker.
 
@@ -46,7 +48,7 @@ Você pode rodar essa aplicação localmente utilizando o docker.
 docker compose up -d
 ```
 
-Após subir a aplicação, execute as migrations para sincronizar com o banco de dados
+Após subir a aplicação, execute as migrations para sincronizar com o banco de dados.
 
 ```sh
 make migrate-up
@@ -66,13 +68,13 @@ https://github.com/golang-migrate/migrate/tree/master/cmd/migrate
 
 ## Como testar
 
-Para rodar os testes da aplicação execute o seguinte comando
+Para rodar os testes da aplicação execute o seguinte comando.
 
 ```sh
 go test ./...
 ```
 
-E para fazer o teste da aplicação rodando localmente você pode estar acessando o seguinte endereço
+E para fazer o teste da aplicação rodando localmente você pode estar acessando o seguinte endereço.
 
 ```shell
 http://localhost:8080/swagger/index.html
