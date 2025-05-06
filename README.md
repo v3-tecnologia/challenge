@@ -4,63 +4,76 @@
 
 <h1 align="center" style="font-weight: bold;">Desafio Técnico da V3</h1>
 
-## ❤️ Bem vindos
+## Tecnologias utilizadas
 
-Olá, tudo certo?
+- GoLang
 
-Seja bem vindo ao teste de seleção para novos colaboradores na V3!
+  - A aplicação foi construida em GoLang
 
-Estamos honrados que você tenha chegado até aqui!
+- GORM
 
-Prepare aquele ☕️, e venha conosco codar e se divertir!
+  - ORM utilizado para facilitar nas execuções de consultas no banco de dados
 
-## 📚 Desafios Disponíveis
+- Gin Framework
 
-Este repositório contém três desafios diferentes, cada um focado em uma área específica:
+  - Framework foi utilizado para modelar a estrutura de RestAPI
 
-1. [Suporte Técnico](SUPPORT.md)
-2. [Desafio Backend](CLOUD.md)
-3. [Desafio Firmware](FIRMWARE.md)
-   
-## Poxa, outro teste?
+- AWS Rekognition
 
-Nós sabemos que os processos de seleção podem ser ingratos! Você investe um tempão e no final pode não ser aprovado!
+  - Serviço utilizado para o reconhecimento facial de fotos recebidas na aplicação
 
-Aqui, nós presamos pela **transparência**!
+- Swagger
 
-Este teste tem um **propósito** bastante simples:
+  - Biblioteca utilizada para a documentação das rotas da aplicação, facilitando os testes em ambiente de desenvolvimento por ter uma integração pronta com o Gin Framework
 
-> Nós queremos avaliar como você consegue transformar problemas em soluções através de código!
+- Migrate
 
-**🚨 IMPORTANTE!** Se você entende que já possui algum projeto pessoal, ou contribuição em um projeto _open-source_ que contemple conhecimentos equivalentes aos que existem neste desafio, então, basta submeter o repositório explicando essa correlação!
+  - Utilizado a biblioteca `migrate` para administrar as migrations do projeto.
 
-## 🚀 Bora nessa!
+##
 
-Este é um teste para analisarmos como você desempenha ao entender, traduzir, resolver e entregar um código que resolve um problema.
+## Como rodar localmente
 
-### Dicas
+Primeiro instale as dependências do projeto
 
-- Documente seu projeto;
-- Faça perguntas sobre os pontos que não ficaram claros para você;
-- Mostre a sua linha de raciocínio;
-- Trabalhe bem o seu README.md;
-  - Explique até onde implementou;
-  - Como o projeto pode ser executado;
-  - Como pode-se testar o projeto;
+```shell
+go mod install
+```
 
-### Como você deverá desenvolver?
+Você pode rodar essa aplicação localmente utilizando o docker.
 
-1. Faça um _fork_ deste projeto em seu GitHub pessoal;
-2. Realize as implementações de acordo com cada um dos níveis;
-3. Faça pequenos _commits_;
-4. Depois de sentir que fez o seu máximo, faça um PR para o repositório original.
+```sh
+docker compose up -d
+```
 
-🚨 **IMPORTANTE!** Não significa que você precisa implementar **todos os níveis** para ser aprovado no processo! Faça até onde se sentir confortável.
+Após subir a aplicação, execute as migrations para sincronizar com o banco de dados
 
-## ⏰ Tempo para Entrega
+```sh
+make migrate-up
+```
 
-Quanto antes você enviar, mais cuidado podemos ter na revisão do seu teste. Faça no seu tempo, mas mantenha a qualidade!
+OU
 
-**Mas não desista! Envie até onde conseguir.**
+```shell
+migrate -path ./internal/infra/database/migrations -database "postgres://dev:dev@localhost:5432/challenge_db?sslmode=disable" --verbose up
+```
 
-Boa sorte! 🍀
+Caso não tenha o `go-migrate` instalado, basta seguir as instruções desse link:
+
+```sh
+https://github.com/golang-migrate/migrate/tree/master/cmd/migrate
+```
+
+## Como testar
+
+Para rodar os testes da aplicação execute o seguinte comando
+
+```sh
+go test ./...
+```
+
+E para fazer o teste da aplicação rodando localmente você pode estar acessando o seguinte endereço
+
+```shell
+http://localhost:8080/swagger/index.html
+```
