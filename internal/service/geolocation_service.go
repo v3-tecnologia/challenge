@@ -23,6 +23,7 @@ func (g *GeolocationService) SaveData(data dtos.GeolocationDataDto) (entities.Ge
 
 	geolocationEntity.Latitude = data.Latitude
 	geolocationEntity.Longitude = data.Longitude
+	geolocationEntity.MacAddress = data.MacAddress
 
 	result, err := g.geolocationRepository.Create(geolocationEntity)
 	if err != nil {

@@ -26,6 +26,7 @@ func (s *PhotoService) RecognizePhoto(dto dtos.SavePhotoDTO) (dtos.SavePhotoResp
 	photoEntity := entities.PhotoEntity{
 		FilePath: dto.FilePath,
 	}
+	photoEntity.MacAddress = dto.MacAddress
 
 	photoEntity, err := s.photoRepository.Create(photoEntity)
 	if err != nil {

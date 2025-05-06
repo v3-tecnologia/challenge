@@ -129,6 +129,12 @@ const docTemplate = `{
                         "name": "image",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "MAC address",
+                        "name": "mac_address",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -170,7 +176,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "latitude",
-                "longitude"
+                "longitude",
+                "mac_address"
             ],
             "properties": {
                 "latitude": {
@@ -178,17 +185,24 @@ const docTemplate = `{
                 },
                 "longitude": {
                     "type": "number"
+                },
+                "mac_address": {
+                    "type": "string"
                 }
             }
         },
         "github_com_wellmtx_challenge_internal_dtos.GyroscopeDataDto": {
             "type": "object",
             "required": [
+                "mac_address",
                 "x",
                 "y",
                 "z"
             ],
             "properties": {
+                "mac_address": {
+                    "type": "string"
+                },
                 "x": {
                     "type": "number"
                 },
@@ -213,6 +227,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "mac_address": {
                     "type": "string"
                 },
                 "matched": {
@@ -241,6 +258,9 @@ const docTemplate = `{
                 "longitude": {
                     "type": "number"
                 },
+                "mac_address": {
+                    "type": "string"
+                },
                 "updated_at": {
                     "type": "string"
                 }
@@ -256,6 +276,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "mac_address": {
                     "type": "string"
                 },
                 "updated_at": {

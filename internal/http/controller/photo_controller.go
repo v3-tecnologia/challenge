@@ -25,6 +25,7 @@ func NewPhotoController(photoService *service.PhotoService) *PhotoController {
 // @Accept       multipart/form-data
 // @Produce      json
 // @Param        image  formData  file  true  "Image file"
+// @Param        mac_address  formData  string  false  "MAC address"
 // @Success      200  {object}  dtos.SavePhotoResponseDTO
 // @Failure      400  {object}  dtos.ErrorResponseDTO
 // @Failure      500  {object}  dtos.ErrorResponseDTO
@@ -38,6 +39,7 @@ func (p *PhotoController) RecognizePhoto(c *gin.Context) {
 		})
 		return
 	}
+	macAddress := c.PostForm("mac_address")
 
 	savePath := "./uploads/" + utils.NormalizeText(image.Filename)
 	if !p.TestMode {
@@ -74,6 +76,9 @@ func (p *PhotoController) RecognizePhoto(c *gin.Context) {
 	result, err := p.photoService.RecognizePhoto(dtos.SavePhotoDTO{
 		Image:    imageBytes,
 		FilePath: savePath,
+		BaseDTO: dtos.BaseDTO{
+			MacAddress: macAddress,
+		},
 	})
 	if err != nil {
 		c.JSON(500, dtos.ErrorResponseDTO{

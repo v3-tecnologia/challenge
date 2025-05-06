@@ -24,6 +24,7 @@ func (g *GyroscopeService) SaveData(data dtos.GyroscopeDataDto) (entities.Gyrosc
 	gyroscopeEntity.XValue = data.X
 	gyroscopeEntity.YValue = data.Y
 	gyroscopeEntity.ZValue = data.Z
+	gyroscopeEntity.MacAddress = data.MacAddress
 
 	result, err := g.gyroscopeRepository.Create(gyroscopeEntity)
 	if err != nil {
