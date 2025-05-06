@@ -12,7 +12,9 @@ func (s *FiberServer) RegisterRoutes() {
 	s.Use(logger.New())
 	s.Use(cors.New())
 
-	s.App.Get("/health", func(c *fiber.Ctx) error {
-		return c.Status(http.StatusOK).JSON(fiber.Map{"status": "ok"})
-	})
+	s.App.Get("/health", health)
+}
+
+func health(c *fiber.Ctx) error {
+	return c.Status(http.StatusOK).JSON(fiber.Map{"status": "ok"})
 }
