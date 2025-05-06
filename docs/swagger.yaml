@@ -14,15 +14,20 @@ definitions:
         type: number
       mac_address:
         type: string
+      timestamp:
+        type: integer
     required:
     - latitude
     - longitude
     - mac_address
+    - timestamp
     type: object
   github_com_wellmtx_challenge_internal_dtos.GyroscopeDataDto:
     properties:
       mac_address:
         type: string
+      timestamp:
+        type: integer
       x:
         type: number
       "y":
@@ -31,6 +36,7 @@ definitions:
         type: number
     required:
     - mac_address
+    - timestamp
     - x
     - "y"
     - z
@@ -49,6 +55,8 @@ definitions:
         type: string
       matched:
         type: boolean
+      timestamp:
+        type: string
       updated_at:
         type: string
     type: object
@@ -66,6 +74,8 @@ definitions:
         type: number
       mac_address:
         type: string
+      timestamp:
+        type: string
       updated_at:
         type: string
     type: object
@@ -78,6 +88,8 @@ definitions:
       id:
         type: string
       mac_address:
+        type: string
+      timestamp:
         type: string
       updated_at:
         type: string
@@ -173,6 +185,10 @@ paths:
       - description: MAC address
         in: formData
         name: mac_address
+        type: string
+      - description: Timestamp
+        in: formData
+        name: timestamp
         type: string
       produces:
       - application/json

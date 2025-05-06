@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/wellmtx/challenge/internal/dtos"
 	"github.com/wellmtx/challenge/internal/infra/utils"
@@ -26,6 +28,7 @@ func NewPhotoController(photoService *service.PhotoService) *PhotoController {
 // @Produce      json
 // @Param        image  formData  file  true  "Image file"
 // @Param        mac_address  formData  string  false  "MAC address"
+// @Param        timestamp  formData  string  false  "Timestamp"
 // @Success      200  {object}  dtos.SavePhotoResponseDTO
 // @Failure      400  {object}  dtos.ErrorResponseDTO
 // @Failure      500  {object}  dtos.ErrorResponseDTO
@@ -40,6 +43,30 @@ func (p *PhotoController) RecognizePhoto(c *gin.Context) {
 		return
 	}
 	macAddress := c.PostForm("mac_address")
+	timestamp := c.PostForm("timestamp")
+	if macAddress == "" {
+		c.JSON(400, dtos.ErrorResponseDTO{
+			Message: "MAC address is required",
+			Code:    400,
+		})
+		return
+	}
+	if timestamp == "" {
+		c.JSON(400, dtos.ErrorResponseDTO{
+			Message: "Timestamp is required",
+			Code:    400,
+		})
+		return
+	}
+
+	timestampInt, err := strconv.Atoi(timestamp)
+	if err != nil {
+		c.JSON(400, dtos.ErrorResponseDTO{
+			Message: "Invalid timestamp",
+			Code:    400,
+		})
+		return
+	}
 
 	savePath := "./uploads/" + utils.NormalizeText(image.Filename)
 	if !p.TestMode {
@@ -78,6 +105,7 @@ func (p *PhotoController) RecognizePhoto(c *gin.Context) {
 		FilePath: savePath,
 		BaseDTO: dtos.BaseDTO{
 			MacAddress: macAddress,
+			Timestamp:  int64(timestampInt),
 		},
 	})
 	if err != nil {

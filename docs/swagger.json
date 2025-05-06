@@ -128,6 +128,12 @@
                         "description": "MAC address",
                         "name": "mac_address",
                         "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Timestamp",
+                        "name": "timestamp",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -170,7 +176,8 @@
             "required": [
                 "latitude",
                 "longitude",
-                "mac_address"
+                "mac_address",
+                "timestamp"
             ],
             "properties": {
                 "latitude": {
@@ -181,6 +188,9 @@
                 },
                 "mac_address": {
                     "type": "string"
+                },
+                "timestamp": {
+                    "type": "integer"
                 }
             }
         },
@@ -188,6 +198,7 @@
             "type": "object",
             "required": [
                 "mac_address",
+                "timestamp",
                 "x",
                 "y",
                 "z"
@@ -195,6 +206,9 @@
             "properties": {
                 "mac_address": {
                     "type": "string"
+                },
+                "timestamp": {
+                    "type": "integer"
                 },
                 "x": {
                     "type": "number"
@@ -228,6 +242,9 @@
                 "matched": {
                     "type": "boolean"
                 },
+                "timestamp": {
+                    "type": "string"
+                },
                 "updated_at": {
                     "type": "string"
                 }
@@ -254,6 +271,9 @@
                 "mac_address": {
                     "type": "string"
                 },
+                "timestamp": {
+                    "type": "string"
+                },
                 "updated_at": {
                     "type": "string"
                 }
@@ -272,6 +292,9 @@
                     "type": "string"
                 },
                 "mac_address": {
+                    "type": "string"
+                },
+                "timestamp": {
                     "type": "string"
                 },
                 "updated_at": {

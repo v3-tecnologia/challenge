@@ -135,6 +135,12 @@ const docTemplate = `{
                         "description": "MAC address",
                         "name": "mac_address",
                         "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Timestamp",
+                        "name": "timestamp",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -177,7 +183,8 @@ const docTemplate = `{
             "required": [
                 "latitude",
                 "longitude",
-                "mac_address"
+                "mac_address",
+                "timestamp"
             ],
             "properties": {
                 "latitude": {
@@ -188,6 +195,9 @@ const docTemplate = `{
                 },
                 "mac_address": {
                     "type": "string"
+                },
+                "timestamp": {
+                    "type": "integer"
                 }
             }
         },
@@ -195,6 +205,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "mac_address",
+                "timestamp",
                 "x",
                 "y",
                 "z"
@@ -202,6 +213,9 @@ const docTemplate = `{
             "properties": {
                 "mac_address": {
                     "type": "string"
+                },
+                "timestamp": {
+                    "type": "integer"
                 },
                 "x": {
                     "type": "number"
@@ -235,6 +249,9 @@ const docTemplate = `{
                 "matched": {
                     "type": "boolean"
                 },
+                "timestamp": {
+                    "type": "string"
+                },
                 "updated_at": {
                     "type": "string"
                 }
@@ -261,6 +278,9 @@ const docTemplate = `{
                 "mac_address": {
                     "type": "string"
                 },
+                "timestamp": {
+                    "type": "string"
+                },
                 "updated_at": {
                     "type": "string"
                 }
@@ -279,6 +299,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "mac_address": {
+                    "type": "string"
+                },
+                "timestamp": {
                     "type": "string"
                 },
                 "updated_at": {
