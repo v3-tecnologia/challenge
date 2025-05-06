@@ -16,6 +16,13 @@ func init() {
 	godotenv.Load()
 }
 
+// @title           Wellmtx V3 Challenge MVP
+// @version         1.0
+// @description     Essa é a API do MVP do desafio V3 de Wellington Saraiva.
+// @contact.name  Wellington Saraiva
+// @host 		localhost:8080
+// @externalDocs.description  OpenAPI
+// @externalDocs.url          https://swagger.io/resources/open-api/
 func main() {
 	db := database.NewDatabase(
 		os.Getenv("DATABASE_HOST"),

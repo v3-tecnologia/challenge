@@ -1,0 +1,179 @@
+definitions:
+  github_com_wellmtx_challenge_internal_dtos.ErrorResponseDTO:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  github_com_wellmtx_challenge_internal_dtos.GeolocationDataDto:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    required:
+    - latitude
+    - longitude
+    type: object
+  github_com_wellmtx_challenge_internal_dtos.GyroscopeDataDto:
+    properties:
+      x:
+        type: number
+      "y":
+        type: number
+      z:
+        type: number
+    required:
+    - x
+    - "y"
+    - z
+    type: object
+  github_com_wellmtx_challenge_internal_dtos.SavePhotoResponseDTO:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      file_path:
+        type: string
+      id:
+        type: string
+      matched:
+        type: boolean
+      updated_at:
+        type: string
+    type: object
+  github_com_wellmtx_challenge_internal_infra_entities.GeolocationEntity:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      updated_at:
+        type: string
+    type: object
+  github_com_wellmtx_challenge_internal_infra_entities.GyroscopeEntity:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: string
+      updated_at:
+        type: string
+      x_value:
+        type: number
+      y_value:
+        type: number
+      z_value:
+        type: number
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    name: Wellington Saraiva
+  description: Essa é a API do MVP do desafio V3 de Wellington Saraiva.
+  title: Wellmtx V3 Challenge MVP
+  version: "1.0"
+paths:
+  /telemetry/gps:
+    post:
+      consumes:
+      - application/json
+      description: Save GPS data
+      parameters:
+      - description: GPS data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_wellmtx_challenge_internal_dtos.GeolocationDataDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_wellmtx_challenge_internal_infra_entities.GeolocationEntity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_wellmtx_challenge_internal_dtos.ErrorResponseDTO'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_wellmtx_challenge_internal_dtos.ErrorResponseDTO'
+      summary: Save GPS data
+      tags:
+      - telemetry
+  /telemetry/gyroscope:
+    post:
+      consumes:
+      - application/json
+      description: Save gyroscope data
+      parameters:
+      - description: Gyroscope data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_wellmtx_challenge_internal_dtos.GyroscopeDataDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_wellmtx_challenge_internal_infra_entities.GyroscopeEntity'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_wellmtx_challenge_internal_dtos.ErrorResponseDTO'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_wellmtx_challenge_internal_dtos.ErrorResponseDTO'
+      summary: Save gyroscope data
+      tags:
+      - telemetry
+  /telemetry/photo:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Recognize photo
+      parameters:
+      - description: Image file
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_wellmtx_challenge_internal_dtos.SavePhotoResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_wellmtx_challenge_internal_dtos.ErrorResponseDTO'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_wellmtx_challenge_internal_dtos.ErrorResponseDTO'
+      summary: Recognize photo
+      tags:
+      - telemetry
+swagger: "2.0"

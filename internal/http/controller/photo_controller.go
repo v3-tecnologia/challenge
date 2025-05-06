@@ -18,10 +18,24 @@ func NewPhotoController(photoService *service.PhotoService) *PhotoController {
 	}
 }
 
+// RecognizePhoto godoc
+// @Summary      Recognize photo
+// @Description  Recognize photo
+// @Tags         telemetry
+// @Accept       multipart/form-data
+// @Produce      json
+// @Param        image  formData  file  true  "Image file"
+// @Success      200  {object}  dtos.SavePhotoResponseDTO
+// @Failure      400  {object}  dtos.ErrorResponseDTO
+// @Failure      500  {object}  dtos.ErrorResponseDTO
+// @Router       /telemetry/photo [post]
 func (p *PhotoController) RecognizePhoto(c *gin.Context) {
 	image, err := c.FormFile("image")
 	if err != nil {
-		c.JSON(400, gin.H{"error": "Unable to get image from request"})
+		c.JSON(400, dtos.ErrorResponseDTO{
+			Message: "Invalid image file",
+			Code:    400,
+		})
 		return
 	}
 
@@ -29,14 +43,20 @@ func (p *PhotoController) RecognizePhoto(c *gin.Context) {
 	if !p.TestMode {
 		err = c.SaveUploadedFile(image, savePath)
 		if err != nil {
-			c.JSON(400, gin.H{"error": "Unable to save image"})
+			c.JSON(400, dtos.ErrorResponseDTO{
+				Message: "Unable to save image",
+				Code:    400,
+			})
 			return
 		}
 	}
 
 	file, err := image.Open()
 	if err != nil {
-		c.JSON(400, gin.H{"error": "Unable to open image"})
+		c.JSON(400, dtos.ErrorResponseDTO{
+			Message: "Unable to open image",
+			Code:    400,
+		})
 		return
 	}
 	defer file.Close()
@@ -44,7 +64,10 @@ func (p *PhotoController) RecognizePhoto(c *gin.Context) {
 	imageBytes := make([]byte, image.Size)
 	_, err = file.Read(imageBytes)
 	if err != nil {
-		c.JSON(400, gin.H{"error": "Unable to read image"})
+		c.JSON(400, dtos.ErrorResponseDTO{
+			Message: "Unable to read image",
+			Code:    400,
+		})
 		return
 	}
 
@@ -53,7 +76,10 @@ func (p *PhotoController) RecognizePhoto(c *gin.Context) {
 		FilePath: savePath,
 	})
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Unable to recognize photo"})
+		c.JSON(500, dtos.ErrorResponseDTO{
+			Message: "Failed to recognize photo",
+			Code:    500,
+		})
 		return
 	}
 

@@ -2,6 +2,9 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/wellmtx/challenge/docs"
 	"github.com/wellmtx/challenge/internal/http/controller"
 )
 
@@ -49,6 +52,8 @@ func (router *Router) Init() {
 		})
 	})
 
+	docs.SwaggerInfo.BasePath = "/"
+
 	telemetry := r.Group("/telemetry")
 	{
 		telemetry.POST("/gyroscope", router.gyroscopeController.SaveData)
@@ -56,6 +61,7 @@ func (router *Router) Init() {
 		telemetry.POST("/photo", router.photoController.RecognizePhoto)
 	}
 
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	err := r.Run(":8080")
 	if err != nil {
 		panic(err)
