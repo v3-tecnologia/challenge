@@ -1,66 +1,43 @@
-<p align="center">
-    <img src="./.github/logo.png" width="200px">
-</p>
+## Cloud Telemetry API
 
-<h1 align="center" style="font-weight: bold;">Desafio Técnico da V3</h1>
+Este repositório contém a implementação de um MVP para coleta de dados de telemetria (GPS, giroscópio e fotos) de motoristas utilizando seus próprios dispositivos Android.
 
-## ❤️ Bem vindos
+A API foi construída em **Go** seguindo princípios de arquitetura limpa, com foco em **desacoplamento**, **testes** e **validações** desde o início.
 
-Olá, tudo certo?
+---
 
-Seja bem vindo ao teste de seleção para novos colaboradores na V3!
+### Como rodar localmente
 
-Estamos honrados que você tenha chegado até aqui!
+```bash
+docker-compose up --build
+```
 
-Prepare aquele ☕️, e venha conosco codar e se divertir!
+---
 
-## 📚 Desafios Disponíveis
+### Funcionalidades implementadas
 
-Este repositório contém três desafios diferentes, cada um focado em uma área específica:
+- ✅ API REST com endpoints para GPS, Giroscópio e Foto
+- ✅ Validação de campos obrigatórios (device_id, timestamp, etc.)
+- ✅ Armazenamento persistente com PostgreSQL via `sqlc`
+- ✅ Upload de imagem via `multipart/form-data`
+- ✅ Mock de reconhecimento facial (modo local)
+- ✅ Testes unitários para entidades e regras de negócio
+- ✅ Dockerfile e Makefile para facilitar setup local
 
-1. [Suporte Técnico](SUPPORT.md)
-2. [Desafio Backend](CLOUD.md)
-3. [Desafio Firmware](FIRMWARE.md)
-   
-## Poxa, outro teste?
+---
 
-Nós sabemos que os processos de seleção podem ser ingratos! Você investe um tempão e no final pode não ser aprovado!
+### Documentação
 
-Aqui, nós presamos pela **transparência**!
+A pasta [`/docs`](./docs) contém arquivos que detalham cada aspecto do projeto:
 
-Este teste tem um **propósito** bastante simples:
+| Documento                                                                 | Descrição                               |
+| ------------------------------------------------------------------------- | --------------------------------------- |
+| [`endpoints.md`](./docs/endpoints.md)                                     | Exemplos de uso da API com `cURL`       |
+| [`requisitos-para-desenvolver.md`](./docs/requisitos-para-desenvolver.md) | Ferramentas e configurações necessárias |
+| [`status-de-implementacao.md`](./docs/status-de-implementacao.md)         | Checklist do desafio e nível de entrega |
 
-> Nós queremos avaliar como você consegue transformar problemas em soluções através de código!
+---
 
-**🚨 IMPORTANTE!** Se você entende que já possui algum projeto pessoal, ou contribuição em um projeto _open-source_ que contemple conhecimentos equivalentes aos que existem neste desafio, então, basta submeter o repositório explicando essa correlação!
+### ⚠️ Observação
 
-## 🚀 Bora nessa!
-
-Este é um teste para analisarmos como você desempenha ao entender, traduzir, resolver e entregar um código que resolve um problema.
-
-### Dicas
-
-- Documente seu projeto;
-- Faça perguntas sobre os pontos que não ficaram claros para você;
-- Mostre a sua linha de raciocínio;
-- Trabalhe bem o seu README.md;
-  - Explique até onde implementou;
-  - Como o projeto pode ser executado;
-  - Como pode-se testar o projeto;
-
-### Como você deverá desenvolver?
-
-1. Faça um _fork_ deste projeto em seu GitHub pessoal;
-2. Realize as implementações de acordo com cada um dos níveis;
-3. Faça pequenos _commits_;
-4. Depois de sentir que fez o seu máximo, faça um PR para o repositório original.
-
-🚨 **IMPORTANTE!** Não significa que você precisa implementar **todos os níveis** para ser aprovado no processo! Faça até onde se sentir confortável.
-
-## ⏰ Tempo para Entrega
-
-Quanto antes você enviar, mais cuidado podemos ter na revisão do seu teste. Faça no seu tempo, mas mantenha a qualidade!
-
-**Mas não desista! Envie até onde conseguir.**
-
-Boa sorte! 🍀
+A integração real com AWS Rekognition não foi implementada. Atualmente, o reconhecimento facial é simulado via InMemoryFaceRecognition.

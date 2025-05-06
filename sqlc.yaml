@@ -1,0 +1,21 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "./database/queries/"
+    schema: "./database/migrations/"
+    gen:
+      go:
+        package: "db"
+        out: "./database/sqlc"
+        sql_package: "pgx/v5"
+        emit_json_tags: true
+        emit_empty_slices: true
+        emit_prepared_queries: true # Prepared statements (recomendado com pgx)
+        emit_interface: true # Gera interfaces úteis para testes
+        overrides:
+          - db_type: "timestamptz" # Override para usar time.Time no lugar de pgtype
+            go_type: "time.Time"
+          - db_type: "uuid" # Usa uuid.UUID do Google
+            go_type:
+              import: "github.com/google/uuid"
+              type: "UUID"
