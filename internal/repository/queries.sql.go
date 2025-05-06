@@ -16,9 +16,9 @@ INSERT INTO devices (device_id, name, model) VALUES ($1, $2, $3) RETURNING devic
 `
 
 type InsertDeviceParams struct {
-	DeviceID string
-	Name     pgtype.Text
-	Model    pgtype.Text
+	DeviceID string      `json:"device_id"`
+	Name     pgtype.Text `json:"name"`
+	Model    pgtype.Text `json:"model"`
 }
 
 func (q *Queries) InsertDevice(ctx context.Context, arg InsertDeviceParams) (Device, error) {

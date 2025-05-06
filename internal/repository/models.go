@@ -5,36 +5,37 @@
 package repository
 
 import (
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Device struct {
-	DeviceID     string
-	Name         pgtype.Text
-	Model        pgtype.Text
-	RegisteredAt pgtype.Timestamp
+	DeviceID     string           `json:"device_id"`
+	Name         pgtype.Text      `json:"name"`
+	Model        pgtype.Text      `json:"model"`
+	RegisteredAt pgtype.Timestamp `json:"registered_at"`
 }
 
 type GpsReading struct {
-	ID          pgtype.UUID
-	DeviceID    string
-	Latitude    pgtype.Numeric
-	Longitude   pgtype.Numeric
-	CollectedAt pgtype.Timestamp
+	ID          uuid.UUID        `json:"id"`
+	DeviceID    string           `json:"device_id"`
+	Latitude    pgtype.Numeric   `json:"latitude"`
+	Longitude   pgtype.Numeric   `json:"longitude"`
+	CollectedAt pgtype.Timestamp `json:"collected_at"`
 }
 
 type GyroscopeReading struct {
-	ID          pgtype.UUID
-	DeviceID    string
-	X           float64
-	Y           float64
-	Z           float64
-	CollectedAt pgtype.Timestamp
+	ID          uuid.UUID        `json:"id"`
+	DeviceID    string           `json:"device_id"`
+	X           float64          `json:"x"`
+	Y           float64          `json:"y"`
+	Z           float64          `json:"z"`
+	CollectedAt pgtype.Timestamp `json:"collected_at"`
 }
 
 type Photo struct {
-	ID          pgtype.UUID
-	DeviceID    string
-	ImageUrl    string
-	CollectedAt pgtype.Timestamp
+	ID          uuid.UUID        `json:"id"`
+	DeviceID    string           `json:"device_id"`
+	ImageUrl    string           `json:"image_url"`
+	CollectedAt pgtype.Timestamp `json:"collected_at"`
 }
