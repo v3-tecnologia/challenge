@@ -10,32 +10,32 @@ import (
 )
 
 type Device struct {
-	DeviceID     string           `json:"device_id"`
+	DeviceID     string           `json:"deviceId"`
 	Name         pgtype.Text      `json:"name"`
 	Model        pgtype.Text      `json:"model"`
-	RegisteredAt pgtype.Timestamp `json:"registered_at"`
+	RegisteredAt pgtype.Timestamp `json:"registeredAt"`
 }
 
 type GpsReading struct {
 	ID          uuid.UUID        `json:"id"`
-	DeviceID    string           `json:"device_id"`
+	DeviceID    string           `json:"deviceId"`
 	Latitude    pgtype.Numeric   `json:"latitude"`
 	Longitude   pgtype.Numeric   `json:"longitude"`
-	CollectedAt pgtype.Timestamp `json:"collected_at"`
+	CollectedAt pgtype.Timestamp `json:"collectedAt"`
 }
 
 type GyroscopeReading struct {
 	ID          uuid.UUID        `json:"id"`
-	DeviceID    string           `json:"device_id"`
+	DeviceID    string           `json:"deviceId"`
 	X           float64          `json:"x"`
 	Y           float64          `json:"y"`
 	Z           float64          `json:"z"`
-	CollectedAt pgtype.Timestamp `json:"collected_at"`
+	CollectedAt pgtype.Timestamp `json:"collectedAt"`
 }
 
 type Photo struct {
 	ID          uuid.UUID        `json:"id"`
-	DeviceID    string           `json:"device_id"`
-	ImageUrl    string           `json:"image_url"`
-	CollectedAt pgtype.Timestamp `json:"collected_at"`
+	DeviceID    string           `json:"deviceId"`
+	ImageUrl    string           `json:"imageUrl"`
+	CollectedAt pgtype.Timestamp `json:"collectedAt"`
 }

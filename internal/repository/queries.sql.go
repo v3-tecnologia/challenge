@@ -16,7 +16,7 @@ INSERT INTO devices (device_id, name, model) VALUES ($1, $2, $3) RETURNING devic
 `
 
 type InsertDeviceParams struct {
-	DeviceID string      `json:"device_id"`
+	DeviceID string      `json:"deviceId"`
 	Name     pgtype.Text `json:"name"`
 	Model    pgtype.Text `json:"model"`
 }
