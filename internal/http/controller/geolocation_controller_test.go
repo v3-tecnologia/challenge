@@ -23,6 +23,10 @@ func TestSaveData(t *testing.T) {
 	data := dtos.GeolocationDataDto{
 		Latitude:  37.7749,
 		Longitude: -122.4194,
+		BaseDTO: dtos.BaseDTO{
+			MacAddress: "00:00:00:00:00:01",
+			Timestamp:  1234567890,
+		},
 	}
 	dataBytes, err := json.Marshal(data)
 	require.NoError(t, err)

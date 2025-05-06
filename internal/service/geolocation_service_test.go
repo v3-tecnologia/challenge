@@ -11,6 +11,10 @@ func TestGeolocationSaveData(t *testing.T) {
 	data := dtos.GeolocationDataDto{
 		Latitude:  1.0,
 		Longitude: 2.0,
+		BaseDTO: dtos.BaseDTO{
+			MacAddress: "00:00:00:00:00:01",
+			Timestamp:  1234567890,
+		},
 	}
 
 	result, err := geolocationService.SaveData(data)

@@ -24,6 +24,10 @@ func TestGyroscopeSaveData(t *testing.T) {
 		X: 1.0,
 		Y: 2.0,
 		Z: 3.0,
+		BaseDTO: dtos.BaseDTO{
+			MacAddress: "00:00:00:00:00:01",
+			Timestamp:  1234567890,
+		},
 	}
 	dataBytes, err := json.Marshal(data)
 	require.NoError(t, err)

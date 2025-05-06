@@ -24,6 +24,8 @@ func TestPhotoController_RecognizePhoto(t *testing.T) {
 	require.NoError(t, err)
 	_, err = io.Copy(part, bytes.NewReader(fileContent))
 	require.NoError(t, err)
+	writer.WriteField("mac_address", "00:00:00:00:00:01")
+	writer.WriteField("timestamp", "1234567890")
 	writer.Close()
 
 	req := httptest.NewRequest(http.MethodPost, "/telemetry/photo", body)

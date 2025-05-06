@@ -12,6 +12,10 @@ func TestPhotoService_RecognizePhoto(t *testing.T) {
 	recognizedPhoto, err := photoService.RecognizePhoto(dtos.SavePhotoDTO{
 		Image:    []byte("test"),
 		FilePath: "test.jpg",
+		BaseDTO: dtos.BaseDTO{
+			MacAddress: "00:00:00:00:00:01",
+			Timestamp:  1234567890,
+		},
 	})
 	require.NoError(t, err)
 
