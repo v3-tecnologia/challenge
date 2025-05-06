@@ -5,22 +5,23 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-
-	"github.com/mkafonso/go-cloud-challenge/recognition/provider"
+	recognition "github.com/mkafonso/go-cloud-challenge/recognition/provider"
 	repository "github.com/mkafonso/go-cloud-challenge/repository/memory"
+	storage "github.com/mkafonso/go-cloud-challenge/storage/provider"
 	"github.com/mkafonso/go-cloud-challenge/usecase"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSavePhoto_ShouldSaveAndRecognizeSuccessfully(t *testing.T) {
 	repo := repository.NewInMemoryPhotoRepository()
-	recognizer := provider.NewInMemoryFaceRecognition()
+	recognizer := recognition.NewInMemoryFaceRecognition()
+	storage := storage.NewInMemoryPhotoStorage()
 
-	uc := usecase.NewSavePhoto(repo, recognizer)
+	uc := usecase.NewSavePhoto(repo, recognizer, storage)
 
 	request := &usecase.SavePhotoRequest{
 		DeviceID:  "00:11:22:33:44:55",
-		FilePath:  "/photos/image.jpg",
+		FileBytes: []byte("random image bytes"),
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
 
@@ -33,14 +34,15 @@ func TestSavePhoto_ShouldSaveAndRecognizeSuccessfully(t *testing.T) {
 
 func TestSavePhoto_ShouldFailWithInvalidTimestamp(t *testing.T) {
 	repo := repository.NewInMemoryPhotoRepository()
-	recognizer := provider.NewInMemoryFaceRecognition()
+	recognizer := recognition.NewInMemoryFaceRecognition()
+	storage := storage.NewInMemoryPhotoStorage()
 
-	uc := usecase.NewSavePhoto(repo, recognizer)
+	uc := usecase.NewSavePhoto(repo, recognizer, storage)
 
 	request := &usecase.SavePhotoRequest{
 		DeviceID:  "00:11:22:33:44:55",
-		FilePath:  "/photos/image.jpg",
-		Timestamp: "invalid-timestamp",
+		FileBytes: []byte("random image bytes"),
+		Timestamp: "not-a-valid-timestamp",
 	}
 
 	response, err := uc.Execute(context.Background(), request)
