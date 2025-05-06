@@ -10,8 +10,8 @@ import (
 
 type SaveGPSDataRequest struct {
 	DeviceID  string
-	Latitude  float64
-	Longitude float64
+	Latitude  *float64
+	Longitude *float64
 	Timestamp string
 }
 

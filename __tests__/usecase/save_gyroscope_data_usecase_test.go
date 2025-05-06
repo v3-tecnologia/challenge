@@ -7,6 +7,7 @@ import (
 
 	repository "github.com/mkafonso/go-cloud-challenge/repository/memory"
 	"github.com/mkafonso/go-cloud-challenge/usecase"
+	"github.com/mkafonso/go-cloud-challenge/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,9 +17,9 @@ func TestSaveGyroscopeData_ShouldSaveSuccessfully(t *testing.T) {
 
 	request := &usecase.SaveGyroscopeDataRequest{
 		DeviceID:  "00:11:22:33:44:55",
-		X:         1.0,
-		Y:         2.0,
-		Z:         3.0,
+		X:         utils.Ptr(1.0),
+		Y:         utils.Ptr(2.0),
+		Z:         utils.Ptr(3.0),
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
 
@@ -34,9 +35,9 @@ func TestSaveGyroscopeData_ShouldFailWithInvalidTimestamp(t *testing.T) {
 
 	request := &usecase.SaveGyroscopeDataRequest{
 		DeviceID:  "00:11:22:33:44:55",
-		X:         1.0,
-		Y:         2.0,
-		Z:         3.0,
+		X:         utils.Ptr(1.0),
+		Y:         utils.Ptr(2.0),
+		Z:         utils.Ptr(3.0),
 		Timestamp: "invalid-timestamp",
 	}
 

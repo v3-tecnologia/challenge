@@ -25,9 +25,9 @@ func (r *PostgresGyroscopeRepository) SaveGyroscope(ctx context.Context, gyro *e
 	params := db.SaveGyroscopeParams{
 		ID:        gyro.ID,
 		DeviceID:  gyro.DeviceID,
-		X:         gyro.X,
-		Y:         gyro.Y,
-		Z:         gyro.Z,
+		X:         *gyro.X,
+		Y:         *gyro.Y,
+		Z:         *gyro.Z,
 		Timestamp: pgtype.Timestamptz{Time: gyro.Timestamp, Valid: true},
 		CreatedAt: pgtype.Timestamptz{Time: gyro.CreatedAt, Valid: true},
 	}

@@ -10,10 +10,10 @@ import (
 )
 
 type SaveGPSDataRequest struct {
-	DeviceID  string  `json:"device_id"`
-	Latitude  float64 `json:"latitude"`
-	Longitude float64 `json:"longitude"`
-	Timestamp string  `json:"timestamp"`
+	DeviceID  string   `json:"device_id"`
+	Latitude  *float64 `json:"latitude"`
+	Longitude *float64 `json:"longitude"`
+	Timestamp string   `json:"timestamp"`
 }
 
 type SaveGPSDataHandler struct {

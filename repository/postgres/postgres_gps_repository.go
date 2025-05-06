@@ -25,8 +25,8 @@ func (r *PostgresGPSRepository) SaveGPS(ctx context.Context, gps *entity.GPS) er
 	params := db.SaveGPSParams{
 		ID:        gps.ID,
 		DeviceID:  gps.DeviceID,
-		Latitude:  gps.Latitude,
-		Longitude: gps.Longitude,
+		Latitude:  *gps.Latitude,
+		Longitude: *gps.Longitude,
 		Timestamp: pgtype.Timestamptz{Time: gps.Timestamp, Valid: true},
 		CreatedAt: pgtype.Timestamptz{Time: gps.CreatedAt, Valid: true},
 	}

@@ -7,6 +7,7 @@ import (
 
 	repository "github.com/mkafonso/go-cloud-challenge/repository/memory"
 	"github.com/mkafonso/go-cloud-challenge/usecase"
+	"github.com/mkafonso/go-cloud-challenge/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,8 +17,8 @@ func TestSaveGPSData_ShouldSaveSuccessfully(t *testing.T) {
 
 	request := &usecase.SaveGPSDataRequest{
 		DeviceID:  "00:11:22:33:44:55",
-		Latitude:  10.0,
-		Longitude: 10.0,
+		Latitude:  utils.Ptr(10.0),
+		Longitude: utils.Ptr(10.0),
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
 
@@ -33,8 +34,8 @@ func TestSaveGPSData_ShouldFailWithInvalidTimestamp(t *testing.T) {
 
 	request := &usecase.SaveGPSDataRequest{
 		DeviceID:  "00:11:22:33:44:55",
-		Latitude:  10.0,
-		Longitude: 10.0,
+		Latitude:  utils.Ptr(10.0),
+		Longitude: utils.Ptr(10.0),
 		Timestamp: "invalid-timestamp",
 	}
 
