@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:16.1-alpine3.19
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: telemetry
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  migrate:
+    image: migrate/migrate:v4.16.2
+    depends_on:
+      - db
+    volumes:
+      - ./database/migrations:/migrations
+    entrypoint:
+      [
+        "migrate",
+        "-path",
+        "/migrations",
+        "-database",
+        "postgres://postgres:postgres@db:5432/telemetry?sslmode=disable",
+        "up",
+      ]
+
+  api:
+    build: .
+    depends_on:
+      - db
+      - migrate
+    environment:
+      DATABASE_URL: "postgres://postgres:postgres@db:5432/telemetry?sslmode=disable"
+    ports:
+      - "8080:8080"
+    command: ["./app"]
+
+volumes:
+  db_data:
