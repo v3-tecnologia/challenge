@@ -3,9 +3,8 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"log"
 
-	env "github.com/bielgennaro/v3-challenge-cloud/internal/handlers"
+	env "github.com/bielgennaro/v3-challenge-cloud/config"
 
 	_ "github.com/lib/pq"
 )
@@ -19,17 +18,15 @@ type Config struct {
 	SSLMode  string
 }
 
-// GetConnection returns a connection to the PostgreSQL database
 func GetConnection() (*sql.DB, error) {
 	config := Config{
 		Host:     env.GetEnv("DB_HOST", "localhost"),
 		Port:     env.GetEnv("DB_PORT", "5432"),
 		User:     env.GetEnv("DB_USER", "postgres"),
-		Password: env.GetEnv("DB_PASSWORD", "postgres"),
+		Password: env.GetEnv("DB_PASSWORD", "99831"),
 		DBName:   env.GetEnv("DB_NAME", "postgres"),
 		SSLMode:  env.GetEnv("DB_SSLMODE", "disable"),
 	}
-
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		config.Host, config.Port, config.User, config.Password, config.DBName, config.SSLMode)
 
@@ -42,6 +39,5 @@ func GetConnection() (*sql.DB, error) {
 		return nil, fmt.Errorf("could not establish connection to database: %w", err)
 	}
 
-	log.Println("Database connection established")
 	return db, nil
 }

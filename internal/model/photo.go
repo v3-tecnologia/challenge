@@ -10,16 +10,16 @@ import (
 type Photo struct {
 	ID         uuid.UUID
 	MacAddress string
-	FilePath   string
-	Recognized bool
+	FileURL    string
+	IsMatch    bool
 	Timestamp  time.Time
 	CreatedAt  time.Time
 }
 
 type PhotoBuilder struct {
 	macAddress string
-	filePath   string
-	recognized bool
+	fileUrl    string
+	isMatch    bool
 	timestamp  time.Time
 	err        error
 }
@@ -45,12 +45,12 @@ func (b *PhotoBuilder) WithMacAddress(macAddress string) *PhotoBuilder {
 	return b
 }
 
-func (b *PhotoBuilder) WithFilePath(filePath string) *PhotoBuilder {
+func (b *PhotoBuilder) WithFileUrl(fileUrl string) *PhotoBuilder {
 	if b.err != nil {
 		return b
 	}
 
-	if filePath == "" {
+	if fileUrl == "" {
 		b.err = errors.NewErrorBadRequest(
 			"missing_file_path",
 			"file path for the photo is required",
@@ -58,16 +58,16 @@ func (b *PhotoBuilder) WithFilePath(filePath string) *PhotoBuilder {
 		return b
 	}
 
-	b.filePath = filePath
+	b.fileUrl = fileUrl
 	return b
 }
 
-func (b *PhotoBuilder) WithRecognitionStatus(recognized bool) *PhotoBuilder {
+func (b *PhotoBuilder) WithRecognitionStatus(isMatch bool) *PhotoBuilder {
 	if b.err != nil {
 		return b
 	}
 
-	b.recognized = recognized
+	b.isMatch = isMatch
 	return b
 }
 
@@ -96,8 +96,8 @@ func (b *PhotoBuilder) Build() (*Photo, error) {
 	return &Photo{
 		ID:         uuid.New(),
 		MacAddress: b.macAddress,
-		FilePath:   b.filePath,
-		Recognized: b.recognized,
+		FileURL:    b.fileUrl,
+		IsMatch:    b.isMatch,
 		Timestamp:  b.timestamp,
 		CreatedAt:  time.Now(),
 	}, nil
