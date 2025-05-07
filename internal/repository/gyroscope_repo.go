@@ -9,7 +9,6 @@ import (
 )
 
 func SaveGyroscope(gyroscope *model.Gyroscope) error {
-	// Obter conexão com o banco
 	conn, err := db.GetConnection()
 	if err != nil {
 		return err

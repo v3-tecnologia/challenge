@@ -16,10 +16,6 @@ func SaveGPS(gps *model.GPS) error {
 	}
 	defer conn.Close()
 
-	// Log dos valores que estão sendo inseridos
-	log.Printf("Saving GPS data: ID=%s, MacAddress=%s, Lat=%.6f, Lng=%.6f, Timestamp=%v",
-		gps.ID, gps.MacAddress, *gps.Latitude, *gps.Longitude, gps.Timestamp)
-
 	// Insertion Query
 	query := `
         INSERT INTO gps (id, mac_address, latitude, longitude, timestamp, created_at)

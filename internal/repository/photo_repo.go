@@ -34,7 +34,6 @@ func SavePhoto(photo *model.Photo) error {
 }
 
 func GetPhotoByID(id uuid.UUID) (*model.Photo, error) {
-	// Obter conexão com o banco
 	conn, err := db.GetConnection()
 	if err != nil {
 		return nil, err
