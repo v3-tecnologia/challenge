@@ -7,7 +7,7 @@ import (
 )
 
 func SetupTelemetryRoutes(router *mux.Router) {
-	telemetryRouter := router.PathPrefix("/cloud").Subrouter()
+	telemetryRouter := router.PathPrefix("/telemetry").Subrouter()
 
 	telemetryRouter.HandleFunc("/gyroscope", handlers.HandleGyroscopeData).Methods("POST")
 	telemetryRouter.HandleFunc("/gps", handlers.HandleGPSData).Methods("POST")
