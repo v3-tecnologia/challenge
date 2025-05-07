@@ -1,22 +1,28 @@
 package repository
 
 import (
-	"database/sql"
+	"fmt"
+	"log"
 
 	"github.com/bielgennaro/v3-challenge-cloud/internal/db"
 	"github.com/bielgennaro/v3-challenge-cloud/internal/model"
-	"github.com/google/uuid"
 )
 
 func SaveGPS(gps *model.GPS) error {
 	conn, err := db.GetConnection()
 	if err != nil {
-		return err
+		log.Printf("Error connecting to database: %v", err)
+		return fmt.Errorf("database connection error: %w", err)
 	}
+	defer conn.Close()
+
+	// Log dos valores que estão sendo inseridos
+	log.Printf("Saving GPS data: ID=%s, MacAddress=%s, Lat=%.6f, Lng=%.6f, Timestamp=%v",
+		gps.ID, gps.MacAddress, *gps.Latitude, *gps.Longitude, gps.Timestamp)
 
 	// Insertion Query
 	query := `
-        INSERT INTO gps_data (id, mac_address, latitude, longitude, timestamp, created_at)
+        INSERT INTO gps (id, mac_address, latitude, longitude, timestamp, created_at)
         VALUES ($1, $2, $3, $4, $5, $6)
     `
 
@@ -30,37 +36,11 @@ func SaveGPS(gps *model.GPS) error {
 		gps.CreatedAt,
 	)
 
-	return err
-}
-
-func GetGPSByID(id uuid.UUID) (*model.GPS, error) {
-	conn, err := db.GetConnection()
 	if err != nil {
-		return nil, err
+		log.Printf("Error executing query: %v", err)
+		return fmt.Errorf("database insertion error: %w", err)
 	}
 
-	query := `
-        SELECT id, mac_address, latitude, longitude, timestamp, created_at
-        FROM gps_data
-        WHERE id = $1
-    `
-
-	var gps model.GPS
-	err = conn.QueryRow(query, id).Scan(
-		&gps.ID,
-		&gps.MacAddress,
-		&gps.Latitude,
-		&gps.Longitude,
-		&gps.Timestamp,
-		&gps.CreatedAt,
-	)
-
-	if err == sql.ErrNoRows {
-		return nil, nil
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	return &gps, nil
+	log.Printf("GPS data saved successfully with ID: %s", gps.ID)
+	return nil
 }

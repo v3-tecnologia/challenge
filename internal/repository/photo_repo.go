@@ -24,8 +24,8 @@ func SavePhoto(photo *model.Photo) error {
 		query,
 		photo.ID,
 		photo.MacAddress,
-		photo.FilePath,
-		photo.Recognized,
+		photo.FileURL,
+		photo.IsMatch,
 		photo.Timestamp,
 		photo.CreatedAt,
 	)
@@ -50,8 +50,8 @@ func GetPhotoByID(id uuid.UUID) (*model.Photo, error) {
 	err = conn.QueryRow(query, id).Scan(
 		&photo.ID,
 		&photo.MacAddress,
-		&photo.FilePath,
-		&photo.Recognized,
+		&photo.FileURL,
+		&photo.IsMatch,
 		&photo.Timestamp,
 		&photo.CreatedAt,
 	)
