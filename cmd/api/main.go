@@ -9,9 +9,9 @@ import (
 	"syscall"
 	"time"
 
+	env "github.com/bielgennaro/v3-challenge-cloud/config"
 	"github.com/bielgennaro/v3-challenge-cloud/config/middleware"
 	"github.com/bielgennaro/v3-challenge-cloud/internal/db"
-	env "github.com/bielgennaro/v3-challenge-cloud/internal/handlers"
 	"github.com/bielgennaro/v3-challenge-cloud/internal/routes"
 	"github.com/gorilla/mux"
 )
@@ -39,6 +39,10 @@ func main() {
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  120 * time.Second,
+	}
+
+	if err := db.RunMigrations(); err != nil {
+		log.Fatalf("Failed to run database migrations: %v", err)
 	}
 
 	go func() {

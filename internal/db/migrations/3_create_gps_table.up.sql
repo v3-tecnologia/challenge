@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS gps (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    mac_address VARCHAR(17) NOT NULL,
+    latitude DOUBLE PRECISION NOT NULL,
+    longitude DOUBLE PRECISION NOT NULL,
+    timestamp TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
