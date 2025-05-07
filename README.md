@@ -26,48 +26,45 @@ V3 Challenge API é uma API robusta desenvolvida para receber, validar e process
 | `POST` | `/telemetry/gps` | Recebe e processa dados de GPS |
 | `POST` | `/telemetry/photo` | Recebe, processa e analisa fotos |
 
-## 📐 Estrutura dos Dados ( Pode ser alterado futuramente, apenas exemplos)
+## 📐 Estrutura dos Dados
 
 ### Giroscópio
 ```json
 {
-  "deviceId": "string",
-  "timestamp": "ISO8601",
+  "mac_address": "string",
+  "timestamp": "Time",
   "x": "number",
   "y": "number",
-  "z": "number",
-  "precision": "number"
+  "z": "number"
 }
 ```
 
 ### GPS
 ```json
 {
-  "deviceId": "string",
-  "timestamp": "ISO8601",
+  "mac_address": "string",
+  "timestamp": "Time",
   "latitude": "number",
   "longitude": "number",
-  "altitude": "number",
-  "accuracy": "number"
 }
 ```
 
 ### Foto
 ```json
 {
-  "deviceId": "string",
-  "timestamp": "ISO8601",
-  "imageData": "base64",
-  "format": "string",
-  "metadata": {
-    "location": {
-      "latitude": "number",
-      "longitude": "number"
-    },
-    "deviceInfo": "string"
-  }
+  "mac_address": "string",
+  "timestamp": "Time",
+  "file_url": "string",
+  "is_match": "bool"
 }
 ```
+
+## ❌ Erros possíveis
+### 500
+![image](https://github.com/user-attachments/assets/1e40bde4-5507-49ab-a2b0-232d1d672031)
+
+### 400
+![image](https://github.com/user-attachments/assets/6214cb9c-9796-4fac-bd2b-2104997712ec)
 
 ## 🖥️ Tecnologias Utilizadas
 
