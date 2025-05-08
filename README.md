@@ -7,7 +7,7 @@
 
 ## 📋 Visão Geral
 
-V3 Challenge API é uma API robusta desenvolvida para receber, validar e processar dados de telemetria de dispositivos IoT, incluindo informações de giroscópio, GPS e imagens. A API utiliza tecnologias modernas como Node.js, Docker e integração com AWS Rekognition para reconhecimento facial avançado.
+V3 Challenge API é uma API robusta desenvolvida para receber, validar e processar dados de telemetria de dispositivos, incluindo informações de giroscópio, GPS e imagens. A API utiliza tecnologias modernas como Golang, Docker e integração com AWS Rekognition para reconhecimento facial avançado.
 
 ## 🚀 Funcionalidades
 
@@ -71,37 +71,37 @@ V3 Challenge API é uma API robusta desenvolvida para receber, validar e process
 - **Backend**: Golang
 - **Banco de Dados**: Postgres
 - **Containerização**: Docker, Docker Compose
-- **Testes**: Go testing, Testify
+- **Testes**: Go testing, Go Sql Mock
 - **Reconhecimento de Imagem**: AWS Rekognition
 
 ## 🛠️ Configuração e Instalação
+
+### Para rodar o projeto localmente utilize e consulte o arquivo ```Makefile```
+
+- Para rodar e buildar:
+```make
+  make run
+```
+
+- Para buildar
+```make
+  make build
+```
+
+- Para rodar os testes:
+```make
+  make test
+```
+
+- Para subir o container com a aplicação e o banco
+```docker
+  docker compose up --build
+```
 
 ### Pré-requisitos
 
 - Go (v1.24 ou superior)
 - Docker e Docker Compose
 - Conta AWS (para Rekognition)
-
-
-## 📊 Resultados da Análise de Imagem
-
-Quando uma foto é enviada ao endpoint `/telemetry/photo`, o sistema utiliza AWS Rekognition para:
-
-1. Analisar a imagem quanto à qualidade e conteúdo
-2. Comparar com imagens anteriores
-3. Retornar resultados de reconhecimento
-
-Exemplo de resposta (pode ser alterado futuramente):
-```json
-{
-  "success": true,
-  "photoId": "8a7b6c5d4e3f2g1h",
-  "recognition": {
-    "matched": true,
-    "confidence": 98.7,
-    "matchedPhotoIds": ["1a2b3c4d5e6f7g8h"]
-  }
-}
-```
 
 Desenvolvido com ❤️ para a V3.
