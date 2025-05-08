@@ -32,3 +32,35 @@ func (q *Queries) InsertDevice(ctx context.Context, arg InsertDeviceParams) (Dev
 	)
 	return i, err
 }
+
+const insertGyroscopeReading = `-- name: InsertGyroscopeReading :one
+INSERT INTO gyroscope_readings (device_id, x, y, z, collected_at) VALUES ($1, $2, $3, $4, $5) RETURNING id, device_id, x, y, z, collected_at
+`
+
+type InsertGyroscopeReadingParams struct {
+	DeviceID    string           `json:"deviceId"`
+	X           float64          `json:"x"`
+	Y           float64          `json:"y"`
+	Z           float64          `json:"z"`
+	CollectedAt pgtype.Timestamp `json:"collectedAt"`
+}
+
+func (q *Queries) InsertGyroscopeReading(ctx context.Context, arg InsertGyroscopeReadingParams) (GyroscopeReading, error) {
+	row := q.db.QueryRow(ctx, insertGyroscopeReading,
+		arg.DeviceID,
+		arg.X,
+		arg.Y,
+		arg.Z,
+		arg.CollectedAt,
+	)
+	var i GyroscopeReading
+	err := row.Scan(
+		&i.ID,
+		&i.DeviceID,
+		&i.X,
+		&i.Y,
+		&i.Z,
+		&i.CollectedAt,
+	)
+	return i, err
+}
