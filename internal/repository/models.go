@@ -11,8 +11,6 @@ import (
 
 type Device struct {
 	DeviceID     string           `json:"deviceId"`
-	Name         pgtype.Text      `json:"name"`
-	Model        pgtype.Text      `json:"model"`
 	RegisteredAt pgtype.Timestamp `json:"registeredAt"`
 }
 

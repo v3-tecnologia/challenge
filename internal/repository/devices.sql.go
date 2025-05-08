@@ -7,44 +7,26 @@ package repository
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const getDeviceByID = `-- name: GetDeviceByID :one
-SELECT device_id, name, model, registered_at FROM devices WHERE device_id = $1
+SELECT device_id, registered_at FROM devices WHERE device_id = $1
 `
 
 func (q *Queries) GetDeviceByID(ctx context.Context, deviceID string) (Device, error) {
 	row := q.db.QueryRow(ctx, getDeviceByID, deviceID)
 	var i Device
-	err := row.Scan(
-		&i.DeviceID,
-		&i.Name,
-		&i.Model,
-		&i.RegisteredAt,
-	)
+	err := row.Scan(&i.DeviceID, &i.RegisteredAt)
 	return i, err
 }
 
 const insertDevice = `-- name: InsertDevice :one
-INSERT INTO devices (device_id, name, model) VALUES ($1, $2, $3) RETURNING device_id, name, model, registered_at
+INSERT INTO devices (device_id) VALUES ($1) RETURNING device_id, registered_at
 `
 
-type InsertDeviceParams struct {
-	DeviceID string      `json:"deviceId"`
-	Name     pgtype.Text `json:"name"`
-	Model    pgtype.Text `json:"model"`
-}
-
-func (q *Queries) InsertDevice(ctx context.Context, arg InsertDeviceParams) (Device, error) {
-	row := q.db.QueryRow(ctx, insertDevice, arg.DeviceID, arg.Name, arg.Model)
+func (q *Queries) InsertDevice(ctx context.Context, deviceID string) (Device, error) {
+	row := q.db.QueryRow(ctx, insertDevice, deviceID)
 	var i Device
-	err := row.Scan(
-		&i.DeviceID,
-		&i.Name,
-		&i.Model,
-		&i.RegisteredAt,
-	)
+	err := row.Scan(&i.DeviceID, &i.RegisteredAt)
 	return i, err
 }

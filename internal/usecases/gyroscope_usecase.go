@@ -12,7 +12,7 @@ type GyroscopeUseCase interface {
 
 type GyroscopeQuerier interface {
 	GetDeviceByID(ctx context.Context, deviceID string) (repository.Device, error)
-	InsertDevice(ctx context.Context, params repository.InsertDeviceParams) (repository.Device, error)
+	InsertDevice(ctx context.Context, deviceID string) (repository.Device, error)
 	InsertGyroscopeReading(ctx context.Context, params repository.InsertGyroscopeReadingParams) (repository.GyroscopeReading, error)
 }
 
@@ -28,9 +28,7 @@ func NewGyroscopeUseCase(queries GyroscopeQuerier) GyroscopeUseCase {
 
 func (uc *gyroscopeUseCaseImpl) CreateGyroscopeReading(ctx context.Context, params repository.InsertGyroscopeReadingParams) (repository.GyroscopeReading, error) {
 	deviceUC := NewDeviceUseCase(uc.queries)
-	_, err := deviceUC.CreateDevice(ctx, repository.InsertDeviceParams{
-		DeviceID: params.DeviceID,
-	})
+	_, err := deviceUC.CreateDevice(ctx, params.DeviceID)
 
 	if err != nil {
 		return repository.GyroscopeReading{}, err

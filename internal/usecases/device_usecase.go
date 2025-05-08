@@ -9,12 +9,12 @@ import (
 )
 
 type DeviceUseCase interface {
-	CreateDevice(ctx context.Context, params repository.InsertDeviceParams) (repository.Device, error)
+	CreateDevice(ctx context.Context, deviceID string) (repository.Device, error)
 }
 
 type DeviceQuerier interface {
 	GetDeviceByID(ctx context.Context, deviceID string) (repository.Device, error)
-	InsertDevice(ctx context.Context, params repository.InsertDeviceParams) (repository.Device, error)
+	InsertDevice(ctx context.Context, deviceID string) (repository.Device, error)
 }
 
 type deviceUseCaseImpl struct {
@@ -27,11 +27,11 @@ func NewDeviceUseCase(queries DeviceQuerier) DeviceUseCase {
 	}
 }
 
-func (uc *deviceUseCaseImpl) CreateDevice(ctx context.Context, params repository.InsertDeviceParams) (repository.Device, error) {
-	device, err := uc.queries.GetDeviceByID(ctx, params.DeviceID)
+func (uc *deviceUseCaseImpl) CreateDevice(ctx context.Context, deviceID string) (repository.Device, error) {
+	device, err := uc.queries.GetDeviceByID(ctx, deviceID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			device, err = uc.queries.InsertDevice(ctx, params)
+			device, err = uc.queries.InsertDevice(ctx, deviceID)
 
 			if err != nil {
 				return repository.Device{}, err

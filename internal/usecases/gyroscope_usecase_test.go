@@ -16,8 +16,8 @@ type MockQueries struct {
 	mock.Mock
 }
 
-func (m *MockQueries) InsertDevice(ctx context.Context, arg repository.InsertDeviceParams) (repository.Device, error) {
-	args := m.Called(ctx, arg)
+func (m *MockQueries) InsertDevice(ctx context.Context, deviceID string) (repository.Device, error) {
+	args := m.Called(ctx, deviceID)
 	return args.Get(0).(repository.Device), args.Error(1)
 }
 
@@ -82,7 +82,7 @@ func Test_CreateReading_WhenDeviceMissing_ShouldInsertDeviceFirst(t *testing.T) 
 	deviceID := "test-device"
 
 	mockQueries.On("GetDeviceByID", mock.Anything, deviceID).Return(repository.Device{}, sql.ErrNoRows)
-	mockQueries.On("InsertDevice", mock.Anything, repository.InsertDeviceParams{DeviceID: deviceID}).Return(expectedDevice, nil)
+	mockQueries.On("InsertDevice", mock.Anything, deviceID).Return(expectedDevice, nil)
 	mockQueries.On("InsertGyroscopeReading", mock.Anything, params).Return(expectedReading, nil)
 
 	reading, err := uc.CreateGyroscopeReading(context.Background(), params)
