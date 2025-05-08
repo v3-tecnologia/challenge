@@ -71,10 +71,15 @@ func handleGps(c *gin.Context) {
 }
 
 func handlePhoto(c *gin.Context) {
-	datetimeCollected := c.PostForm("datetime_collected")
+	datetimeCollectedStr := c.PostForm("datetime_collected")
 	macAddr := c.PostForm("mac_addr")
-	if datetimeCollected == "" {
+	if datetimeCollectedStr == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "datetime_collected não fornecido"})
+		return
+	}
+	datetimeCollected, err := time.Parse(time.RFC3339, datetimeCollectedStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "datetime_collected inválido"})
 		return
 	}
 
@@ -93,7 +98,11 @@ func handlePhoto(c *gin.Context) {
 	photo.Name = file.Filename
 	photo.DateTimeCollected = datetimeCollected
 	photo.MacAddr = macAddr
-	photo.Image = utils.FileHeaderToBytes(file)
+	photo.Image, err = utils.FileHeaderToBytes(file)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Erro ao ler a imagem"})
+		return
+	}
 
 	repo := repository.PhotoRepository{DB: db.DB}
 	err = repo.Save(&photo)
