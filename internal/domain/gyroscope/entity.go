@@ -14,6 +14,14 @@ type GyroscopeData struct {
 	Z         float64
 	Timestamp time.Time
 }
+type GyroscopeDto struct {
+	ID        string  `json:"id"`
+	DeviceID  string  `json:"deviceId"`
+	Timestamp int64   `json:"timestamp"`
+	X         float64 `json:"x"`
+	Y         float64 `json:"y"`
+	Z         float64 `json:"z"`
+}
 
 func NewGyroscopeData(deviceID string, x, y, z float64, timestamp time.Time) (*GyroscopeData, error) {
 	dev, err := device.NewDevice(deviceID)
