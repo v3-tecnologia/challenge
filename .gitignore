@@ -1,0 +1,25 @@
+*.env
+
+# Binaries
+*.exe
+*.o
+
+# Test binaries and results
+*_test
+*.test
+testdata
+
+# Dependencies (Go modules)
+/vendor
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+
+# Go specific
+*.out

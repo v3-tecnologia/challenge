@@ -1,66 +1,107 @@
-<p align="center">
-    <img src="./.github/logo.png" width="200px">
-</p>
+# 🛰️ V3 Challenge API
 
-<h1 align="center" style="font-weight: bold;">Desafio Técnico da V3</h1>
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Go Version](https://img.shields.io/badge/go-1.24-00ADD8?logo=go&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-Rekognition-FF9900?logo=amazon-aws&logoColor=white)
 
-## ❤️ Bem vindos
+## 📋 Visão Geral
 
-Olá, tudo certo?
+V3 Challenge API é uma API robusta desenvolvida para receber, validar e processar dados de telemetria de dispositivos, incluindo informações de giroscópio, GPS e imagens. A API utiliza tecnologias modernas como Golang, Docker e integração com AWS Rekognition para reconhecimento facial avançado.
 
-Seja bem vindo ao teste de seleção para novos colaboradores na V3!
+## 🚀 Funcionalidades
 
-Estamos honrados que você tenha chegado até aqui!
+- ✅ Recebimento e validação de dados de telemetria (giroscópio, GPS, fotos)
+- 📦 Armazenamento consistente em banco de dados
+- 🧠 Reconhecimento inteligente de imagens com AWS Rekognition
+- 🔍 Verificação de similaridade entre fotos enviadas
+- 🐳 Containerização completa com Docker
+- 🧪 Cobertura completa de testes unitários
 
-Prepare aquele ☕️, e venha conosco codar e se divertir!
+## 📚 Endpoints da API
 
-## 📚 Desafios Disponíveis
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| `POST` | `/telemetry/gyroscope` | Recebe e processa dados do giroscópio |
+| `POST` | `/telemetry/gps` | Recebe e processa dados de GPS |
+| `POST` | `/telemetry/photo` | Recebe, processa e analisa fotos |
 
-Este repositório contém três desafios diferentes, cada um focado em uma área específica:
+## 📐 Estrutura dos Dados
 
-1. [Suporte Técnico](SUPPORT.md)
-2. [Desafio Backend](CLOUD.md)
-3. [Desafio Firmware](FIRMWARE.md)
-   
-## Poxa, outro teste?
+### Giroscópio
+```json
+{
+  "mac_address": "string",
+  "timestamp": "Time",
+  "x": "number",
+  "y": "number",
+  "z": "number"
+}
+```
 
-Nós sabemos que os processos de seleção podem ser ingratos! Você investe um tempão e no final pode não ser aprovado!
+### GPS
+```json
+{
+  "mac_address": "string",
+  "timestamp": "Time",
+  "latitude": "number",
+  "longitude": "number",
+}
+```
 
-Aqui, nós presamos pela **transparência**!
+### Foto
+```json
+{
+  "mac_address": "string",
+  "timestamp": "Time",
+  "file_url": "string",
+  "is_match": "bool"
+}
+```
 
-Este teste tem um **propósito** bastante simples:
+## ❌ Erros possíveis
+### 500
+![image](https://github.com/user-attachments/assets/1e40bde4-5507-49ab-a2b0-232d1d672031)
 
-> Nós queremos avaliar como você consegue transformar problemas em soluções através de código!
+### 400
+![image](https://github.com/user-attachments/assets/6214cb9c-9796-4fac-bd2b-2104997712ec)
 
-**🚨 IMPORTANTE!** Se você entende que já possui algum projeto pessoal, ou contribuição em um projeto _open-source_ que contemple conhecimentos equivalentes aos que existem neste desafio, então, basta submeter o repositório explicando essa correlação!
+## 🖥️ Tecnologias Utilizadas
 
-## 🚀 Bora nessa!
+- **Backend**: Golang
+- **Banco de Dados**: Postgres
+- **Containerização**: Docker, Docker Compose
+- **Testes**: Go testing, Go Sql Mock
+- **Reconhecimento de Imagem**: AWS Rekognition
 
-Este é um teste para analisarmos como você desempenha ao entender, traduzir, resolver e entregar um código que resolve um problema.
+## 🛠️ Configuração e Instalação
 
-### Dicas
+### Para rodar o projeto localmente utilize e consulte o arquivo ```Makefile```
 
-- Documente seu projeto;
-- Faça perguntas sobre os pontos que não ficaram claros para você;
-- Mostre a sua linha de raciocínio;
-- Trabalhe bem o seu README.md;
-  - Explique até onde implementou;
-  - Como o projeto pode ser executado;
-  - Como pode-se testar o projeto;
+- Para rodar e buildar:
+```make
+  make run
+```
 
-### Como você deverá desenvolver?
+- Para buildar
+```make
+  make build
+```
 
-1. Faça um _fork_ deste projeto em seu GitHub pessoal;
-2. Realize as implementações de acordo com cada um dos níveis;
-3. Faça pequenos _commits_;
-4. Depois de sentir que fez o seu máximo, faça um PR para o repositório original.
+- Para rodar os testes:
+```make
+  make test
+```
 
-🚨 **IMPORTANTE!** Não significa que você precisa implementar **todos os níveis** para ser aprovado no processo! Faça até onde se sentir confortável.
+- Para subir o container com a aplicação e o banco
+```docker
+  docker compose up --build
+```
 
-## ⏰ Tempo para Entrega
+### Pré-requisitos
 
-Quanto antes você enviar, mais cuidado podemos ter na revisão do seu teste. Faça no seu tempo, mas mantenha a qualidade!
+- Go (v1.24 ou superior)
+- Docker e Docker Compose
+- Conta AWS (para Rekognition)
 
-**Mas não desista! Envie até onde conseguir.**
-
-Boa sorte! 🍀
+Desenvolvido com ❤️ para a V3.
