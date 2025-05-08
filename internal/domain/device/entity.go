@@ -5,13 +5,17 @@ import (
 	"regexp"
 )
 
+var (
+	ErrInValidMACGyroscope = errors.New("invalid MAC address")
+)
+
 type Device struct {
 	ID string
 }
 
 func NewDevice(id string) (*Device, error) {
 	if !isValidMAC(id) {
-		return nil, errors.New("invalid MAC address")
+		return nil, ErrInValidMACGyroscope
 	}
 	return &Device{ID: id}, nil
 }
