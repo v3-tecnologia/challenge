@@ -4,29 +4,29 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/ricardoraposo/challenge/internal/database"
 	"github.com/ricardoraposo/challenge/internal/repository"
+	"github.com/ricardoraposo/challenge/internal/usecases"
 )
 
 type GyroscopeHandler struct {
-	database *database.Database
+	useCase usecases.GyroscopeUseCase
 }
 
-func NewGyroscopeHandler(database *database.Database) *GyroscopeHandler {
+func NewGyroscopeHandler(useCase usecases.GyroscopeUseCase) *GyroscopeHandler {
 	return &GyroscopeHandler{
-		database,
+		useCase: useCase,
 	}
 }
 
 func (h *GyroscopeHandler) CreateGyroscopeReadings(c *fiber.Ctx) error {
 	params := repository.InsertGyroscopeReadingParams{}
 	if err := c.BodyParser(&params); err != nil {
-		return err
+		return fiber.NewError(http.StatusBadRequest, err.Error())
 	}
 
-	reading, err := h.database.Query.InsertGyroscopeReading(c.Context(), params)
+	reading, err := h.useCase.CreateGyroscopeReading(c.Context(), params)
 	if err != nil {
-		return err
+		return fiber.NewError(http.StatusInternalServerError, err.Error())
 	}
 
 	return c.Status(http.StatusCreated).JSON(reading)

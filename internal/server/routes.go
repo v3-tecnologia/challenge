@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/ricardoraposo/challenge/internal/handlers"
 	"github.com/ricardoraposo/challenge/internal/middleware"
+	"github.com/ricardoraposo/challenge/internal/usecases"
 )
 
 func (s *FiberServer) RegisterRoutes() {
@@ -16,7 +17,8 @@ func (s *FiberServer) RegisterRoutes() {
 
 	s.App.Get("/health", health)
 
-	gyroscopeHandler := handlers.NewGyroscopeHandler(s.Database)
+	gyroscopeUseCase := usecases.NewGyroscopeUseCase(s.Database.Query)
+	gyroscopeHandler := handlers.NewGyroscopeHandler(gyroscopeUseCase)
 
 	telemetryApi := s.App.Group("/telemetry")
 
