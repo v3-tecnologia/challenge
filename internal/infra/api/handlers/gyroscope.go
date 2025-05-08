@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -22,6 +23,10 @@ func (h *GyroscopeHandler) Create(c *gin.Context) {
 		Y         float64   `json:"y" binding:"required"`
 		Z         float64   `json:"z" binding:"required"`
 		Timestamp time.Time `json:"timestamp" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing or invalid fields"})
+		return
 	}
 
 }
