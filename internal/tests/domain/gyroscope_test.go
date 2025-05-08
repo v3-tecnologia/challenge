@@ -31,3 +31,10 @@ func TestNewGyroscopeData_InvalidDeviceID(t *testing.T) {
 	assert.Nil(t, data)
 	assert.Equal(t, "invalid MAC address", err.Error())
 }
+
+func TestNewGyroscopeData_InvalidTimestamp(t *testing.T) {
+	data, err := gyroscope.NewGyroscopeData("00:1A:2B:3C:4D:5E", 1.0, 2.0, 3.0, time.Time{})
+	assert.Error(t, err)
+	assert.Nil(t, data)
+	assert.Equal(t, "timestamp is required", err.Error())
+}
