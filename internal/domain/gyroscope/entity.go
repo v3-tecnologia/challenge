@@ -7,6 +7,11 @@ import (
 	"github.com/iamrosada0/v3/internal/domain/device"
 )
 
+var (
+	ErrDeviceIDGyroscope  = errors.New("DeviceID not found")
+	ErrTimestampGyroscope = errors.New("timestamp not found")
+)
+
 type GyroscopeData struct {
 	Device    *device.Device
 	X         float64
