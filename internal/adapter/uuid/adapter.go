@@ -10,6 +10,7 @@ type UUIDGenerator interface {
 func (u *Adapter) Generate() string {
 	return uuid.New().String()
 }
-func NewUUIDAdapter() *Adapter {
+
+func NewAdapter() *Adapter {
 	return &Adapter{}
 }
