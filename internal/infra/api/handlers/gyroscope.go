@@ -28,5 +28,10 @@ func (h *GyroscopeHandler) Create(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing or invalid fields"})
 		return
 	}
+	if _, err := h.UseCase.Create(input.DeviceID, input.X, input.Y, input.Z, input.Timestamp); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to process data"})
+		return
+	}
 
+	c.JSON(http.StatusOK, gin.H{"message": "Gyroscope data received and saved"})
 }
