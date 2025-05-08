@@ -7,3 +7,7 @@ import (
 type GyroscopeUseCase struct {
 	Repo repository.GyroscopeRepository
 }
+
+func NewGyroscopeUseCase(repo repository.GyroscopeRepository) *GyroscopeUseCase {
+	return &GyroscopeUseCase{Repo: repo}
+}
