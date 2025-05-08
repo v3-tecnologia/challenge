@@ -7,7 +7,6 @@ import (
 	"github.com/brianvoe/gofakeit/v6"
 	d "github.com/iamrosada0/v3/internal/domain/gyroscope"
 	"github.com/iamrosada0/v3/internal/usecase/gyroscope"
-	uc "github.com/iamrosada0/v3/internal/usecase/gyroscope"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -24,7 +23,7 @@ func (m *MockGyroscopeRepository) Create(data *d.GyroscopeData) (*d.GyroscopeDat
 
 func TestGyroscopeUseCase_Create_Success(t *testing.T) {
 	mockRepo := new(MockGyroscopeRepository)
-	uc := uc.NewGyroscopeUseCase(mockRepo)
+	uc := gyroscope.NewGyroscopeUseCase(mockRepo)
 
 	deviceID := "00:1A:2B:3C:4D:5E"
 	x := gofakeit.Float64()
