@@ -10,3 +10,6 @@ type AdapterInterface interface {
 func (u *Adapter) Value() string {
 	return uuid.New().String()
 }
+func NewUUIDAdapter() *Adapter {
+	return &Adapter{}
+}
