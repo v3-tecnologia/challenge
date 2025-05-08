@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/iamrosada0/v3/internal/adapter/uuid"
 	"github.com/iamrosada0/v3/internal/domain/device"
 )
 
@@ -13,12 +14,14 @@ var (
 )
 
 type GyroscopeData struct {
+	ID        string
 	Device    *device.Device
 	X         float64
 	Y         float64
 	Z         float64
 	Timestamp time.Time
 }
+
 type GyroscopeDto struct {
 	ID        string  `json:"id"`
 	DeviceID  string  `json:"deviceId"`
@@ -28,13 +31,25 @@ type GyroscopeDto struct {
 	Z         float64 `json:"z"`
 }
 
-func NewGyroscopeData(deviceID string, x, y, z float64, timestamp time.Time) (*GyroscopeData, error) {
-	dev, err := device.NewDevice(deviceID)
+func NewGyroscopeData(d *GyroscopeDto) (*GyroscopeData, error) {
+	id := uuid.NewAdapter().Generate()
+
+	dev, err := device.NewDevice(d.DeviceID)
 	if err != nil {
 		return nil, err
 	}
+
+	timestamp := time.Unix(d.Timestamp, 0)
 	if timestamp.IsZero() {
-		return nil, errors.New("timestamp is required")
+		return nil, ErrTimestampGyroscope
 	}
-	return &GyroscopeData{Device: dev, X: x, Y: y, Z: z, Timestamp: timestamp}, nil
+
+	return &GyroscopeData{
+		ID:        id,
+		Device:    dev,
+		Timestamp: timestamp,
+		X:         d.X,
+		Y:         d.Y,
+		Z:         d.Z,
+	}, nil
 }
