@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/brianvoe/gofakeit"
 	d "github.com/iamrosada0/v3/internal/domain/gyroscope"
 	"github.com/iamrosada0/v3/internal/service/gyroscope"
 
+	"github.com/brianvoe/gofakeit/v6"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -21,6 +21,7 @@ func (m *MockGyroscopeRepository) Create(data *d.GyroscopeData) (*d.GyroscopeDat
 	args := m.Called(data)
 	return args.Get(0).(*d.GyroscopeData), args.Error(1)
 }
+
 func TestGyroscopeService_Create_Success(t *testing.T) {
 	mockRepo := new(MockGyroscopeRepository)
 	service := gyroscope.NewGyroscopeService(mockRepo)
