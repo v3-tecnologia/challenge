@@ -3,8 +3,8 @@ package uuid
 import "github.com/google/uuid"
 
 type Adapter struct{}
-type AdapterInterface interface {
-	Value() string
+type UUIDGenerator interface {
+	Generate() string
 }
 
 func (u *Adapter) Generate() string {
