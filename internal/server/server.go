@@ -12,7 +12,7 @@ type FiberServer struct {
 
 func New() *FiberServer {
 	return &FiberServer{
-		App: fiber.New(),
-        Database: database.NewDatabase(),
+		App:      fiber.New(),
+		Database: database.NewDatabase(),
 	}
 }
