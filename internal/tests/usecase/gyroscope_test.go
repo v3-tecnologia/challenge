@@ -42,8 +42,8 @@ func TestGyroscopeUseCase_Create_Success(t *testing.T) {
 }
 
 func TestGyroscopeUseCase_Create_InvalidDeviceID(t *testing.T) {
-	mockService := new(MockGyroscopeService)
-	uc := gyroscope.NewGyroscopeUseCase(mockService)
+	mockRepo := new(MockGyroscopeRepository)
+	uc := gyroscope.NewGyroscopeUseCase(mockRepo)
 
 	_, err := uc.Create("invalid-mac", 1.0, 2.0, 3.0, time.Now())
 	assert.Error(t, err)
