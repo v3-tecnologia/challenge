@@ -9,6 +9,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
+var mockConn *sql.DB
+
 type Config struct {
 	Host     string
 	Port     string
@@ -16,6 +18,10 @@ type Config struct {
 	Password string
 	DBName   string
 	SSLMode  string
+}
+
+func SetConnection(conn *sql.DB) {
+	mockConn = conn
 }
 
 func GetConnection() (*sql.DB, error) {
@@ -29,6 +35,10 @@ func GetConnection() (*sql.DB, error) {
 	}
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		config.Host, config.Port, config.User, config.Password, config.DBName, config.SSLMode)
+
+	if mockConn != nil {
+		return mockConn, nil
+	}
 
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {

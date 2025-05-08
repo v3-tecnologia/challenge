@@ -10,7 +10,6 @@ import (
 	"github.com/bielgennaro/v3-challenge-cloud/internal/repository"
 )
 
-// Payload
 type GyroscopeRequest struct {
 	MacAddress string    `json:"mac_address"`
 	AxisX      float64   `json:"axis_x"`
@@ -20,7 +19,6 @@ type GyroscopeRequest struct {
 }
 
 func HandleGyroscopeData(w http.ResponseWriter, r *http.Request) {
-	// Parse do JSON da requisição
 	var req GyroscopeRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		HandleError(w, errors.NewErrorBadRequest("invalid_json", "Failed to parse request body"))

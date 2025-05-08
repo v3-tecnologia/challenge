@@ -14,7 +14,6 @@ func SavePhoto(photo *model.Photo) error {
 		return err
 	}
 
-	// Insertion Query
 	query := `
         INSERT INTO photo_data (id, mac_address, file_path, recognized, timestamp, created_at)
         VALUES ($1, $2, $3, $4, $5, $6)

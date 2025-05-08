@@ -12,4 +12,6 @@ func SetupTelemetryRoutes(router *mux.Router) {
 	telemetryRouter.HandleFunc("/gyroscope", handlers.HandleGyroscopeData).Methods("POST")
 	telemetryRouter.HandleFunc("/gps", handlers.HandleGPSData).Methods("POST")
 	telemetryRouter.HandleFunc("/photo", handlers.HandlePhotoData).Methods("POST")
+
+	router.HandleFunc("/health", handlers.HandleHealthCheck).Methods("GET")
 }

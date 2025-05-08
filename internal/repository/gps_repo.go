@@ -16,7 +16,6 @@ func SaveGPS(gps *model.GPS) error {
 	}
 	defer conn.Close()
 
-	// Insertion Query
 	query := `
         INSERT INTO gps (id, mac_address, latitude, longitude, timestamp, created_at)
         VALUES ($1, $2, $3, $4, $5, $6)

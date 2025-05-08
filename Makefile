@@ -1,8 +1,8 @@
 build:
-	go build -o ./bin/cli ./cmd/api/main.go
+	go build -o ./bin/cli ./cmd/api/
 
 run: build
-	go run ./cmd/api
+	go run ./cmd/api/
 
 test:
 	go test ./... -v
