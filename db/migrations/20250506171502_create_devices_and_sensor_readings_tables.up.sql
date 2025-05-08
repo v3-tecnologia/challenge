@@ -2,8 +2,6 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE IF NOT EXISTS devices (
   device_id TEXT PRIMARY KEY,
-  name TEXT,
-  model TEXT,
   registered_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
