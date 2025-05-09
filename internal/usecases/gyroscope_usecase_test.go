@@ -34,7 +34,7 @@ func (m *MockQueries) GetDeviceByID(ctx context.Context, arg string) (repository
 var (
 	deviceID = "test-device"
 	now      = pgtype.Timestamp{Time: time.Now(), Valid: true}
-	params   = repository.InsertGyroscopeReadingParams{
+	insertGyroscopeParams   = repository.InsertGyroscopeReadingParams{
 		DeviceID:    deviceID,
 		X:           1.0,
 		Y:           2.0,
@@ -63,9 +63,9 @@ func Test_CreateReading_WhenDeviceExists_ShouldNotInsertDevice(t *testing.T) {
 	uc := NewGyroscopeUseCase(mockQueries)
 
 	mockQueries.On("GetDeviceByID", mock.Anything, deviceID).Return(expectedDevice, nil)
-	mockQueries.On("InsertGyroscopeReading", mock.Anything, params).Return(expectedReading, nil)
+	mockQueries.On("InsertGyroscopeReading", mock.Anything, insertGyroscopeParams).Return(expectedReading, nil)
 
-	reading, err := uc.CreateGyroscopeReading(context.Background(), params)
+	reading, err := uc.CreateGyroscopeReading(context.Background(), insertGyroscopeParams)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedReading, reading)
@@ -83,9 +83,9 @@ func Test_CreateReading_WhenDeviceMissing_ShouldInsertDeviceFirst(t *testing.T) 
 
 	mockQueries.On("GetDeviceByID", mock.Anything, deviceID).Return(repository.Device{}, sql.ErrNoRows)
 	mockQueries.On("InsertDevice", mock.Anything, deviceID).Return(expectedDevice, nil)
-	mockQueries.On("InsertGyroscopeReading", mock.Anything, params).Return(expectedReading, nil)
+	mockQueries.On("InsertGyroscopeReading", mock.Anything, insertGyroscopeParams).Return(expectedReading, nil)
 
-	reading, err := uc.CreateGyroscopeReading(context.Background(), params)
+	reading, err := uc.CreateGyroscopeReading(context.Background(), insertGyroscopeParams)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedReading, reading)
