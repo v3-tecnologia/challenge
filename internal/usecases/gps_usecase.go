@@ -16,17 +16,17 @@ type GpsQuerier interface {
 	InsertGPSReading(ctx context.Context, params repository.InsertGPSReadingParams) (repository.GpsReading, error)
 }
 
-type gpsUseCaseImpl struct {
+type gpsUseCase struct {
 	queries GpsQuerier
 }
 
 func NewGPSUseCase(queries GpsQuerier) GpsUseCase {
-	return &gpsUseCaseImpl{
+	return &gpsUseCase{
 		queries: queries,
 	}
 }
 
-func (uc *gpsUseCaseImpl) CreateGPSReading(ctx context.Context, params repository.InsertGPSReadingParams) (repository.GpsReading, error) {
+func (uc *gpsUseCase) CreateGPSReading(ctx context.Context, params repository.InsertGPSReadingParams) (repository.GpsReading, error) {
 	deviceUC := NewDeviceUseCase(uc.queries)
 	_, err := deviceUC.CreateDevice(ctx, params.DeviceID)
 

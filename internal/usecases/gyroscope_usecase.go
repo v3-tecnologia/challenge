@@ -16,17 +16,17 @@ type GyroscopeQuerier interface {
 	InsertGyroscopeReading(ctx context.Context, params repository.InsertGyroscopeReadingParams) (repository.GyroscopeReading, error)
 }
 
-type gyroscopeUseCaseImpl struct {
+type gyroscopeUseCase struct {
 	queries GyroscopeQuerier
 }
 
 func NewGyroscopeUseCase(queries GyroscopeQuerier) GyroscopeUseCase {
-	return &gyroscopeUseCaseImpl{
+	return &gyroscopeUseCase{
 		queries: queries,
 	}
 }
 
-func (uc *gyroscopeUseCaseImpl) CreateGyroscopeReading(ctx context.Context, params repository.InsertGyroscopeReadingParams) (repository.GyroscopeReading, error) {
+func (uc *gyroscopeUseCase) CreateGyroscopeReading(ctx context.Context, params repository.InsertGyroscopeReadingParams) (repository.GyroscopeReading, error) {
 	deviceUC := NewDeviceUseCase(uc.queries)
 	_, err := deviceUC.CreateDevice(ctx, params.DeviceID)
 
