@@ -2,7 +2,7 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	"v3-backend-challenge/model"
+	"v3-backend-challenge/src/model"
 )
 
 type PhotoRepository struct {

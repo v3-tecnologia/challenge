@@ -9,13 +9,13 @@ type BaseTelemetry struct {
 
 type Gyroscope struct {
 	BaseTelemetry
-	AxisX int `json:"x" binding:"required"`
-	AxisY int `json:"y" binding:"required"`
-	AxisZ int `json:"z" binding:"required"`
+	AxisX float64 `json:"x" binding:"required"`
+	AxisY float64 `json:"y" binding:"required"`
+	AxisZ float64 `json:"z" binding:"required"`
 }
 
 type GPS struct {
 	BaseTelemetry
-	Latitude  int `json:"latitude" binding:"required"`
-	Longitude int `json:"longitude" binding:"required"`
+	Latitude  float64 `json:"latitude" binding:"required"`
+	Longitude float64 `json:"longitude" binding:"required"`
 }

@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 	"time"
-	"v3-backend-challenge/model"
+	"v3-backend-challenge/src/model"
 )
 
 var DB *gorm.DB

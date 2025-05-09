@@ -2,30 +2,44 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"time"
-	"v3-backend-challenge/db"
-	"v3-backend-challenge/dto"
-	"v3-backend-challenge/model"
-	"v3-backend-challenge/repository"
-	"v3-backend-challenge/utils"
+	"v3-backend-challenge/src/db"
+	"v3-backend-challenge/src/dto"
+	"v3-backend-challenge/src/model"
+	"v3-backend-challenge/src/repository"
+	"v3-backend-challenge/src/utils"
 )
 
-func RegisterRoutes() {
-	r := gin.Default()
-	group := r.Group("/telemetry")
-	group.POST("/gyroscope", handleGyroscope)
-	group.POST("/gps", handleGps)
-	group.POST("/photo", handlePhoto)
+type TelemetryApi struct {
+	DB *gorm.DB
+	r  *gin.Engine
+}
 
-	err := r.Run()
+func Init() {
+	telemetryApi := TelemetryApi{}
+	telemetryApi.r = gin.Default()
+	telemetryApi.DB = db.DB
+	telemetryApi.RegisterRoutes(telemetryApi.r, telemetryApi.DB)
+	err := telemetryApi.r.Run()
 	if err != nil {
 		panic(err)
 	}
 }
 
-func handleGyroscope(c *gin.Context) {
+func (t *TelemetryApi) RegisterRoutes(r *gin.Engine, db *gorm.DB) {
+	t.DB = db
+	t.r = r
+
+	group := r.Group("/telemetry")
+	group.POST("/gyroscope", t.handleGyroscope)
+	group.POST("/gps", t.handleGps)
+	group.POST("/photo", t.handlePhoto)
+}
+
+func (t *TelemetryApi) handleGyroscope(c *gin.Context) {
 	request, err := handleGenericPostBadRequest[dto.Gyroscope](c)
 	if err != nil {
 		return
@@ -38,17 +52,17 @@ func handleGyroscope(c *gin.Context) {
 	gyroscope.DateTimeCollected = request.DateTimeCollected
 	gyroscope.MacAddr = request.MacAddr
 
-	repo := repository.GyroscopeRepository{DB: db.DB}
+	repo := repository.GyroscopeRepository{DB: t.DB}
 	err = repo.Save(&gyroscope)
 	if err != nil {
 		log.Println("Error saving gyroscope data:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao salvar os dados"})
 		return
 	}
-	c.JSON(201, gin.H{})
+	c.JSON(201, gin.H{"": gyroscope})
 }
 
-func handleGps(c *gin.Context) {
+func (t *TelemetryApi) handleGps(c *gin.Context) {
 	request, err := handleGenericPostBadRequest[dto.GPS](c)
 	if err != nil {
 		return
@@ -60,7 +74,7 @@ func handleGps(c *gin.Context) {
 	gps.DateTimeCollected = request.DateTimeCollected
 	gps.MacAddr = request.MacAddr
 
-	repo := repository.GpsRepository{DB: db.DB}
+	repo := repository.GpsRepository{DB: t.DB}
 	err = repo.Save(&gps)
 	if err != nil {
 		log.Println("Error saving GPS data:", err)
@@ -70,7 +84,7 @@ func handleGps(c *gin.Context) {
 	c.JSON(201, gin.H{})
 }
 
-func handlePhoto(c *gin.Context) {
+func (t *TelemetryApi) handlePhoto(c *gin.Context) {
 	datetimeCollectedStr := c.PostForm("datetime_collected")
 	macAddr := c.PostForm("mac_addr")
 	if datetimeCollectedStr == "" {
@@ -104,7 +118,7 @@ func handlePhoto(c *gin.Context) {
 		return
 	}
 
-	repo := repository.PhotoRepository{DB: db.DB}
+	repo := repository.PhotoRepository{DB: t.DB}
 	err = repo.Save(&photo)
 	if err != nil {
 		log.Println("Error saving photo data:", err)
