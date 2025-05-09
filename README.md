@@ -1,66 +1,47 @@
-<p align="center">
-    <img src="./.github/logo.png" width="200px">
-</p>
+<h1 align="center" style="font-weight: bold;"> Desafio BackEnd V3 </h1>
 
-<h1 align="center" style="font-weight: bold;">Desafio Técnico da V3</h1>
+### 🛠 Tecnologias Utilizadas
+- **Go** 1.24.2  
+- **Docker**  
+- **MySQL**
 
-## ❤️ Bem vindos
+---
 
-Olá, tudo certo?
+## 🚀 Começando <a id="getting-started"></a>
 
-Seja bem vindo ao teste de seleção para novos colaboradores na V3!
+### ✅ Pré-requisitos
+- [Docker](https://www.docker.com/) instalado na sua máquina.
 
-Estamos honrados que você tenha chegado até aqui!
+---
 
-Prepare aquele ☕️, e venha conosco codar e se divertir!
+### ⚙️ Configuração do Ambiente
 
-## 📚 Desafios Disponíveis
+Renomeie o arquivo `.env.example` para `.env` e preencha as variáveis:
 
-Este repositório contém três desafios diferentes, cada um focado em uma área específica:
+| Variável       | Descrição                                                       |
+|----------------|-----------------------------------------------------------------|
+| `DB_HOST`      | Nome do serviço MySQL no Docker ou endereço da máquina         |
+| `DB_PORT`      | Porta do MySQL (padrão: `3306`)                                 |
+| `DB_USER`      | Usuário do banco de dados                                       |
+| `DB_PASSWORD`  | Senha do banco de dados                                         |
+| `DB_NAME`      | Nome do banco de dados                                          |
+| `DB_LOG`       | Ativa log do banco (`1` para ativar, `0` para desativar`)       |
 
-1. [Suporte Técnico](SUPPORT.md)
-2. [Desafio Backend](CLOUD.md)
-3. [Desafio Firmware](FIRMWARE.md)
-   
-## Poxa, outro teste?
+---
 
-Nós sabemos que os processos de seleção podem ser ingratos! Você investe um tempão e no final pode não ser aprovado!
+### ▶️ Executando a Aplicação
 
-Aqui, nós presamos pela **transparência**!
+Para iniciar a aplicação e o banco de dados, utilize:
 
-Este teste tem um **propósito** bastante simples:
+```bash
+sudo docker-compose up --build
+```
 
-> Nós queremos avaliar como você consegue transformar problemas em soluções através de código!
+### 🧪 Executando os Testes
 
-**🚨 IMPORTANTE!** Se você entende que já possui algum projeto pessoal, ou contribuição em um projeto _open-source_ que contemple conhecimentos equivalentes aos que existem neste desafio, então, basta submeter o repositório explicando essa correlação!
+Para rodar os testes, utilize:
 
-## 🚀 Bora nessa!
+```bash
+sudo docker-compose run --rm test
+```
 
-Este é um teste para analisarmos como você desempenha ao entender, traduzir, resolver e entregar um código que resolve um problema.
-
-### Dicas
-
-- Documente seu projeto;
-- Faça perguntas sobre os pontos que não ficaram claros para você;
-- Mostre a sua linha de raciocínio;
-- Trabalhe bem o seu README.md;
-  - Explique até onde implementou;
-  - Como o projeto pode ser executado;
-  - Como pode-se testar o projeto;
-
-### Como você deverá desenvolver?
-
-1. Faça um _fork_ deste projeto em seu GitHub pessoal;
-2. Realize as implementações de acordo com cada um dos níveis;
-3. Faça pequenos _commits_;
-4. Depois de sentir que fez o seu máximo, faça um PR para o repositório original.
-
-🚨 **IMPORTANTE!** Não significa que você precisa implementar **todos os níveis** para ser aprovado no processo! Faça até onde se sentir confortável.
-
-## ⏰ Tempo para Entrega
-
-Quanto antes você enviar, mais cuidado podemos ter na revisão do seu teste. Faça no seu tempo, mas mantenha a qualidade!
-
-**Mas não desista! Envie até onde conseguir.**
-
-Boa sorte! 🍀
