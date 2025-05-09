@@ -3,6 +3,6 @@ package model
 type GPS struct {
 	BaseTelemetry
 	BaseModel
-	Latitude  int `gorm:"not null"`
-	Longitude int `gorm:"not null"`
+	Latitude  float64 `gorm:"not null"`
+	Longitude float64 `gorm:"not null"`
 }

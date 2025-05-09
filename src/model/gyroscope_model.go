@@ -3,7 +3,7 @@ package model
 type Gyroscope struct {
 	BaseModel
 	BaseTelemetry
-	AxisX int `gorm:"not null"`
-	AxisY int `gorm:"not null"`
-	AxisZ int `gorm:"not null"`
+	AxisX float64 `gorm:"not null"`
+	AxisY float64 `gorm:"not null"`
+	AxisZ float64 `gorm:"not null"`
 }
