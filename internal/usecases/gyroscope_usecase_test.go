@@ -32,9 +32,9 @@ func (m *MockQueries) GetDeviceByID(ctx context.Context, arg string) (repository
 }
 
 var (
-	deviceID = "test-device"
-	now      = pgtype.Timestamp{Time: time.Now(), Valid: true}
-	insertGyroscopeParams   = repository.InsertGyroscopeReadingParams{
+	deviceID              = "test-device"
+	now                   = pgtype.Timestamp{Time: time.Now(), Valid: true}
+	insertGyroscopeParams = repository.InsertGyroscopeReadingParams{
 		DeviceID:    deviceID,
 		X:           1.0,
 		Y:           2.0,

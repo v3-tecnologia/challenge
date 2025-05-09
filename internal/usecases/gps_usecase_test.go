@@ -17,7 +17,7 @@ func (m *MockQueries) InsertGPSReading(ctx context.Context, arg repository.Inser
 }
 
 var (
-	insertGpsParams   = repository.InsertGPSReadingParams{
+	insertGpsParams = repository.InsertGPSReadingParams{
 		DeviceID:    deviceID,
 		Latitude:    pgtype.Numeric{Exp: 1, Valid: true},
 		Longitude:   pgtype.Numeric{Exp: 2, Valid: true},
