@@ -34,19 +34,25 @@ func NewS3Uploader() interfaces.BucketUploader {
 	}
 }
 
-func (up *S3Uploader) UploadAsync(file io.Reader, key string, ch chan<- string) {
+func (up *S3Uploader) UploadAsync(ctx context.Context, file io.Reader, key string, ch chan<- string, errCh chan<- error) {
 	uploader := manager.NewUploader(up.client)
-	uploadedFile, err := uploader.Upload(context.TODO(), &s3.PutObjectInput{
-		Bucket:      aws.String(os.Getenv("AWS_REGION")),
-		Key:         aws.String(key),
-		Body:        file,
-		ContentType: aws.String("image/png"),
-		ACL:         "public-read",
-	})
+	go func() {
+		defer close(ch)
+		defer close(errCh)
 
-	if err != nil {
-		ch <- "https://i.imgur.com/fLjGgnc.png"
-	}
+		uploadedFile, err := uploader.Upload(ctx, &s3.PutObjectInput{
+			Bucket:      aws.String(os.Getenv("AWS_BUCKET_NAME")),
+			Key:         aws.String(key),
+			Body:        file,
+			ContentType: aws.String("image/png"),
+			ACL:         "public-read",
+		})
 
-	ch <- uploadedFile.Location
+		if err != nil {
+			errCh <- err
+			return
+		}
+
+		ch <- uploadedFile.Location
+	}()
 }

@@ -1,7 +1,10 @@
 package interfaces
 
-import "io"
+import (
+	"context"
+	"io"
+)
 
 type BucketUploader interface {
-	Upload(file io.Reader, key string, ch chan<- string)
+	UploadAsync(ctx context.Context, file io.Reader, key string, ch chan<- string, errCh chan<- error)
 }
