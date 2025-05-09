@@ -9,6 +9,7 @@ import (
 	"github.com/ricardoraposo/challenge/internal/handlers"
 	"github.com/ricardoraposo/challenge/internal/handlers/dto"
 	"github.com/ricardoraposo/challenge/internal/middleware"
+	"github.com/ricardoraposo/challenge/internal/services"
 	"github.com/ricardoraposo/challenge/internal/usecases"
 )
 
@@ -20,14 +21,18 @@ func (s *FiberServer) RegisterRoutes() {
 
 	gyroscopeUseCase := usecases.NewGyroscopeUseCase(s.Database.Query)
 	gpsUseCase := usecases.NewGPSUseCase(s.Database.Query)
+	photosUseCase := usecases.NewPhotosUseCase(
+		s.Database.Query,
+		services.NewS3Uploader(),
+	)
 
 	gyroscopeHandler := handlers.NewGyroscopeHandler(gyroscopeUseCase)
 	gpsHandler := handlers.NewGPSHandler(gpsUseCase)
+	photosHandler := handlers.NewPhotosHandler(photosUseCase)
 
 	telemetryApi := s.App.Group("/telemetry")
 
-	telemetryApi.Post("/gyroscope", middleware.ValidateStruct[dto.InsertGryoscopeReadingsDto], gyroscopeHandler.CreateGyroscopeReadings)
-	telemetryApi.Post("/gps", middleware.ValidateStruct[dto.InsertGPSReadingsDto], gpsHandler.CreateGPSReadings)
+	telemetryApi.Post("/photo", middleware.ValidateCreatePhotoParams, photosHandler.CreatePhoto)
 }
 
 func health(c *fiber.Ctx) error {
