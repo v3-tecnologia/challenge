@@ -34,9 +34,8 @@ func validate(data any) []ErrorResponse {
 	return validationErrors
 }
 
-func ValidateStruct[T any](c *fiber.Ctx) error {
+func ValidateJSONBodyStruct[T any](c *fiber.Ctx) error {
 	var params T
-
 	if err := c.BodyParser(&params); err != nil {
 		return err
 	}
@@ -50,6 +49,37 @@ func ValidateStruct[T any](c *fiber.Ctx) error {
 
 	// Store the parsed and validated data in Locals to be used in the handler
 	c.Locals("validatedBody", params)
+
+	return c.Next()
+}
+
+func ValidateCreatePhotoParams(c *fiber.Ctx) error {
+	deviceId := c.FormValue("deviceId")
+	collectedAt := c.FormValue("collectedAt")
+	file, err := c.FormFile("file")
+	if err != nil {
+		return c.
+			Status(fiber.StatusBadRequest).
+			JSON(fiber.Map{"errors": "Invalid file"})
+	}
+
+	if deviceId == "" {
+		return c.
+			Status(fiber.StatusBadRequest).
+			JSON(fiber.Map{"errors": "Invalid deviceId"})
+	}
+
+	if collectedAt == "" {
+		return c.
+			Status(fiber.StatusBadRequest).
+			JSON(fiber.Map{"errors": "Invalid collectedAt"})
+	}
+
+	if file.Filename == "" {
+		return c.
+			Status(fiber.StatusBadRequest).
+			JSON(fiber.Map{"errors": "Invalid filename"})
+	}
 
 	return c.Next()
 }
