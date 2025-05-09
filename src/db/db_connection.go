@@ -14,7 +14,7 @@ import (
 var DB *gorm.DB
 
 func Init() {
-	time.Sleep(5 * time.Second) //aguardar o db iniciar
+	time.Sleep(10 * time.Second) //aguardar o db criar/iniciar
 
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",

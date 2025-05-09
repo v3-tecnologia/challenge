@@ -14,7 +14,7 @@ import (
 	"v3-backend-challenge/src/dto"
 )
 
-func TestHandleGyroscope(t *testing.T) {
+func TestHandleGyroscope_ValidPayload_Success(t *testing.T) {
 	db := SetupTestDB()
 	router := SetupRouter(db)
 
@@ -37,7 +37,7 @@ func TestHandleGyroscope(t *testing.T) {
 	assert.Equal(t, http.StatusCreated, resp.Code)
 }
 
-func TestHandleGPS(t *testing.T) {
+func TestHandleGPS_ValidPayload_Success(t *testing.T) {
 	db := SetupTestDB()
 	router := SetupRouter(db)
 
@@ -59,7 +59,7 @@ func TestHandleGPS(t *testing.T) {
 	assert.Equal(t, http.StatusCreated, resp.Code)
 }
 
-func TestHandlePhoto(t *testing.T) {
+func TestHandlePhoto_ValidPayload_Success(t *testing.T) {
 	db := SetupTestDB()
 	router := SetupRouter(db)
 
@@ -158,7 +158,7 @@ func TestHandlePhoto_Errors(t *testing.T) {
 	}
 }
 
-func TestHandleGps_InvalidPayload(t *testing.T) {
+func TestHandleGps_InvalidPayload_Error(t *testing.T) {
 	db := SetupTestDB()
 	router := SetupRouter(db)
 
@@ -171,7 +171,7 @@ func TestHandleGps_InvalidPayload(t *testing.T) {
 	assert.Contains(t, resp.Body.String(), "Payload não está conforme o esperado")
 }
 
-func TestHandleGyroscope_InvalidPayload(t *testing.T) {
+func TestHandleGyroscope_InvalidPayload_Error(t *testing.T) {
 	db := SetupTestDB()
 	router := SetupRouter(db)
 
