@@ -1,9 +1,38 @@
 package middleware
 
 import (
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	"github.com/ricardoraposo/challenge/internal/common"
 )
+
+type ErrorResponse struct {
+	Error       bool
+	FailedField string
+	Tag         string
+	Value       any
+}
+
+var structValidator = validator.New(validator.WithRequiredStructEnabled())
+
+func validate(data any) []ErrorResponse {
+	validationErrors := []ErrorResponse{}
+
+	errs := structValidator.Struct(data)
+	if errs != nil {
+		for _, err := range errs.(validator.ValidationErrors) {
+			var elem ErrorResponse
+
+			elem.Error = true
+			elem.FailedField = err.Field()
+			elem.Tag = err.Tag()
+			elem.Value = err.Value()
+
+			validationErrors = append(validationErrors, elem)
+		}
+	}
+
+	return validationErrors
+}
 
 func ValidateStruct[T any](c *fiber.Ctx) error {
 	var params T
@@ -12,7 +41,7 @@ func ValidateStruct[T any](c *fiber.Ctx) error {
 		return err
 	}
 
-	validationErrors := common.Validate(params)
+	validationErrors := validate(params)
 	if len(validationErrors) > 0 {
 		return c.
 			Status(fiber.StatusBadRequest).

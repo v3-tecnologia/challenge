@@ -6,8 +6,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/ricardoraposo/challenge/internal/dto"
 	"github.com/ricardoraposo/challenge/internal/handlers"
+	"github.com/ricardoraposo/challenge/internal/handlers/dto"
 	"github.com/ricardoraposo/challenge/internal/middleware"
 	"github.com/ricardoraposo/challenge/internal/usecases"
 )
