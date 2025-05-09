@@ -32,6 +32,8 @@ func (s *FiberServer) RegisterRoutes() {
 
 	telemetryApi := s.App.Group("/telemetry")
 
+	telemetryApi.Post("/gyroscope", middleware.ValidateJSONBodyStruct[dto.InsertGryoscopeReadingsDto], gyroscopeHandler.CreateGyroscopeReadings)
+	telemetryApi.Post("/gps", middleware.ValidateJSONBodyStruct[dto.InsertGPSReadingsDto], gpsHandler.CreateGPSReadings)
 	telemetryApi.Post("/photo", middleware.ValidateCreatePhotoParams, photosHandler.CreatePhoto)
 }
 
