@@ -6,6 +6,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.36.3
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.67
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.75
+	github.com/aws/aws-sdk-go-v2/service/rekognition v1.46.3
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.79.3
 	github.com/go-playground/validator/v10 v10.26.0
 	github.com/gofiber/fiber/v2 v2.52.6
