@@ -6,5 +6,11 @@ import (
 )
 
 type BucketUploader interface {
-	UploadAsync(ctx context.Context, file io.Reader, key string, ch chan<- string, errCh chan<- error)
+	UploadAsync(
+		ctx context.Context,
+		file io.Reader,
+		key string,
+		ch chan<- string,
+		errCh chan<- error,
+	)
 }
