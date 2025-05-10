@@ -11,6 +11,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/ricardoraposo/challenge/internal/interfaces"
 	"github.com/ricardoraposo/challenge/internal/repository"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -43,10 +44,20 @@ func (m *MockBucketUploader) UploadAsync(ctx context.Context, file io.Reader, ke
 	m.Called(ctx, file, key, resultCh, errCh)
 }
 
+type MockFaceDetector struct {
+	mock.Mock
+}
+
+func (m *MockFaceDetector) HandleFaceRecognition(ctx context.Context, imageKey string) (*[]interfaces.FaceMatch, error) {
+	args := m.Called(ctx, imageKey)
+	return args.Get(0).(*[]interfaces.FaceMatch), args.Error(1)
+}
+
 func Test_CreatePhoto_Success(t *testing.T) {
 	mockQueries := new(MockPhotosQueries)
 	mockUploader := new(MockBucketUploader)
-	uc := NewPhotosUseCase(mockQueries, mockUploader)
+	mockFaceDetector := new(MockFaceDetector)
+	uc := NewPhotosUseCase(mockQueries, mockUploader, mockFaceDetector)
 
 	ctx := context.Background()
 	testDeviceID := "test-device-123"
@@ -68,16 +79,11 @@ func Test_CreatePhoto_Success(t *testing.T) {
 	}
 
 	expectedPhoto := repository.Photo{
-		ID:          uuid.New(),
-		DeviceID:    testDeviceID,
-		ImageUrl:    testImageURL,
-		CollectedAt: pgNow,
-	}
-
-	insertPhotoParams := repository.InsertPhotoParams{
-		DeviceID:    testDeviceID,
-		ImageUrl:    testImageURL,
-		CollectedAt: pgNow,
+		ID:            uuid.New(),
+		DeviceID:      testDeviceID,
+		ImageUrl:      testImageURL,
+		RecurrentUser: pgtype.Bool{Bool: false, Valid: true},
+		CollectedAt:   pgNow,
 	}
 
 	mockQueries.On("GetDeviceByID", ctx, testDeviceID).Return(repository.Device{}, sql.ErrNoRows)
@@ -92,8 +98,15 @@ func Test_CreatePhoto_Success(t *testing.T) {
 			}()
 		}).Return()
 
-	// Mocking InsertPhoto
-	mockQueries.On("InsertPhoto", ctx, insertPhotoParams).Return(expectedPhoto, nil)
+	mockFaceDetector.On("HandleFaceRecognition", mock.AnythingOfType("*context.cancelCtx"), params.Key).Return(&[]interfaces.FaceMatch{}, nil)
+
+	insertPhotoParamsWithFace := repository.InsertPhotoParams{
+		DeviceID:      testDeviceID,
+		ImageUrl:      testImageURL,
+		CollectedAt:   pgNow,
+		RecurrentUser: pgtype.Bool{Bool: false, Valid: true},
+	}
+	mockQueries.On("InsertPhoto", ctx, insertPhotoParamsWithFace).Return(expectedPhoto, nil)
 
 	photo, err := uc.CreatePhoto(ctx, params)
 
@@ -102,12 +115,14 @@ func Test_CreatePhoto_Success(t *testing.T) {
 
 	mockQueries.AssertExpectations(t)
 	mockUploader.AssertExpectations(t)
+	mockFaceDetector.AssertExpectations(t)
 }
 
 func TestPhotosUseCase_CreatePhoto_UploadFails(t *testing.T) {
 	mockQueries := new(MockPhotosQueries)
 	mockUploader := new(MockBucketUploader)
-	uc := NewPhotosUseCase(mockQueries, mockUploader)
+	mockFaceDetector := new(MockFaceDetector)
+	uc := NewPhotosUseCase(mockQueries, mockUploader, mockFaceDetector)
 
 	ctx := context.Background()
 	testDeviceID := "test-device-upload-fail"

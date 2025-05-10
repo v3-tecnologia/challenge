@@ -24,6 +24,7 @@ func (s *FiberServer) RegisterRoutes() {
 	photosUseCase := usecases.NewPhotosUseCase(
 		s.Database.Query,
 		services.NewS3Uploader(),
+		services.NewRekognitionClient(),
 	)
 
 	gyroscopeHandler := handlers.NewGyroscopeHandler(gyroscopeUseCase)
