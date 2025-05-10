@@ -12,23 +12,36 @@ import (
 )
 
 const insertPhoto = `-- name: InsertPhoto :one
-INSERT INTO photos (device_id, image_url, collected_at) VALUES ($1, $2, $3) RETURNING id, device_id, image_url, collected_at
+INSERT INTO
+    photos (
+    device_id,
+    image_url,
+    collected_at,
+    recurrent_user
+) VALUES ($1, $2, $3, $4) RETURNING id, device_id, image_url, collected_at, recurrent_user
 `
 
 type InsertPhotoParams struct {
-	DeviceID    string           `json:"deviceId"`
-	ImageUrl    string           `json:"imageUrl"`
-	CollectedAt pgtype.Timestamp `json:"collectedAt"`
+	DeviceID      string           `json:"deviceId"`
+	ImageUrl      string           `json:"imageUrl"`
+	CollectedAt   pgtype.Timestamp `json:"collectedAt"`
+	RecurrentUser pgtype.Bool      `json:"recurrentUser"`
 }
 
 func (q *Queries) InsertPhoto(ctx context.Context, arg InsertPhotoParams) (Photo, error) {
-	row := q.db.QueryRow(ctx, insertPhoto, arg.DeviceID, arg.ImageUrl, arg.CollectedAt)
+	row := q.db.QueryRow(ctx, insertPhoto,
+		arg.DeviceID,
+		arg.ImageUrl,
+		arg.CollectedAt,
+		arg.RecurrentUser,
+	)
 	var i Photo
 	err := row.Scan(
 		&i.ID,
 		&i.DeviceID,
 		&i.ImageUrl,
 		&i.CollectedAt,
+		&i.RecurrentUser,
 	)
 	return i, err
 }

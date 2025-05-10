@@ -32,8 +32,9 @@ type GyroscopeReading struct {
 }
 
 type Photo struct {
-	ID          uuid.UUID        `json:"id"`
-	DeviceID    string           `json:"deviceId"`
-	ImageUrl    string           `json:"imageUrl"`
-	CollectedAt pgtype.Timestamp `json:"collectedAt"`
+	ID            uuid.UUID        `json:"id"`
+	DeviceID      string           `json:"deviceId"`
+	ImageUrl      string           `json:"imageUrl"`
+	CollectedAt   pgtype.Timestamp `json:"collectedAt"`
+	RecurrentUser pgtype.Bool      `json:"recurrentUser"`
 }
