@@ -6,8 +6,9 @@
 
 ## Dados para contato
 
-[LinkedIn](https://www.linkedin.com/in/ricardoraposoo)
-Email: raposo.bomtempo@gmail.com
+LinkedIn := [https://www.linkedin.com/in/ricardoraposoo](https://www.linkedin.com/in/ricardoraposoo)
+<br/>
+Email := raposo.bomtempo@gmail.com
 
 ## 📝 Descrição
 
@@ -40,6 +41,14 @@ Acredito que todos os requisitos do desafio foram atendidos.
 - AWS IAM User
 
 ## 🚀 Executando o projeto
+
+Como a configuração com a AWS possa ser um pouco exaustiva, eu gravei o vídeo abaixo demonstrando as funcionalidades de upload de imagem e detecção de rostos:
+
+
+https://github.com/user-attachments/assets/03b5a114-d2b7-418b-98ad-528c814de55f
+
+
+Os dois outros endpoints podem ser facilmente executados apenas com o banco de dados configurado.
 
 ### Configuração de ambiente
 
