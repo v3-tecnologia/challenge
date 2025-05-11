@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/iamrosada0/v3/internal/usecase"
+	usecase "github.com/iamrosada0/v3/internal/usecase/gps"
 )
 
 type GPSHandlers struct {
