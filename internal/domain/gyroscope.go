@@ -5,7 +5,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/iamrosada0/v3/internal/adapter/uuid"
+	"v3/internal/adapter/uuid"
 )
 
 var (

@@ -2,16 +2,20 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/iamrosada0/v3/internal/infra/api/handlers"
 )
 
-func SetupRouter(gyroHandler *handlers.GyroscopeHandler) *gin.Engine {
+// SetupRouter configures all API routes.
+func SetupRouter(
+	gyroscopeHandlers *GyroscopeHandlers,
+	gpsHandlers *GPSHandlers,
+	// photoHandlers *PhotoHandlers,
+) *gin.Engine {
 	router := gin.Default()
 
-	telemetry := router.Group("/telemetry")
-	{
-		telemetry.POST("/gyroscope", gyroHandler.Create)
-	}
+	// Setup routes for each handler
+	gyroscopeHandlers.SetupRoutes(router)
+	gpsHandlers.SetupRoutes(router)
+	// photoHandlers.SetupRoutes(router)
 
 	return router
 }

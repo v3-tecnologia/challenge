@@ -4,13 +4,15 @@ import (
 	"errors"
 	"time"
 
-	"github.com/iamrosada0/v3/internal/adapter/uuid"
+	"v3/internal/adapter/uuid"
 )
 
 var (
-	ErrDeviceIDPhoto  = errors.New("device ID not found")
-	ErrTimestampPhoto = errors.New("timestamp not found")
-	ErrFilePathPhoto  = errors.New("file path not found")
+	ErrDeviceIDPhoto                  = errors.New("device ID not found")
+	ErrTimestampPhoto                 = errors.New("timestamp not found")
+	ErrFilePathPhoto                  = errors.New("file path not found")
+	ErrProcessPhotoWithAWSRekognition = errors.New("failed to process photo with AWS Rekognition")
+	ErrSavePhotoData                  = errors.New("failed to save photo data")
 )
 
 type PhotoDto struct {

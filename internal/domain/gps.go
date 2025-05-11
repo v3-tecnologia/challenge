@@ -5,14 +5,15 @@ import (
 	"math"
 	"time"
 
-	"github.com/iamrosada0/v3/internal/adapter/uuid"
+	"v3/internal/adapter/uuid"
 )
 
 var (
-	ErrDeviceIDGPS      = errors.New("device ID not found")
-	ErrTimestampGPS     = errors.New("timestamp not found")
-	ErrInvalidGPSValues = errors.New("invalid GPS values")
-	ErrSaveGPSData      = errors.New("failed to save GPS data")
+	ErrDeviceIDGPS             = errors.New("device ID not found")
+	ErrTimestampGPS            = errors.New("timestamp not found")
+	ErrInvalidGPSValues        = errors.New("invalid GPS values")
+	ErrSaveGPSData             = errors.New("failed to save GPS data")
+	ErrMissingGPSInvalidFields = errors.New("missing or invalid fields")
 )
 
 type GPSDto struct {

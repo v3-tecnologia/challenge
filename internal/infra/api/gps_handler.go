@@ -3,9 +3,10 @@ package api
 import (
 	"net/http"
 
+	"v3/internal/domain"
+	usecase "v3/internal/usecase"
+
 	"github.com/gin-gonic/gin"
-	"github.com/iamrosada0/v3/internal/domain"
-	usecase "github.com/iamrosada0/v3/internal/usecase/gps"
 )
 
 type GPSHandlers struct {

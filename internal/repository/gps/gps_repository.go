@@ -1,7 +1,8 @@
 package gps
 
 import (
-	"github.com/iamrosada0/v3/internal/domain"
+	"v3/internal/domain"
+
 	"gorm.io/gorm"
 )
 

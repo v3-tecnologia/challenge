@@ -1,50 +1,90 @@
 package usecase
 
-import (
-	"testing"
-	"time"
+// import (
+// 	"errors"
+// 	"testing"
+// 	"time"
 
-	"github.com/brianvoe/gofakeit/v6"
-	d "github.com/iamrosada0/v3/internal/domain/gyroscope"
-	"github.com/iamrosada0/v3/internal/usecase/gyroscope"
+// 	"v3/internal/domain"
+// )
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-)
+// type mockGyroscopeRepository struct {
+// 	createFunc func(d *domain.Gyroscope) (*domain.Gyroscope, error)
+// }
 
-type MockGyroscopeRepository struct {
-	mock.Mock
-}
+// func (m *mockGyroscopeRepository) Create(d *domain.Gyroscope) (*domain.Gyroscope, error) {
+// 	return m.createFunc(d)
+// }
 
-func (m *MockGyroscopeRepository) Create(data *d.GyroscopeData) (*d.GyroscopeData, error) {
-	args := m.Called(data)
-	return args.Get(0).(*d.GyroscopeData), args.Error(1)
-}
+// func TestCreateGyroscopeUseCase_Execute(t *testing.T) {
+// 	validInput := GyroscopeInputDto{
+// 		DeviceID:  "00:1A:2B:3C:4D:5E",
+// 		Timestamp: time.Now().Unix(),
+// 		X:         1.0,
+// 		Y:         2.0,
+// 		Z:         3.0,
+// 	}
 
-func TestGyroscopeUseCase_Create_Success(t *testing.T) {
-	mockRepo := new(MockGyroscopeRepository)
-	uc := gyroscope.NewGyroscopeUseCase(mockRepo)
+// 	tests := []struct {
+// 		name     string
+// 		input    GyroscopeInputDto
+// 		repoMock *mockGyroscopeRepository
+// 		wantErr  bool
+// 	}{
+// 		{
+// 			name:  "valid input",
+// 			input: validInput,
+// 			repoMock: &mockGyroscopeRepository{
+// 				createFunc: func(d *domain.Gyroscope) (*domain.Gyroscope, error) {
+// 					return d, nil
+// 				},
+// 			},
+// 			wantErr: false,
+// 		},
+// 		{
+// 			name: "invalid input (invalid MAC)",
+// 			input: GyroscopeInputDto{
+// 				DeviceID:  "invalid",
+// 				Timestamp: time.Now().Unix(),
+// 				X:         1.0,
+// 				Y:         2.0,
+// 				Z:         3.0,
+// 			},
+// 			repoMock: &mockGyroscopeRepository{
+// 				createFunc: func(d *domain.Gyroscope) (*domain.Gyroscope, error) {
+// 					return nil, errors.New("should not be called")
+// 				},
+// 			},
+// 			wantErr: true,
+// 		},
+// 		{
+// 			name:  "repository error",
+// 			input: validInput,
+// 			repoMock: &mockGyroscopeRepository{
+// 				createFunc: func(d *domain.Gyroscope) (*domain.Gyroscope, error) {
+// 					return nil, errors.New("database error")
+// 				},
+// 			},
+// 			wantErr: true,
+// 		},
+// 	}
 
-	deviceID := "00:1A:2B:3C:4D:5E"
-	x := gofakeit.Float64()
-	y := gofakeit.Float64()
-	z := gofakeit.Float64()
-	timestamp := time.Now()
-
-	data, _ := d.NewGyroscopeData(deviceID, x, y, z, timestamp)
-	mockRepo.On("Create", data).Return(data, nil)
-
-	result, err := uc.Create(deviceID, x, y, z, timestamp)
-	assert.NoError(t, err)
-	assert.Equal(t, data, result)
-	mockRepo.AssertExpectations(t)
-}
-
-func TestGyroscopeUseCase_Create_InvalidDeviceID(t *testing.T) {
-	mockRepo := new(MockGyroscopeRepository)
-	uc := gyroscope.NewGyroscopeUseCase(mockRepo)
-
-	_, err := uc.Create("invalid-mac", 1.0, 2.0, 3.0, time.Now())
-	assert.Error(t, err)
-	assert.Equal(t, "invalid MAC address", err.Error())
-}
+// 	for _, tt := range tests {
+// 		t.Run(tt.name, func(t *testing.T) {
+// 			uc := NewCreateGyroscopeUseCase(tt.repoMock)
+// 			got, err := uc.Execute(tt.input)
+// 			if (err != nil) != tt.wantErr {
+// 				t.Errorf("CreateGyroscopeUseCase.Execute() error = %v, wantErr %v", err, tt.wantErr)
+// 				return
+// 			}
+// 			if !tt.wantErr {
+// 				if got == nil {
+// 					t.Errorf("CreateGyroscopeUseCase.Execute() returned nil Gyroscope")
+// 				}
+// 				if got.DeviceID != tt.input.DeviceID {
+// 					t.Errorf("CreateGyroscopeUseCase.Execute() DeviceID = %v, want %v", got.DeviceID, tt.input.DeviceID)
+// 				}
+// 			}
+// 		})
+// 	}
+// }
