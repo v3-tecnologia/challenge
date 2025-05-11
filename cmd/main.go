@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"v3/internal/infra/api"
 	"v3/internal/repository/gps"
 	"v3/internal/repository/gyroscope"
@@ -13,10 +15,14 @@ import (
 
 func main() {
 	// Initialize database
-	db, err := gorm.Open(postgres.Open("your-dsn"), &gorm.Config{})
+	dsn := "host=postgres user=meuusuario password=minhasenha dbname=meubanco port=5432 sslmode=disable"
+
+	// Conectar ao banco de dados
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect to database")
+		log.Fatalf("failed to connect to the database: %v", err)
 	}
+	fmt.Println("Conectado ao banco de dados com sucesso!")
 
 	// Initialize repositories
 	gyroRepo := gyroscope.NewGyroscopeRepository(db)
