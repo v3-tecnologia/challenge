@@ -24,7 +24,7 @@ func main() {
 	fmt.Println("Conectado ao banco de dados com sucesso!")
 
 	//  AutoMigrate para criar a tabela gyroscopes
-	err = db.AutoMigrate(&domain.Gyroscope{}, &domain.GPS{})
+	err = db.AutoMigrate(&domain.Gyroscope{}, &domain.GPS{}, &domain.Photo{})
 	if err != nil {
 		log.Fatalf("erro ao fazer AutoMigrate: %v", err)
 	}
