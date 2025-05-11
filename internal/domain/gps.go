@@ -26,3 +26,7 @@ type GPS struct {
 	Timestamp time.Time `json:"timestamp" gorm:"not null"`
 	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
 }
+
+func NewGPSData(d *GPSDto) (*GPS, error) {
+
+}
