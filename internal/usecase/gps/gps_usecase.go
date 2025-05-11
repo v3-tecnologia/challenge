@@ -1,8 +1,6 @@
 package gps
 
 import (
-	"errors"
-
 	"github.com/iamrosada0/v3/internal/domain"
 	"github.com/iamrosada0/v3/internal/repository/gps"
 )
@@ -29,7 +27,7 @@ func (uc *CreateGPSUseCase) Execute(input domain.GPSDto) (*domain.GPS, error) {
 	}
 	savedGPS, err := uc.Repo.Create(gpsData)
 	if err != nil {
-		return nil, errors.New("failed to save GPS data")
+		return nil, domain.ErrSaveGPSValues
 	}
 
 	return savedGPS, nil
