@@ -85,6 +85,14 @@ func (rc RekognitionClient) detectFace(ctx context.Context, imageKey string) (*[
 	return &faceMatches, nil
 }
 
+func (rc *RekognitionClient) CreateCollection() (string, error) {
+    col, err := rc.client.CreateCollection(context.Background(), &rekognition.CreateCollectionInput{
+		CollectionId: aws.String(os.Getenv("AWS_FACE_COLLECTION_ID")),
+	})
+
+    return *col.CollectionArn, err
+}
+
 func (rc *RekognitionClient) CreateUser() (string, error) {
 	userId := uuid.NewString()
 	_, err := rc.client.CreateUser(context.Background(), &rekognition.CreateUserInput{
