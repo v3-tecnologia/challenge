@@ -3,6 +3,8 @@ package domain
 import (
 	"errors"
 	"time"
+
+	"github.com/iamrosada0/v3/internal/adapter/uuid"
 )
 
 var (
@@ -27,5 +29,15 @@ type Photo struct {
 }
 
 func NewPhotoData(d *PhotoDto) (*Photo, error) {
+	id := uuid.NewAdapter().Generate()
 
+	dev, err := NewDevice(d.DeviceID)
+	if err != nil {
+		return nil, ErrDeviceIDPhoto
+	}
+
+	timestamp := time.Unix(d.Timestamp, 0)
+	if timestamp.IsZero() {
+		return nil, ErrTimestampPhoto
+	}
 }
