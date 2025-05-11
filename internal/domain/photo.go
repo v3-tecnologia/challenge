@@ -25,3 +25,7 @@ type Photo struct {
 	Timestamp  time.Time `json:"timestamp" gorm:"not null"`
 	CreatedAt  time.Time `json:"created_at" gorm:"autoCreateTime"`
 }
+
+func NewPhotoData(d *PhotoDto) (*Photo, error) {
+
+}
