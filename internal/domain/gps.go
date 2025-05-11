@@ -3,6 +3,8 @@ package domain
 import (
 	"errors"
 	"time"
+
+	"github.com/iamrosada0/v3/internal/adapter/uuid"
 )
 
 var (
@@ -28,5 +30,5 @@ type GPS struct {
 }
 
 func NewGPSData(d *GPSDto) (*GPS, error) {
-
+	id := uuid.NewAdapter().Generate()
 }
