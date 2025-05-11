@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   postgres:
     image: postgres:12.3-alpine
@@ -10,6 +9,19 @@ services:
       POSTGRES_DB: 'postgres'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mynetwork
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - '8080:8080'
+    env_file:
+      - .env
     networks:
       - mynetwork
 
