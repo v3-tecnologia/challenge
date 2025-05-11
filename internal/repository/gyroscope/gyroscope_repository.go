@@ -11,3 +11,7 @@ type GyroscopeRepository interface {
 type gyroscopeRepository struct {
 	DB *gorm.DB
 }
+
+func NewGyroscopeRepository(db *gorm.DB) GyroscopeRepository {
+	return &gyroscopeRepository{DB: db}
+}
