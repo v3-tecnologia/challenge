@@ -2,6 +2,7 @@ package domain
 
 import (
 	"errors"
+	"math"
 	"time"
 
 	"github.com/iamrosada0/v3/internal/adapter/uuid"
@@ -41,4 +42,11 @@ func NewGPSData(d *GPSDto) (*GPS, error) {
 	if timestamp.IsZero() {
 		return nil, ErrTimestampGPS
 	}
+	if math.IsNaN(d.Latitude) || math.IsInf(d.Latitude, 0) || math.IsNaN(d.Longitude) || math.IsInf(d.Longitude, 0) {
+		return nil, ErrInvalidGPSValues
+	}
+	if d.Latitude < -90 || d.Latitude > 90 || d.Longitude < -180 || d.Longitude > 180 {
+		return nil, ErrInvalidGPSValues
+	}
+
 }
