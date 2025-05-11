@@ -7,3 +7,9 @@ import (
 type GyroscopeHandlers struct {
 	CreateGyroscopeUseCase *usecase.CreateGyroscopeUseCase
 }
+
+func NewGyroscopeHandlers(createGyroscopeUseCase *usecase.CreateGyroscopeUseCase) *GyroscopeHandlers {
+	return &GyroscopeHandlers{
+		CreateGyroscopeUseCase: createGyroscopeUseCase,
+	}
+}
