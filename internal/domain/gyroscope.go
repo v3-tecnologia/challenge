@@ -2,6 +2,7 @@ package domain
 
 import (
 	"errors"
+	"math"
 	"time"
 
 	"github.com/iamrosada0/v3/internal/adapter/uuid"
@@ -44,5 +45,18 @@ func NewGyroscopeData(d *GyroscopeDto) (*Gyroscope, error) {
 	if timestamp.IsZero() {
 		return nil, ErrTimestampGyroscope
 	}
+
+	if math.IsNaN(d.X) || math.IsInf(d.X, 0) || math.IsNaN(d.Y) || math.IsInf(d.Y, 0) || math.IsNaN(d.Z) || math.IsInf(d.Z, 0) {
+		return nil, ErrInvalidGyroscopeValues
+	}
+
+	return &Gyroscope{
+		ID:        id,
+		DeviceID:  dev.ID,
+		Timestamp: timestamp,
+		X:         d.X,
+		Y:         d.Y,
+		Z:         d.Z,
+	}, nil
 
 }
