@@ -52,5 +52,11 @@ func (uc *CreatePhotoUseCase) Execute(input PhotoInputDto) (*domain.Photo, error
 	if err != nil {
 		return nil, errors.New("failed to process photo with AWS Rekognition")
 	}
+	photo.Recognized = len(result.FaceMatches) > 0
+	savedPhoto, err := uc.Repo.Create(photo)
+	if err != nil {
+		return nil, errors.New("failed to save photo data")
+	}
 
+	return savedPhoto, nil
 }
