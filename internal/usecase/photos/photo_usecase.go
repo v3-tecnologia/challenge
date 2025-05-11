@@ -1,7 +1,12 @@
 package photos
 
 import (
+	"context"
+	"errors"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/rekognition"
+	"github.com/aws/aws-sdk-go-v2/service/rekognition/types"
 	"github.com/iamrosada0/v3/internal/domain"
 	"github.com/iamrosada0/v3/internal/repository/photo"
 )
@@ -33,6 +38,19 @@ func (uc *CreatePhotoUseCase) Execute(input PhotoInputDto) (*domain.Photo, error
 	})
 	if err != nil {
 		return nil, err
+	}
+	inputRekog := &rekognition.SearchFacesByImageInput{
+		CollectionId: aws.String("your-collection-id"),
+		Image: &types.Image{
+			S3Object: &types.S3Object{
+				Bucket: aws.String("your-bucket"),
+				Name:   aws.String(photo.FilePath),
+			},
+		},
+	}
+	result, err := uc.RekogClient.SearchFacesByImage(context.TODO(), inputRekog)
+	if err != nil {
+		return nil, errors.New("failed to process photo with AWS Rekognition")
 	}
 
 }
