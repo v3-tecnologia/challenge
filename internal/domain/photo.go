@@ -44,4 +44,12 @@ func NewPhotoData(d *PhotoDto) (*Photo, error) {
 	if d.FilePath == "" {
 		return nil, ErrFilePathPhoto
 	}
+	return &Photo{
+		ID:         id,
+		DeviceID:   dev.ID,
+		FilePath:   d.FilePath,
+		Timestamp:  timestamp,
+		Recognized: false,
+	}, nil
+
 }
