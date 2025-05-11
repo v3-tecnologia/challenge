@@ -3,6 +3,8 @@ package domain
 import (
 	"errors"
 	"time"
+
+	"github.com/iamrosada0/v3/internal/adapter/uuid"
 )
 
 var (
@@ -30,5 +32,17 @@ type Gyroscope struct {
 }
 
 func NewGyroscopeData(d *GyroscopeDto) (*Gyroscope, error) {
+
+	id := uuid.NewAdapter().Generate()
+
+	dev, err := NewDevice(d.DeviceID)
+	if err != nil {
+		return nil, ErrDeviceIDGyroscope
+	}
+
+	timestamp := time.Unix(d.Timestamp, 0)
+	if timestamp.IsZero() {
+		return nil, ErrTimestampGyroscope
+	}
 
 }
