@@ -54,6 +54,8 @@ func (m *MockFaceDetector) HandleFaceRecognition(ctx context.Context, imageKey s
 }
 
 func Test_CreatePhoto_Success(t *testing.T) {
+    t.Parallel()
+
 	mockQueries := new(MockPhotosQueries)
 	mockUploader := new(MockBucketUploader)
 	mockFaceDetector := new(MockFaceDetector)
@@ -119,6 +121,8 @@ func Test_CreatePhoto_Success(t *testing.T) {
 }
 
 func TestPhotosUseCase_CreatePhoto_UploadFails(t *testing.T) {
+    t.Parallel()
+
 	mockQueries := new(MockPhotosQueries)
 	mockUploader := new(MockBucketUploader)
 	mockFaceDetector := new(MockFaceDetector)
