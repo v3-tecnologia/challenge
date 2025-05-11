@@ -22,4 +22,14 @@ func NewCreateGPSUseCase(repo gps.GPSRepository) *CreateGPSUseCase {
 
 func (uc *CreateGPSUseCase) Execute(input GPSInputDto) (*domain.GPS, error) {
 
+	gpsData, err := domain.NewGPSData(&domain.GPSDto{
+		DeviceID:  input.DeviceID,
+		Timestamp: input.Timestamp,
+		Latitude:  input.Latitude,
+		Longitude: input.Longitude,
+	})
+
+	if err != nil {
+		return nil, err
+	}
 }
