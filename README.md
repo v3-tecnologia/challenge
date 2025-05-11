@@ -4,6 +4,11 @@
 
 <h1 align="center" style="font-weight: bold;">Desafio Técnico da V3</h1>
 
+## Dados para contato
+
+[LinkedIn](https://www.linkedin.com/in/ricardoraposoo)
+Email: raposo.bomtempo@gmail.com
+
 ## 📝 Descrição
 
 Este projeto tem como objetivo criar um sistema de registro e armazenamento de dados de telemetria, incluindo dados de giroscópio, GPS e fotos de usuários.
