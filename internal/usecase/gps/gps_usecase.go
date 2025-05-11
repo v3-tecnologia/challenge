@@ -12,3 +12,7 @@ type GPSInputDto struct {
 type CreateGPSUseCase struct {
 	Repo gps.GPSRepository
 }
+
+func NewCreateGPSUseCase(repo gps.GPSRepository) *CreateGPSUseCase {
+	return &CreateGPSUseCase{Repo: repo}
+}
