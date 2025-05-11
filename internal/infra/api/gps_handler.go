@@ -1,7 +1,10 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
+	"github.com/iamrosada0/v3/internal/domain"
 	usecase "github.com/iamrosada0/v3/internal/usecase/gps"
 )
 
@@ -20,4 +23,20 @@ func (h *GPSHandlers) SetupRoutes(router *gin.Engine) {
 	{
 		api.POST("/gps", h.CreateGPSHandler)
 	}
+}
+
+func (h *GPSHandlers) CreateGPSHandler(c *gin.Context) {
+	var input domain.GPSDto
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing or invalid fields"})
+		return
+	}
+
+	gps, err := h.CreateGPSUseCase.Execute(input)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gps)
 }
