@@ -1,16 +1,11 @@
 package gps
 
 import (
+	"errors"
+
 	"github.com/iamrosada0/v3/internal/domain"
 	"github.com/iamrosada0/v3/internal/repository/gps"
 )
-
-type GPSInputDto struct {
-	DeviceID  string  `json:"deviceId"`
-	Timestamp int64   `json:"timestamp"`
-	Latitude  float64 `json:"latitude"`
-	Longitude float64 `json:"longitude"`
-}
 
 type CreateGPSUseCase struct {
 	Repo gps.GPSRepository
@@ -20,7 +15,7 @@ func NewCreateGPSUseCase(repo gps.GPSRepository) *CreateGPSUseCase {
 	return &CreateGPSUseCase{Repo: repo}
 }
 
-func (uc *CreateGPSUseCase) Execute(input GPSInputDto) (*domain.GPS, error) {
+func (uc *CreateGPSUseCase) Execute(input domain.GPSDto) (*domain.GPS, error) {
 
 	gpsData, err := domain.NewGPSData(&domain.GPSDto{
 		DeviceID:  input.DeviceID,
@@ -32,4 +27,10 @@ func (uc *CreateGPSUseCase) Execute(input GPSInputDto) (*domain.GPS, error) {
 	if err != nil {
 		return nil, err
 	}
+	savedGPS, err := uc.Repo.Create(gpsData)
+	if err != nil {
+		return nil, errors.New("failed to save GPS data")
+	}
+
+	return savedGPS, nil
 }
