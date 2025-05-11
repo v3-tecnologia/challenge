@@ -16,3 +16,10 @@ type photoRepository struct {
 func NewPhotoRepository(db *gorm.DB) PhotoRepository {
 	return &photoRepository{DB: db}
 }
+
+func (r *photoRepository) Create(d *domain.Photo) (*domain.Photo, error) {
+	if err := r.DB.Create(d).Error; err != nil {
+		return nil, err
+	}
+	return d, nil
+}
