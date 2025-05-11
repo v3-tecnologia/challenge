@@ -12,3 +12,7 @@ type GPSRepository interface {
 type gpsRepository struct {
 	DB *gorm.DB
 }
+
+func NewGPSRepository(db *gorm.DB) GPSRepository {
+	return &gpsRepository{DB: db}
+}
