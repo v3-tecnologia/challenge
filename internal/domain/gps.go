@@ -31,4 +31,14 @@ type GPS struct {
 
 func NewGPSData(d *GPSDto) (*GPS, error) {
 	id := uuid.NewAdapter().Generate()
+
+	dev, err := NewDevice(d.DeviceID)
+	if err != nil {
+		return nil, ErrDeviceIDGPS
+	}
+
+	timestamp := time.Unix(d.Timestamp, 0)
+	if timestamp.IsZero() {
+		return nil, ErrTimestampGPS
+	}
 }
