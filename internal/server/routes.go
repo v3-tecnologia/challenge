@@ -36,18 +36,6 @@ func (s *FiberServer) RegisterRoutes() {
 	telemetryApi.Post("/gyroscope", middleware.ValidateJSONBodyStruct[dto.InsertGryoscopeReadingsDto], gyroscopeHandler.CreateGyroscopeReadings)
 	telemetryApi.Post("/gps", middleware.ValidateJSONBodyStruct[dto.InsertGPSReadingsDto], gpsHandler.CreateGPSReadings)
 	telemetryApi.Post("/photo", middleware.ValidateCreatePhotoParams, photosHandler.CreatePhoto)
-
-	//NOTE I'm leaving this route for demo purposes, it should not be used in production
-	demoApi := s.App.Group("/demo")
-	demoApi.Post("collection", func(c *fiber.Ctx) error {
-		client := services.NewRekognitionClient()
-		res, err := client.CreateCollection()
-		if err != nil {
-			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"status": "error"})
-		}
-
-		return c.Status(http.StatusOK).JSON(res)
-	})
 }
 
 func health(c *fiber.Ctx) error {

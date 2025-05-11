@@ -2,6 +2,8 @@ package services
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"os"
 	"path"
 
@@ -28,6 +30,10 @@ func (rc *RekognitionClient) HandleFaceRecognition(
 	ctx context.Context,
 	imageKey string,
 ) (*[]interfaces.FaceMatch, error) {
+	if _, err := rc.createCollection(); err != nil {
+		return &[]interfaces.FaceMatch{}, err
+	}
+
 	key := os.Getenv("AWS_BUCKET_KEY_PREFIX") + imageKey
 	result, err := rc.detectFace(ctx, key)
 	if err != nil {
@@ -85,12 +91,28 @@ func (rc RekognitionClient) detectFace(ctx context.Context, imageKey string) (*[
 	return &faceMatches, nil
 }
 
-func (rc *RekognitionClient) CreateCollection() (string, error) {
-    col, err := rc.client.CreateCollection(context.Background(), &rekognition.CreateCollectionInput{
+func (rc *RekognitionClient) createCollection() (string, error) {
+	desc, err := rc.client.DescribeCollection(context.Background(), &rekognition.DescribeCollectionInput{
 		CollectionId: aws.String(os.Getenv("AWS_FACE_COLLECTION_ID")),
 	})
+	if err == nil {
+		return *desc.CollectionARN, nil
+	}
 
-    return *col.CollectionArn, err
+	var notFoundErr *rt.ResourceNotFoundException
+	if ok := errors.As(err, &notFoundErr); ok {
+		fmt.Println("Collection not found, creating...")
+		col, err := rc.client.CreateCollection(context.Background(), &rekognition.CreateCollectionInput{
+			CollectionId: aws.String(os.Getenv("AWS_FACE_COLLECTION_ID")),
+		})
+		if err != nil {
+			return "", err
+		}
+
+		return *col.CollectionArn, nil
+	}
+
+	return "", err
 }
 
 func (rc *RekognitionClient) CreateUser() (string, error) {
