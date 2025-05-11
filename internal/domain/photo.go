@@ -40,4 +40,8 @@ func NewPhotoData(d *PhotoDto) (*Photo, error) {
 	if timestamp.IsZero() {
 		return nil, ErrTimestampPhoto
 	}
+
+	if d.FilePath == "" {
+		return nil, ErrFilePathPhoto
+	}
 }
