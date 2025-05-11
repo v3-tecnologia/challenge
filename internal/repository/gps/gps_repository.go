@@ -16,3 +16,10 @@ type gpsRepository struct {
 func NewGPSRepository(db *gorm.DB) GPSRepository {
 	return &gpsRepository{DB: db}
 }
+
+func (r *gpsRepository) Create(d *domain.GPS) (*domain.GPS, error) {
+	if err := r.DB.Create(d).Error; err != nil {
+		return nil, err
+	}
+	return d, nil
+}
