@@ -12,7 +12,7 @@ var (
 	ErrDeviceIDGPS      = errors.New("device ID not found")
 	ErrTimestampGPS     = errors.New("timestamp not found")
 	ErrInvalidGPSValues = errors.New("invalid GPS values")
-	ErrSaveGPSValues    = errors.New("failed to save GPS data")
+	ErrSaveGPSData      = errors.New("failed to save GPS data")
 )
 
 type GPSDto struct {
