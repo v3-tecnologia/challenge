@@ -2,6 +2,7 @@ package photos
 
 import (
 	"github.com/aws/aws-sdk-go-v2/service/rekognition"
+	"github.com/iamrosada0/v3/internal/domain"
 	"github.com/iamrosada0/v3/internal/repository/photo"
 )
 
@@ -21,4 +22,17 @@ func NewCreatePhotoUseCase(repo photo.PhotoRepository, rekogClient *rekognition.
 		Repo:        repo,
 		RekogClient: rekogClient,
 	}
+}
+
+func (uc *CreatePhotoUseCase) Execute(input PhotoInputDto) (*domain.Photo, error) {
+
+	photo, err := domain.NewPhotoData(&domain.PhotoDto{
+		DeviceID:  input.DeviceID,
+		Timestamp: input.Timestamp,
+		FilePath:  input.FilePath,
+	})
+	if err != nil {
+		return nil, err
+	}
+
 }
