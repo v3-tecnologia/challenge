@@ -15,3 +15,10 @@ type CreatePhotoUseCase struct {
 	Repo        photo.PhotoRepository
 	RekogClient *rekognition.Client
 }
+
+func NewCreatePhotoUseCase(repo photo.PhotoRepository, rekogClient *rekognition.Client) *CreatePhotoUseCase {
+	return &CreatePhotoUseCase{
+		Repo:        repo,
+		RekogClient: rekogClient,
+	}
+}
