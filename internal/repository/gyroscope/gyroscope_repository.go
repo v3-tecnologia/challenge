@@ -15,3 +15,9 @@ type gyroscopeRepository struct {
 func NewGyroscopeRepository(db *gorm.DB) GyroscopeRepository {
 	return &gyroscopeRepository{DB: db}
 }
+func (r *gyroscopeRepository) Create(d *domain.Gyroscope) (*domain.Gyroscope, error) {
+	if err := r.DB.Create(d).Error; err != nil {
+		return nil, err
+	}
+	return d, nil
+}
