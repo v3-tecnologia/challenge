@@ -1,6 +1,9 @@
 package gps
 
-import "github.com/iamrosada0/v3/internal/repository/gps"
+import (
+	"github.com/iamrosada0/v3/internal/domain"
+	"github.com/iamrosada0/v3/internal/repository/gps"
+)
 
 type GPSInputDto struct {
 	DeviceID  string  `json:"deviceId"`
@@ -15,4 +18,8 @@ type CreateGPSUseCase struct {
 
 func NewCreateGPSUseCase(repo gps.GPSRepository) *CreateGPSUseCase {
 	return &CreateGPSUseCase{Repo: repo}
+}
+
+func (uc *CreateGPSUseCase) Execute(input GPSInputDto) (*domain.GPS, error) {
+
 }
