@@ -27,7 +27,7 @@ func (uc *CreateGPSUseCase) Execute(input domain.GPSDto) (*domain.GPS, error) {
 	}
 	savedGPS, err := uc.Repo.Create(gpsData)
 	if err != nil {
-		return nil, domain.ErrSaveGPSValues
+		return nil, domain.ErrSaveGPSData
 	}
 
 	return savedGPS, nil
