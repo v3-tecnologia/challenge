@@ -1,8 +1,6 @@
 package gyroscope
 
 import (
-	"errors"
-
 	"github.com/iamrosada0/v3/internal/domain"
 	"github.com/iamrosada0/v3/internal/repository/gyroscope"
 )
@@ -37,7 +35,7 @@ func (uc *CreateGyroscopeUseCase) Execute(input GyroscopeInputDto) (*domain.Gyro
 
 	savedGyro, err := uc.Repo.Create(gyro)
 	if err != nil {
-		return nil, errors.New("failed to save gyroscope data")
+		return nil, domain.ErrSaveGyroscopeData
 	}
 
 	return savedGyro, nil
