@@ -9,10 +9,10 @@ import (
 
 type CreatePhotoUseCase struct {
 	Repo       photo.PhotoRepository
-	AWSService *aws.AWSService
+	AWSService aws.AWSServiceInterface // Alterado de *aws.AWSService para aws.AWSServiceInterface
 }
 
-func NewCreatePhotoUseCase(repo photo.PhotoRepository, awsService *aws.AWSService) *CreatePhotoUseCase {
+func NewCreatePhotoUseCase(repo photo.PhotoRepository, awsService aws.AWSServiceInterface) *CreatePhotoUseCase {
 	return &CreatePhotoUseCase{
 		Repo:       repo,
 		AWSService: awsService,
