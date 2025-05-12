@@ -4,6 +4,12 @@
 
 <h1 align="center" style="font-weight: bold;">Desafio Técnico da V3</h1>
 
+## Dados para contato
+
+LinkedIn := [https://www.linkedin.com/in/ricardoraposoo](https://www.linkedin.com/in/ricardoraposoo)
+<br/>
+Email := raposo.bomtempo@gmail.com
+
 ## 📝 Descrição
 
 Este projeto tem como objetivo criar um sistema de registro e armazenamento de dados de telemetria, incluindo dados de giroscópio, GPS e fotos de usuários.
@@ -35,6 +41,14 @@ Acredito que todos os requisitos do desafio foram atendidos.
 - AWS IAM User
 
 ## 🚀 Executando o projeto
+
+Como a configuração com a AWS possa ser um pouco exaustiva, eu gravei o vídeo abaixo demonstrando as funcionalidades de upload de imagem e detecção de rostos:
+
+
+https://github.com/user-attachments/assets/03b5a114-d2b7-418b-98ad-528c814de55f
+
+
+Os dois outros endpoints podem ser facilmente executados apenas com o banco de dados configurado.
 
 ### Configuração de ambiente
 
