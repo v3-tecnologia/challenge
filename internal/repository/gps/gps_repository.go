@@ -2,9 +2,18 @@ package gps
 
 import (
 	"errors"
+	"fmt"
 	"v3/internal/domain"
 
 	"gorm.io/gorm"
+)
+
+var (
+	ErrDeviceIDEmpty  = errors.New("NOT NULL constraint failed: gps.device_id")
+	ErrTimestampEmpty = errors.New("NOT NULL constraint failed: gps.timestamp")
+	ErrLatitudeEmpty  = errors.New("NOT NULL constraint failed: gps.latitude")
+	ErrLongitudeEmpty = errors.New("NOT NULL constraint failed: gps.longitude")
+	ErrCreateFailed   = errors.New("failed to create GPS record")
 )
 
 type GPSRepository interface {
@@ -20,22 +29,23 @@ func NewGPSRepository(db *gorm.DB) GPSRepository {
 }
 
 func (r *gpsRepository) Create(d *domain.GPS) (*domain.GPS, error) {
-	// Validate required fields
+
 	if d.DeviceID == "" {
-		return nil, errors.New("NOT NULL constraint failed: gps.device_id")
+		return nil, ErrDeviceIDEmpty
 	}
 	if d.Timestamp.IsZero() {
-		return nil, errors.New("NOT NULL constraint failed: gps.timestamp")
+		return nil, ErrTimestampEmpty
 	}
 	if d.Latitude == 0 {
-		return nil, errors.New("NOT NULL constraint failed: gps.latitude")
+		return nil, ErrLatitudeEmpty
 	}
 	if d.Longitude == 0 {
-		return nil, errors.New("NOT NULL constraint failed: gps.longitude")
+		return nil, ErrLongitudeEmpty
 	}
 
 	if err := r.DB.Create(d).Error; err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%w: %v", ErrCreateFailed, err)
 	}
+
 	return d, nil
 }
