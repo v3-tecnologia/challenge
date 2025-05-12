@@ -34,7 +34,6 @@ type Gyroscope struct {
 }
 
 func NewGyroscopeData(d *GyroscopeDto) (*Gyroscope, error) {
-
 	id := uuid.NewAdapter().Generate()
 
 	dev, err := NewDevice(d.DeviceID)
@@ -42,10 +41,10 @@ func NewGyroscopeData(d *GyroscopeDto) (*Gyroscope, error) {
 		return nil, ErrDeviceIDGyroscope
 	}
 
-	timestamp := time.Unix(d.Timestamp, 0)
-	if timestamp.IsZero() {
+	if d.Timestamp <= 0 {
 		return nil, ErrTimestampGyroscope
 	}
+	timestamp := time.Unix(d.Timestamp, 0).UTC()
 
 	if math.IsNaN(d.X) || math.IsInf(d.X, 0) || math.IsNaN(d.Y) || math.IsInf(d.Y, 0) || math.IsNaN(d.Z) || math.IsInf(d.Z, 0) {
 		return nil, ErrInvalidGyroscopeValues
@@ -59,5 +58,4 @@ func NewGyroscopeData(d *GyroscopeDto) (*Gyroscope, error) {
 		Y:         d.Y,
 		Z:         d.Z,
 	}, nil
-
 }
