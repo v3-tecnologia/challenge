@@ -34,7 +34,7 @@ func (s *PhotoService) RecognizePhoto(dto dtos.SavePhotoDTO) (dtos.SavePhotoResp
 		return dtos.SavePhotoResponseDTO{}, err
 	}
 
-	photos, err := s.photoRepository.GetAll()
+	photos, err := s.photoRepository.ListByMacAddress(dto.MacAddress)
 	if err != nil {
 		return dtos.SavePhotoResponseDTO{}, fmt.Errorf("unable to get photos, %v", err)
 	}
