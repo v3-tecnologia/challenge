@@ -9,7 +9,7 @@ import (
 	"time"
 	"v3/internal/domain"
 	"v3/internal/infra/api"
-	"v3/internal/tests/infra/api/mocks" // Atualizado para infra/api
+	"v3/internal/tests/infra/api/mocks"
 	"v3/internal/usecase"
 
 	"github.com/gin-gonic/gin"
@@ -83,7 +83,7 @@ func TestGPSHandlers_CreateGPSHandler(t *testing.T) {
 			},
 			expectedStatus: http.StatusBadRequest,
 			expectedBody: map[string]interface{}{
-				"error": domain.ErrSaveGPSData.Error(), // Ajustar se souber a string exata
+				"error": domain.ErrSaveGPSData.Error(),
 			},
 		},
 	}
