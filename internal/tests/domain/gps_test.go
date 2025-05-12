@@ -42,7 +42,7 @@ func TestNewGPSData(t *testing.T) {
 				Latitude:  40.7128,
 				Longitude: -74.0060,
 			},
-			wantErr: nil, // Modificado para nil, pois 0 timestamp não aciona IsZero()
+			wantErr: domain.ErrTimestampGPS,
 		},
 		{
 			name: "Invalid Latitude (NaN)",
