@@ -2,7 +2,10 @@ package api
 
 import (
 	"errors"
+	"io"
+	"log"
 	"net/http"
+	"strconv"
 	"v3/internal/domain"
 	"v3/internal/usecase"
 
@@ -23,15 +26,122 @@ func (h *PhotoHandlers) SetupRoutes(router *gin.Engine) {
 	router.POST("/api/telemetry/photo", h.CreatePhotoHandler)
 }
 
+// func (h *PhotoHandlers) CreatePhotoHandler(c *gin.Context) {
+// 	// Parse multipart form with a reasonable size limit (e.g., 6MB)
+// 	if err := c.Request.ParseMultipartForm(6 << 20); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "failed to parse form data"})
+// 		return
+// 	}
+
+// 	// Bind form fields to PhotoDto
+// 	var input domain.PhotoDto
+// 	if err := c.ShouldBind(&input); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrMissingPhotoInvalidFields.Error()})
+// 		return
+// 	}
+
+// 	// Get the photo file
+// 	file, _, err := c.Request.FormFile("photo")
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrPhotoData.Error()})
+// 		return
+// 	}
+// 	defer file.Close()
+
+// 	// Read file into bytes
+// 	photoBytes, err := io.ReadAll(file)
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "failed to read photo file"})
+// 		return
+// 	}
+// 	if len(photoBytes) == 0 {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrPhotoData.Error()})
+// 		return
+// 	}
+// 	if len(photoBytes) > 5*1024*1024 {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "photo size exceeds 5MB"})
+// 		return
+// 	}
+
+// 	// Execute use case with photo bytes
+// 	photo, err := h.CreatePhotoUseCase.Execute(input, photoBytes)
+// 	if err != nil {
+// 		if errors.Is(err, domain.ErrDeviceIDPhoto) || errors.Is(err, domain.ErrTimestampPhoto) || errors.Is(err, domain.ErrPhotoData) {
+// 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		} else {
+// 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 		}
+// 		return
+// 	}
+
+//		c.JSON(http.StatusCreated, photo)
+//	}
+
 func (h *PhotoHandlers) CreatePhotoHandler(c *gin.Context) {
+	// Parse multipart form with 6MB limit
+	if err := c.Request.ParseMultipartForm(6 << 20); err != nil {
+		log.Printf("Failed to parse form data: %v\n", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "failed to parse form data"})
+		return
+	}
+
+	// Log form fields for debugging
+	log.Printf("Received form fields: deviceId=%s, timestamp=%s\n",
+		c.PostForm("deviceId"), c.PostForm("timestamp"))
+
+	// Bind form fields to PhotoDto
 	var input domain.PhotoDto
-	if err := c.ShouldBindJSON(&input); err != nil {
+	if err := c.ShouldBind(&input); err != nil {
+		log.Printf("Binding failed: %v\n", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrMissingPhotoInvalidFields.Error()})
 		return
 	}
 
-	photo, err := h.CreatePhotoUseCase.Execute(input)
+	// Manually parse timestamp as int64 if needed
+	if c.PostForm("timestamp") != "" {
+		timestamp, err := strconv.ParseInt(c.PostForm("timestamp"), 10, 64)
+		if err != nil {
+			log.Printf("Invalid timestamp format: %v\n", err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrMissingPhotoInvalidFields.Error()})
+			return
+		}
+		input.Timestamp = timestamp // Assuming PhotoDto has Timestamp field as int64
+	}
+
+	// Get the photo file
+	file, _, err := c.Request.FormFile("photo")
 	if err != nil {
+		log.Printf("Photo file error: %v\n", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrPhotoData.Error()})
+		return
+	}
+	defer file.Close()
+
+	// Read file into bytes
+	photoBytes, err := io.ReadAll(file)
+	if err != nil {
+		log.Printf("Failed to read photo file: %v\n", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "failed to read photo file"})
+		return
+	}
+	if len(photoBytes) == 0 {
+		log.Println("Photo file is empty")
+		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrPhotoData.Error()})
+		return
+	}
+	if len(photoBytes) > 5*1024*1024 {
+		log.Println("Photo size exceeds 5MB")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "photo size exceeds 5MB"})
+		return
+	}
+
+	log.Printf("Valid input: deviceId=%s, timestamp=%d, photo size=%d bytes\n",
+		input.DeviceID, input.Timestamp, len(photoBytes))
+
+	// Execute use case
+	photo, err := h.CreatePhotoUseCase.Execute(input, photoBytes)
+	if err != nil {
+		log.Printf("Use case failed: %v\n", err)
 		if errors.Is(err, domain.ErrDeviceIDPhoto) || errors.Is(err, domain.ErrTimestampPhoto) || errors.Is(err, domain.ErrPhotoData) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		} else {
@@ -42,3 +152,48 @@ func (h *PhotoHandlers) CreatePhotoHandler(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, photo)
 }
+
+// package api
+
+// import (
+// 	"errors"
+// 	"net/http"
+// 	"v3/internal/domain"
+// 	"v3/internal/usecase"
+
+// 	"github.com/gin-gonic/gin"
+// )
+
+// type PhotoHandlers struct {
+// 	CreatePhotoUseCase *usecase.CreatePhotoUseCase
+// }
+
+// func NewPhotoHandlers(createPhotoUseCase *usecase.CreatePhotoUseCase) *PhotoHandlers {
+// 	return &PhotoHandlers{
+// 		CreatePhotoUseCase: createPhotoUseCase,
+// 	}
+// }
+
+// func (h *PhotoHandlers) SetupRoutes(router *gin.Engine) {
+// 	router.POST("/api/telemetry/photo", h.CreatePhotoHandler)
+// }
+
+// func (h *PhotoHandlers) CreatePhotoHandler(c *gin.Context) {
+// 	var input domain.PhotoDto
+// 	if err := c.ShouldBindJSON(&input); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrMissingPhotoInvalidFields.Error()})
+// 		return
+// 	}
+
+// 	photo, err := h.CreatePhotoUseCase.Execute(input)
+// 	if err != nil {
+// 		if errors.Is(err, domain.ErrDeviceIDPhoto) || errors.Is(err, domain.ErrTimestampPhoto) || errors.Is(err, domain.ErrPhotoData) {
+// 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		} else {
+// 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 		}
+// 		return
+// 	}
+
+// 	c.JSON(http.StatusCreated, photo)
+// }
