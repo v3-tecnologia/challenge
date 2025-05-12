@@ -33,7 +33,7 @@ func TestNewPhotoData(t *testing.T) {
 			name: "Zero timestamp",
 			input: &domain.PhotoDto{
 				DeviceID:  "00:0a:95:9d:68:16",
-				Timestamp: 0, // O timestamp 0 deve acionar o erro
+				Timestamp: 0,
 			},
 			wantErr: domain.ErrTimestampPhoto,
 		},
