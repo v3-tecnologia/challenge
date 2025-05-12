@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: challenge_app
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+    depends_on:
+      database:
+        condition: service_healthy
+    links:
+      - database
+
+  database:
+    image: postgres:latest
+    container_name: challenge_db_postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-u", "dev", "-d", "challenge_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: challenge_db
+    networks:
+      - backend
+    ports:
+      - "5432:5432"
+
+networks:
+  backend:
+    driver: bridge
