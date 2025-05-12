@@ -1,88 +1,80 @@
 package usecase
 
-// import (
-// 	"errors"
-// 	"testing"
-// 	"time"
+import (
+	"errors"
+	"testing"
+	"time"
+	"v3/internal/domain"
+	"v3/internal/usecase"
 
-// 	"v3/internal/domain"
-// )
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+)
 
-// type mockGPSRepository struct {
-// 	createFunc func(d *domain.GPS) (*domain.GPS, error)
-// }
+// Mock do GPSRepository
+type MockGPSRepository struct {
+	mock.Mock
+}
 
-// func (m *mockGPSRepository) Create(d *domain.GPS) (*domain.GPS, error) {
-// 	return m.createFunc(d)
-// }
+func (m *MockGPSRepository) Create(gpsData *domain.GPS) (*domain.GPS, error) {
+	args := m.Called(gpsData)
+	return args.Get(0).(*domain.GPS), args.Error(1)
+}
 
-// func TestCreateGPSUseCase_Execute(t *testing.T) {
-// 	validInput := GPSInputDto{
-// 		DeviceID:  "00:1A:2B:3C:4D:5E",
-// 		Timestamp: time.Now().Unix(),
-// 		Latitude:  -23.5505,
-// 		Longitude: -46.6333,
-// 	}
+func TestCreateGPSUseCase_Execute(t *testing.T) {
+	t.Run("sucesso ao criar GPS", func(t *testing.T) {
+		mockRepo := new(MockGPSRepository)
+		useCase := usecase.NewCreateGPSUseCase(mockRepo)
 
-// 	tests := []struct {
-// 		name     string
-// 		input    GPSInputDto
-// 		repoMock *mockGPSRepository
-// 		wantErr  bool
-// 	}{
-// 		{
-// 			name:  "valid input",
-// 			input: validInput,
-// 			repoMock: &mockGPSRepository{
-// 				createFunc: func(d *domain.GPS) (*domain.GPS, error) {
-// 					return d, nil
-// 				},
-// 			},
-// 			wantErr: false,
-// 		},
-// 		{
-// 			name: "invalid input (invalid MAC)",
-// 			input: GPSInputDto{
-// 				DeviceID:  "invalid",
-// 				Timestamp: time.Now().Unix(),
-// 				Latitude:  -23.5505,
-// 				Longitude: -46.6333,
-// 			},
-// 			repoMock: &mockGPSRepository{
-// 				createFunc: func(d *domain.GPS) (*domain.GPS, error) {
-// 					return nil, errors.New("should not be called")
-// 				},
-// 			},
-// 			wantErr: true,
-// 		},
-// 		{
-// 			name:  "repository error",
-// 			input: validInput,
-// 			repoMock: &mockGPSRepository{
-// 				createFunc: func(d *domain.GPS) (*domain.GPS, error) {
-// 					return nil, errors.New("database error")
-// 				},
-// 			},
-// 			wantErr: true,
-// 		},
-// 	}
+		input := domain.GPSDto{
+			DeviceID:  "device123",
+			Timestamp: 1618481023,
+			Latitude:  10.0,
+			Longitude: 20.0,
+		}
 
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			uc := NewCreateGPSUseCase(tt.repoMock)
-// 			got, err := uc.Execute(tt.input)
-// 			if (err != nil) != tt.wantErr {
-// 				t.Errorf("CreateGPSUseCase.Execute() error = %v, wantErr %v", err, tt.wantErr)
-// 				return
-// 			}
-// 			if !tt.wantErr {
-// 				if got == nil {
-// 					t.Errorf("CreateGPSUseCase.Execute() returned nil GPS")
-// 				}
-// 				if got.DeviceID != tt.input.DeviceID {
-// 					t.Errorf("CreateGPSUseCase.Execute() DeviceID = %v, want %v", got.DeviceID, tt.input.DeviceID)
-// 				}
-// 			}
-// 		})
-// 	}
-// }
+		expectedTime := time.Unix(input.Timestamp, 0)
+
+		expectedGPS := &domain.GPS{
+			ID:        "gps123",
+			DeviceID:  input.DeviceID,
+			Latitude:  input.Latitude,
+			Longitude: input.Longitude,
+			Timestamp: expectedTime,
+			CreatedAt: time.Now(), // opcional para assert
+		}
+
+		mockRepo.On("Create", mock.MatchedBy(func(g *domain.GPS) bool {
+			return g.DeviceID == input.DeviceID &&
+				g.Latitude == input.Latitude &&
+				g.Longitude == input.Longitude &&
+				g.Timestamp.Equal(expectedTime)
+		})).Return(expectedGPS, nil)
+
+		result, err := useCase.Execute(input)
+
+		assert.NoError(t, err)
+		assert.Equal(t, expectedGPS, result)
+		mockRepo.AssertExpectations(t)
+	})
+
+	t.Run("erro ao criar GPS", func(t *testing.T) {
+		mockRepo := new(MockGPSRepository)
+		useCase := usecase.NewCreateGPSUseCase(mockRepo)
+
+		input := domain.GPSDto{
+			DeviceID:  "device123",
+			Timestamp: 1618481023,
+			Latitude:  10.0,
+			Longitude: 20.0,
+		}
+
+		mockRepo.On("Create", mock.Anything).Return(nil, errors.New("erro ao salvar GPS"))
+
+		result, err := useCase.Execute(input)
+
+		assert.Error(t, err)
+		assert.Nil(t, result)
+		mockRepo.AssertExpectations(t)
+	})
+}
