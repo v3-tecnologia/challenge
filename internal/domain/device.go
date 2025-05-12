@@ -14,12 +14,12 @@ type Device struct {
 }
 
 func NewDevice(id string) (*Device, error) {
-	if !isValidMAC(id) {
+	if !IsValidMAC(id) {
 		return nil, ErrInValidMACGyroscope
 	}
 	return &Device{ID: id}, nil
 }
 
-func isValidMAC(id string) bool {
+func IsValidMAC(id string) bool {
 	return regexp.MustCompile(`^([0-9A-Fa-f]{2}:){5}([0-9A-Fa-f]{2})$`).MatchString(id)
 }
