@@ -45,7 +45,7 @@ func TestNewGyroscopeData(t *testing.T) {
 				Y:         2.0,
 				Z:         3.0,
 			},
-			wantErr: nil,
+			wantErr: domain.ErrTimestampGyroscope,
 		},
 		{
 			name: "Invalid X (NaN)",
