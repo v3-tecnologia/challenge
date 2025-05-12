@@ -40,10 +40,10 @@ func NewGPSData(d *GPSDto) (*GPS, error) {
 		return nil, ErrDeviceIDGPS
 	}
 
-	timestamp := time.Unix(d.Timestamp, 0)
-	if timestamp.IsZero() {
+	if d.Timestamp <= 0 {
 		return nil, ErrTimestampGPS
 	}
+	timestamp := time.Unix(d.Timestamp, 0)
 
 	if math.IsNaN(d.Latitude) || math.IsInf(d.Latitude, 0) || math.IsNaN(d.Longitude) || math.IsInf(d.Longitude, 0) {
 		return nil, ErrInvalidGPSValues
@@ -59,5 +59,4 @@ func NewGPSData(d *GPSDto) (*GPS, error) {
 		Longitude: d.Longitude,
 		Timestamp: timestamp,
 	}, nil
-
 }
