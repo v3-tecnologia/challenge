@@ -8,14 +8,14 @@ import (
 func SetupRouter(
 	gyroscopeHandlers *GyroscopeHandlers,
 	gpsHandlers *GPSHandlers,
-	// photoHandlers *PhotoHandlers,
+	photoHandlers *PhotoHandlers,
 ) *gin.Engine {
 	router := gin.Default()
 
 	// Setup routes for each handler
 	gyroscopeHandlers.SetupRoutes(router)
 	gpsHandlers.SetupRoutes(router)
-	// photoHandlers.SetupRoutes(router)
+	photoHandlers.SetupRoutes(router)
 
 	return router
 }
