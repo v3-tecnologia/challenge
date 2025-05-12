@@ -54,10 +54,8 @@ func (a *AWSService) UploadPhoto(deviceID string, photoBytes []byte, timestamp i
 		return "", fmt.Errorf("unsupported photo format: %s", contentType)
 	}
 
-	// Generate S3 key with correct extension
 	key := fmt.Sprintf("%s/%d%s", deviceID, timestamp, extension)
 
-	// Upload to S3
 	_, err := a.s3Client.PutObject(context.TODO(), &s3.PutObjectInput{
 		Bucket:      &a.bucket,
 		Key:         &key,
