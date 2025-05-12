@@ -40,12 +40,12 @@ func TestNewGyroscopeData(t *testing.T) {
 			name: "Zero timestamp",
 			input: &domain.GyroscopeDto{
 				DeviceID:  "00:0a:95:9d:68:16",
-				Timestamp: 0, // Ajustado para não esperar erro
+				Timestamp: 0,
 				X:         1.0,
 				Y:         2.0,
 				Z:         3.0,
 			},
-			wantErr: nil, // Aqui o erro esperado foi modificado para nil
+			wantErr: nil,
 		},
 		{
 			name: "Invalid X (NaN)",
