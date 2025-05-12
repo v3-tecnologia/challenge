@@ -13,6 +13,10 @@ import (
 )
 
 func TestCreatePhotoUseCase_Execute(t *testing.T) {
+	// Timestamp fixo para consistência
+	fixedTimestamp := time.Now().Truncate(time.Second).UTC()
+	fixedUnix := fixedTimestamp.Unix()
+
 	tests := []struct {
 		name           string
 		input          domain.PhotoDto
@@ -25,20 +29,25 @@ func TestCreatePhotoUseCase_Execute(t *testing.T) {
 			name: "Successful photo creation",
 			input: domain.PhotoDto{
 				DeviceID:  "00:0a:95:9d:68:16",
-				Timestamp: time.Now().Unix(),
+				Timestamp: fixedUnix,
 			},
 			photoBytes: []byte("photo-data"),
 			setupMocks: func(repo *mocks.MockPhotoRepository, aws *mocks.MockAWSService) {
-				aws.On("UploadPhoto", "00:0a:95:9d:68:16", []byte("photo-data"), mock.AnythingOfType("int64")).Return("/photos/123.jpg", nil)
-				aws.On("ComparePhoto", "00:0a:95:9d:68:16", "/photos/123.jpg").Return(true, nil)
+				aws.On("UploadPhoto", "00:0a:95:9d:68:16", []byte("photo-data"), fixedUnix).Return("/photos/123.jpg", nil).Once()
+				aws.On("ComparePhoto", "00:0a:95:9d:68:16", "/photos/123.jpg").Return(true, nil).Once()
 				photo := &domain.Photo{
 					ID:         "mock-id",
 					DeviceID:   "00:0a:95:9d:68:16",
 					FilePath:   "/photos/123.jpg",
 					Recognized: true,
-					Timestamp:  time.Unix(time.Now().Unix(), 0).UTC(),
+					Timestamp:  fixedTimestamp,
 				}
-				repo.On("Create", mock.AnythingOfType("*domain.Photo")).Return(photo, nil)
+				repo.On("Create", mock.MatchedBy(func(p *domain.Photo) bool {
+					return p.DeviceID == "00:0a:95:9d:68:16" &&
+						p.FilePath == "/photos/123.jpg" &&
+						p.Recognized == true &&
+						p.Timestamp == fixedTimestamp
+				})).Return(photo, nil).Once()
 			},
 			wantErr: nil,
 			validateResult: func(t *testing.T, photo *domain.Photo) {
@@ -47,13 +56,14 @@ func TestCreatePhotoUseCase_Execute(t *testing.T) {
 				assert.Equal(t, "00:0a:95:9d:68:16", photo.DeviceID)
 				assert.Equal(t, "/photos/123.jpg", photo.FilePath)
 				assert.True(t, photo.Recognized)
+				assert.Equal(t, fixedTimestamp, photo.Timestamp)
 			},
 		},
 		{
 			name: "Invalid DeviceID",
 			input: domain.PhotoDto{
 				DeviceID:  "",
-				Timestamp: time.Now().Unix(),
+				Timestamp: fixedUnix,
 			},
 			photoBytes: []byte("photo-data"),
 			setupMocks: func(repo *mocks.MockPhotoRepository, aws *mocks.MockAWSService) {
@@ -83,7 +93,7 @@ func TestCreatePhotoUseCase_Execute(t *testing.T) {
 			name: "Empty Photo Bytes",
 			input: domain.PhotoDto{
 				DeviceID:  "00:0a:95:9d:68:16",
-				Timestamp: time.Now().Unix(),
+				Timestamp: fixedUnix,
 			},
 			photoBytes: []byte{},
 			setupMocks: func(repo *mocks.MockPhotoRepository, aws *mocks.MockAWSService) {
@@ -98,11 +108,11 @@ func TestCreatePhotoUseCase_Execute(t *testing.T) {
 			name: "AWS UploadPhoto error",
 			input: domain.PhotoDto{
 				DeviceID:  "00:0a:95:9d:68:16",
-				Timestamp: time.Now().Unix(),
+				Timestamp: fixedUnix,
 			},
 			photoBytes: []byte("photo-data"),
 			setupMocks: func(repo *mocks.MockPhotoRepository, aws *mocks.MockAWSService) {
-				aws.On("UploadPhoto", "00:0a:95:9d:68:16", []byte("photo-data"), mock.AnythingOfType("int64")).Return("", errors.New("upload failed"))
+				aws.On("UploadPhoto", "00:0a:95:9d:68:16", []byte("photo-data"), fixedUnix).Return("", errors.New("upload failed")).Once()
 			},
 			wantErr: domain.ErrProcessPhotoWithAWSRekognition,
 			validateResult: func(t *testing.T, photo *domain.Photo) {
@@ -113,12 +123,12 @@ func TestCreatePhotoUseCase_Execute(t *testing.T) {
 			name: "AWS ComparePhoto error",
 			input: domain.PhotoDto{
 				DeviceID:  "00:0a:95:9d:68:16",
-				Timestamp: time.Now().Unix(),
+				Timestamp: fixedUnix,
 			},
 			photoBytes: []byte("photo-data"),
 			setupMocks: func(repo *mocks.MockPhotoRepository, aws *mocks.MockAWSService) {
-				aws.On("UploadPhoto", "00:0a:95:9d:68:16", []byte("photo-data"), mock.AnythingOfType("int64")).Return("/photos/123.jpg", nil)
-				aws.On("ComparePhoto", "00:0a:95:9d:68:16", "/photos/123.jpg").Return(false, errors.New("compare failed"))
+				aws.On("UploadPhoto", "00:0a:95:9d:68:16", []byte("photo-data"), fixedUnix).Return("/photos/123.jpg", nil).Once()
+				aws.On("ComparePhoto", "00:0a:95:9d:68:16", "/photos/123.jpg").Return(false, errors.New("compare failed")).Once()
 			},
 			wantErr: domain.ErrProcessPhotoWithAWSRekognition,
 			validateResult: func(t *testing.T, photo *domain.Photo) {
@@ -129,13 +139,13 @@ func TestCreatePhotoUseCase_Execute(t *testing.T) {
 			name: "Repository Create error",
 			input: domain.PhotoDto{
 				DeviceID:  "00:0a:95:9d:68:16",
-				Timestamp: time.Now().Unix(),
+				Timestamp: fixedUnix,
 			},
 			photoBytes: []byte("photo-data"),
 			setupMocks: func(repo *mocks.MockPhotoRepository, aws *mocks.MockAWSService) {
-				aws.On("UploadPhoto", "00:0a:95:9d:68:16", []byte("photo-data"), mock.AnythingOfType("int64")).Return("/photos/123.jpg", nil)
-				aws.On("ComparePhoto", "00:0a:95:9d:68:16", "/photos/123.jpg").Return(true, nil)
-				repo.On("Create", mock.AnythingOfType("*domain.Photo")).Return(nil, errors.New("database error"))
+				aws.On("UploadPhoto", "00:0a:95:9d:68:16", []byte("photo-data"), fixedUnix).Return("/photos/123.jpg", nil).Once()
+				aws.On("ComparePhoto", "00:0a:95:9d:68:16", "/photos/123.jpg").Return(true, nil).Once()
+				repo.On("Create", mock.AnythingOfType("*domain.Photo")).Return(nil, errors.New("database error")).Once()
 			},
 			wantErr: domain.ErrSavePhotoData,
 			validateResult: func(t *testing.T, photo *domain.Photo) {
@@ -146,11 +156,11 @@ func TestCreatePhotoUseCase_Execute(t *testing.T) {
 			name: "Photo size exceeds 5MB",
 			input: domain.PhotoDto{
 				DeviceID:  "00:0a:95:9d:68:16",
-				Timestamp: time.Now().Unix(),
+				Timestamp: fixedUnix,
 			},
 			photoBytes: make([]byte, 6*1024*1024), // 6MB
 			setupMocks: func(repo *mocks.MockPhotoRepository, aws *mocks.MockAWSService) {
-				aws.On("UploadPhoto", "00:0a:95:9d:68:16", mock.MatchedBy(func(b []byte) bool { return len(b) == 6*1024*1024 }), mock.AnythingOfType("int64")).Return("", errors.New("photo size exceeds 5MB")).Once()
+				aws.On("UploadPhoto", "00:0a:95:9d:68:16", mock.MatchedBy(func(b []byte) bool { return len(b) == 6*1024*1024 }), fixedUnix).Return("", errors.New("photo size exceeds 5MB")).Once()
 			},
 			wantErr: domain.ErrProcessPhotoWithAWSRekognition,
 			validateResult: func(t *testing.T, photo *domain.Photo) {
@@ -161,11 +171,11 @@ func TestCreatePhotoUseCase_Execute(t *testing.T) {
 			name: "Unsupported photo format",
 			input: domain.PhotoDto{
 				DeviceID:  "00:0a:95:9d:68:16",
-				Timestamp: time.Now().Unix(),
+				Timestamp: fixedUnix,
 			},
 			photoBytes: []byte("invalid-format"),
 			setupMocks: func(repo *mocks.MockPhotoRepository, aws *mocks.MockAWSService) {
-				aws.On("UploadPhoto", "00:0a:95:9d:68:16", []byte("invalid-format"), mock.AnythingOfType("int64")).Return("", errors.New("unsupported photo format: application/octet-stream"))
+				aws.On("UploadPhoto", "00:0a:95:9d:68:16", []byte("invalid-format"), fixedUnix).Return("", errors.New("unsupported photo format: application/octet-stream")).Once()
 			},
 			wantErr: domain.ErrProcessPhotoWithAWSRekognition,
 			validateResult: func(t *testing.T, photo *domain.Photo) {
