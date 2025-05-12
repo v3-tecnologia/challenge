@@ -14,6 +14,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
+// AWSServiceInterface define os métodos necessários para o serviço AWS
+type AWSServiceInterface interface {
+	UploadPhoto(deviceID string, photoBytes []byte, timestamp int64) (string, error)
+	ComparePhoto(deviceID, filePath string) (bool, error)
+}
+
 type AWSService struct {
 	s3Client  *s3.Client
 	rekClient *rekognition.Client
@@ -21,7 +27,6 @@ type AWSService struct {
 }
 
 func NewAWSService(bucket string) (*AWSService, error) {
-
 	cfg, err := config.LoadDefaultConfig(context.TODO(),
 		config.WithRegion(os.Getenv("AWS_REGION")),
 	)
