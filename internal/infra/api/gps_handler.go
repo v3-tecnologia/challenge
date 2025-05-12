@@ -2,18 +2,17 @@ package api
 
 import (
 	"net/http"
-
 	"v3/internal/domain"
-	usecase "v3/internal/usecase"
+	"v3/internal/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
 type GPSHandlers struct {
-	CreateGPSUseCase *usecase.CreateGPSUseCase
+	CreateGPSUseCase usecase.GPSUseCase
 }
 
-func NewGPSHandlers(createGPSUseCase *usecase.CreateGPSUseCase) *GPSHandlers {
+func NewGPSHandlers(createGPSUseCase usecase.GPSUseCase) *GPSHandlers {
 	return &GPSHandlers{
 		CreateGPSUseCase: createGPSUseCase,
 	}
