@@ -26,7 +26,7 @@ func setupGyroscopeRouter(useCase usecase.GyroscopeUseCase) *gin.Engine {
 }
 
 func TestGyroscopeHandlers_CreateGyroscopeHandler(t *testing.T) {
-	// Timestamp fixo para consistência
+
 	fixedTimestamp := time.Now().Truncate(time.Second).UTC()
 	fixedUnix := fixedTimestamp.Unix()
 
@@ -88,7 +88,7 @@ func TestGyroscopeHandlers_CreateGyroscopeHandler(t *testing.T) {
 			},
 			expectedStatus: http.StatusBadRequest,
 			expectedBody: map[string]interface{}{
-				"error": domain.ErrSaveGyroscopeData.Error(), // "failed to save gyroscope data"
+				"error": domain.ErrSaveGyroscopeData.Error(),
 			},
 		},
 	}
