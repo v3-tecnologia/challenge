@@ -2,9 +2,19 @@ package gyroscope
 
 import (
 	"errors"
+	"fmt"
 	"v3/internal/domain"
 
 	"gorm.io/gorm"
+)
+
+var (
+	ErrDeviceIDEmpty  = errors.New("NOT NULL constraint failed: gyroscopes.device_id")
+	ErrXEmpty         = errors.New("NOT NULL constraint failed: gyroscopes.x")
+	ErrYEmpty         = errors.New("NOT NULL constraint failed: gyroscopes.y")
+	ErrZEmpty         = errors.New("NOT NULL constraint failed: gyroscopes.z")
+	ErrTimestampEmpty = errors.New("NOT NULL constraint failed: gyroscopes.timestamp")
+	ErrCreateFailed   = errors.New("failed to create gyroscope record")
 )
 
 type GyroscopeRepository interface {
@@ -20,25 +30,25 @@ func NewGyroscopeRepository(db *gorm.DB) GyroscopeRepository {
 }
 
 func (r *gyroscopeRepository) Create(d *domain.Gyroscope) (*domain.Gyroscope, error) {
-	// Validate required fields
 	if d.DeviceID == "" {
-		return nil, errors.New("NOT NULL constraint failed: gyroscopes.device_id")
+		return nil, ErrDeviceIDEmpty
 	}
 	if d.X == 0 {
-		return nil, errors.New("NOT NULL constraint failed: gyroscopes.x")
+		return nil, ErrXEmpty
 	}
 	if d.Y == 0 {
-		return nil, errors.New("NOT NULL constraint failed: gyroscopes.y")
+		return nil, ErrYEmpty
 	}
 	if d.Z == 0 {
-		return nil, errors.New("NOT NULL constraint failed: gyroscopes.z")
+		return nil, ErrZEmpty
 	}
 	if d.Timestamp.IsZero() {
-		return nil, errors.New("NOT NULL constraint failed: gyroscopes.timestamp")
+		return nil, ErrTimestampEmpty
 	}
 
 	if err := r.DB.Create(d).Error; err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%w: %v", ErrCreateFailed, err)
 	}
+
 	return d, nil
 }
