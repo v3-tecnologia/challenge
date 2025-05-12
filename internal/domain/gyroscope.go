@@ -4,15 +4,15 @@ import (
 	"errors"
 	"math"
 	"time"
-
 	"v3/internal/adapter/uuid"
 )
 
 var (
-	ErrDeviceIDGyroscope      = errors.New("device ID not found")
-	ErrTimestampGyroscope     = errors.New("timestamp not found")
-	ErrInvalidGyroscopeValues = errors.New("invalid gyroscope values")
-	ErrSaveGyroscopeData      = errors.New("failed to save gyroscope data")
+	ErrDeviceIDGyroscope             = errors.New("device ID not found")
+	ErrTimestampGyroscope            = errors.New("timestamp not found")
+	ErrInvalidGyroscopeValues        = errors.New("invalid gyroscope values")
+	ErrSaveGyroscopeData             = errors.New("failed to save gyroscope data")
+	ErrMissingGyroscopeInvalidFields = errors.New("missing or invalid fields")
 )
 
 type GyroscopeDto struct {
