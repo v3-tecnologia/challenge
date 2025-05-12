@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"v3/internal/domain"
 	"v3/internal/usecase"
 
@@ -86,26 +87,29 @@ func (h *PhotoHandlers) CreatePhotoHandler(c *gin.Context) {
 	}
 
 	// Log form fields for debugging
-	log.Printf("Received form fields: deviceId=%s, timestamp=%s\n",
-		c.PostForm("deviceId"), c.PostForm("timestamp"))
+	deviceID := strings.TrimSpace(c.PostForm("deviceId"))
+	timestampStr := strings.TrimSpace(c.PostForm("timestamp"))
+	log.Printf("Received form fields: deviceId=%s, timestamp=%s\n", deviceID, timestampStr)
 
-	// Bind form fields to PhotoDto
-	var input domain.PhotoDto
-	if err := c.ShouldBind(&input); err != nil {
-		log.Printf("Binding failed: %v\n", err)
+	// Validate required fields
+	if deviceID == "" || timestampStr == "" {
+		log.Println("Validation failed: deviceId or timestamp is empty")
 		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrMissingPhotoInvalidFields.Error()})
 		return
 	}
 
-	// Manually parse timestamp as int64 if needed
-	if c.PostForm("timestamp") != "" {
-		timestamp, err := strconv.ParseInt(c.PostForm("timestamp"), 10, 64)
-		if err != nil {
-			log.Printf("Invalid timestamp format: %v\n", err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrMissingPhotoInvalidFields.Error()})
-			return
-		}
-		input.Timestamp = timestamp // Assuming PhotoDto has Timestamp field as int64
+	// Parse timestamp as int64
+	timestamp, err := strconv.ParseInt(timestampStr, 10, 64)
+	if err != nil {
+		log.Printf("Invalid timestamp format: %v\n", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrMissingPhotoInvalidFields.Error()})
+		return
+	}
+
+	// Create PhotoDto manually to avoid binding issues
+	input := domain.PhotoDto{
+		DeviceID:  deviceID,
+		Timestamp: timestamp,
 	}
 
 	// Get the photo file
