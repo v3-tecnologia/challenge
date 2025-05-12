@@ -5,6 +5,11 @@ import (
 	"v3/internal/repository/gyroscope"
 )
 
+// GyroscopeUseCase define os métodos do CreateGyroscopeUseCase
+type GyroscopeUseCase interface {
+	Execute(input domain.GyroscopeDto) (*domain.Gyroscope, error)
+}
+
 type CreateGyroscopeUseCase struct {
 	Repo gyroscope.GyroscopeRepository
 }
@@ -14,7 +19,7 @@ func NewCreateGyroscopeUseCase(repo gyroscope.GyroscopeRepository) *CreateGyrosc
 }
 
 func (uc *CreateGyroscopeUseCase) Execute(input domain.GyroscopeDto) (*domain.Gyroscope, error) {
-	gyro, err := domain.NewGyroscopeData(&domain.GyroscopeDto{
+	gyroData, err := domain.NewGyroscopeData(&domain.GyroscopeDto{
 		DeviceID:  input.DeviceID,
 		Timestamp: input.Timestamp,
 		X:         input.X,
@@ -24,11 +29,9 @@ func (uc *CreateGyroscopeUseCase) Execute(input domain.GyroscopeDto) (*domain.Gy
 	if err != nil {
 		return nil, err
 	}
-
-	savedGyro, err := uc.Repo.Create(gyro)
+	savedGyro, err := uc.Repo.Create(gyroData)
 	if err != nil {
 		return nil, domain.ErrSaveGyroscopeData
 	}
-
 	return savedGyro, nil
 }
