@@ -66,3 +66,60 @@ func TestNewDevice(t *testing.T) {
 		})
 	}
 }
+func TestIsValidMAC(t *testing.T) {
+	tests := []struct {
+		name string
+		mac  string
+		want bool
+	}{
+		{
+			name: "Valid MAC address",
+			mac:  "00:0a:95:9d:68:16",
+			want: true,
+		},
+		{
+			name: "Valid MAC with uppercase",
+			mac:  "FF:FF:FF:FF:FF:FF",
+			want: true,
+		},
+		{
+			name: "Valid MAC with lowercase",
+			mac:  "ff:ff:ff:ff:ff:ff",
+			want: true,
+		},
+		{
+			name: "Invalid MAC - too short",
+			mac:  "00:0a:95:9d:68",
+			want: false,
+		},
+		{
+			name: "Invalid MAC - too long",
+			mac:  "00:0a:95:9d:68:16:00",
+			want: false,
+		},
+		{
+			name: "Invalid MAC - wrong separator",
+			mac:  "00-0a-95-9d-68-16",
+			want: false,
+		},
+		{
+			name: "Invalid MAC - non-hex",
+			mac:  "00:0a:95:9d:68:GG",
+			want: false,
+		},
+		{
+			name: "Invalid MAC - empty",
+			mac:  "",
+			want: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := domain.IsValidMAC(tt.mac)
+			if got != tt.want {
+				t.Errorf("isValidMAC(%q) = %v, want %v", tt.mac, got, tt.want)
+			}
+		})
+	}
+}
