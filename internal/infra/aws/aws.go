@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"net/http"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -39,16 +40,32 @@ func (a *AWSService) UploadPhoto(deviceID string, photoBytes []byte, timestamp i
 	if len(photoBytes) > 5*1024*1024 {
 		return "", fmt.Errorf("photo size exceeds 5MB")
 	}
-	key := fmt.Sprintf("%s/%d.jpg", deviceID, timestamp)
+
+	contentType := http.DetectContentType(photoBytes)
+	var extension string
+	switch contentType {
+	case "image/jpeg":
+		extension = ".jpg"
+	case "image/png":
+		extension = ".png"
+	default:
+		return "", fmt.Errorf("unsupported photo format: %s", contentType)
+	}
+
+	// Generate S3 key with correct extension
+	key := fmt.Sprintf("%s/%d%s", deviceID, timestamp, extension)
+
+	// Upload to S3
 	_, err := a.s3Client.PutObject(context.TODO(), &s3.PutObjectInput{
 		Bucket:      &a.bucket,
 		Key:         &key,
 		Body:        bytes.NewReader(photoBytes),
-		ContentType: aws.String("image/jpeg"),
+		ContentType: aws.String(contentType),
 	})
 	if err != nil {
 		return "", fmt.Errorf("failed to upload photo to S3: %w", err)
 	}
+
 	return key, nil
 }
 
