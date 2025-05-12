@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -20,8 +21,9 @@ type AWSService struct {
 }
 
 func NewAWSService(bucket string) (*AWSService, error) {
+
 	cfg, err := config.LoadDefaultConfig(context.TODO(),
-		config.WithRegion("eu-west-2"), // Adjust region as needed
+		config.WithRegion(os.Getenv("AWS_REGION")),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load AWS config: %w", err)
