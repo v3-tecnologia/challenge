@@ -34,10 +34,10 @@ func NewPhotoData(d *PhotoDto) (*Photo, error) {
 	if d.DeviceID == "" {
 		return nil, ErrDeviceIDPhoto
 	}
-	timestamp := time.Unix(d.Timestamp, 0).UTC()
-	if timestamp.IsZero() {
+	if d.Timestamp <= 0 {
 		return nil, ErrTimestampPhoto
 	}
+	timestamp := time.Unix(d.Timestamp, 0).UTC()
 	return &Photo{
 		ID:         id,
 		DeviceID:   d.DeviceID,
