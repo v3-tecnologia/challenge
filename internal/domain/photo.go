@@ -41,7 +41,7 @@ func NewPhotoData(d *PhotoDto) (*Photo, error) {
 	return &Photo{
 		ID:         id,
 		DeviceID:   d.DeviceID,
-		FilePath:   "", // Set after S3 upload
+		FilePath:   "",
 		Timestamp:  timestamp,
 		Recognized: false,
 	}, nil
