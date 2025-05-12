@@ -28,26 +28,23 @@ func (h *PhotoHandlers) SetupRoutes(router *gin.Engine) {
 }
 
 func (h *PhotoHandlers) CreatePhotoHandler(c *gin.Context) {
-	// Parse multipart form with 6MB limit
+
 	if err := c.Request.ParseMultipartForm(6 << 20); err != nil {
 		log.Printf("Failed to parse form data: %v\n", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "failed to parse form data"})
 		return
 	}
 
-	// Log form fields for debugging
 	deviceID := strings.TrimSpace(c.PostForm("deviceId"))
 	timestampStr := strings.TrimSpace(c.PostForm("timestamp"))
 	log.Printf("Received form fields: deviceId=%s, timestamp=%s\n", deviceID, timestampStr)
 
-	// Validate required fields
 	if deviceID == "" || timestampStr == "" {
 		log.Println("Validation failed: deviceId or timestamp is empty")
 		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrMissingPhotoInvalidFields.Error()})
 		return
 	}
 
-	// Parse timestamp as int64
 	timestamp, err := strconv.ParseInt(timestampStr, 10, 64)
 	if err != nil {
 		log.Printf("Invalid timestamp format: %v\n", err)
@@ -55,13 +52,11 @@ func (h *PhotoHandlers) CreatePhotoHandler(c *gin.Context) {
 		return
 	}
 
-	// Create PhotoDto manually to avoid binding issues
 	input := domain.PhotoDto{
 		DeviceID:  deviceID,
 		Timestamp: timestamp,
 	}
 
-	// Get the photo file
 	file, _, err := c.Request.FormFile("photo")
 	if err != nil {
 		log.Printf("Photo file error: %v\n", err)
@@ -70,7 +65,6 @@ func (h *PhotoHandlers) CreatePhotoHandler(c *gin.Context) {
 	}
 	defer file.Close()
 
-	// Read file into bytes
 	photoBytes, err := io.ReadAll(file)
 	if err != nil {
 		log.Printf("Failed to read photo file: %v\n", err)
@@ -91,7 +85,6 @@ func (h *PhotoHandlers) CreatePhotoHandler(c *gin.Context) {
 	log.Printf("Valid input: deviceId=%s, timestamp=%d, photo size=%d bytes\n",
 		input.DeviceID, input.Timestamp, len(photoBytes))
 
-	// Execute use case
 	photo, err := h.CreatePhotoUseCase.Execute(input, photoBytes)
 	if err != nil {
 		log.Printf("Use case failed: %v\n", err)
