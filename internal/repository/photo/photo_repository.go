@@ -2,7 +2,6 @@ package photo
 
 import (
 	"errors"
-	"fmt"
 	"v3/internal/domain"
 
 	"gorm.io/gorm"
@@ -25,23 +24,4 @@ type photoRepository struct {
 
 func NewPhotoRepository(db *gorm.DB) PhotoRepository {
 	return &photoRepository{DB: db}
-}
-
-func (r *photoRepository) Create(d *domain.Photo) (*domain.Photo, error) {
-
-	if d.DeviceID == "" {
-		return nil, ErrDeviceIDEmpty
-	}
-	if d.FilePath == "" {
-		return nil, ErrFilePathEmpty
-	}
-	if d.Timestamp.IsZero() {
-		return nil, ErrTimestampEmpty
-	}
-
-	if err := r.DB.Create(d).Error; err != nil {
-		return nil, fmt.Errorf("%w: %v", ErrCreateFailed, err)
-	}
-
-	return d, nil
 }
