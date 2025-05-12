@@ -1,4 +1,4 @@
-package device_test
+package domain
 
 import (
 	"errors"
