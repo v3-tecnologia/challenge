@@ -38,7 +38,7 @@ func TestNewGPSData(t *testing.T) {
 			name: "Zero timestamp",
 			input: &domain.GPSDto{
 				DeviceID:  "00:0a:95:9d:68:16",
-				Timestamp: 0, // O timestamp 0 não ativa IsZero()
+				Timestamp: 0,
 				Latitude:  40.7128,
 				Longitude: -74.0060,
 			},
