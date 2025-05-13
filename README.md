@@ -65,7 +65,141 @@ A aplicação ficará disponível em `http://localhost:8080`.
 - `POST /telemetry/gps`: Recebe dados de GPS (`latitude`, `longitude`, `timestamp`, `device_id`).
 - `POST /telemetry/photo`: Recebe uma foto (`photo`) com `timestamp` e `device_id`.
 
+
+
+## 🌐 Base URL
+
+```
+http://localhost:8080/api/telemetry
+```
+
 ---
+
+## 📘 Sumário
+
+* [Endpoints](#endpoints)
+
+  * [POST /gyroscope](#1-post-gyroscope)
+  * [POST /gps](#2-post-gps)
+  * [POST /photo](#3-post-photo)
+* [Formato dos dados](#formato-dos-dados)
+
+
+---
+
+## 📡 Endpoints
+
+### 1. `POST /gyroscope`
+
+Registra dados de giroscópio.
+
+#### 🧾 Requisição (JSON)
+
+```json
+{
+  "x": 0.98,
+  "y": -0.45,
+  "z": 0.12,
+  "timestamp": 1715460300,
+  "deviceId": "00:0a:95:9d:68:16"
+}
+```
+
+#### ✅ Resposta
+
+```json
+{
+  "id": "dc3eac84-2cc5-4269-91ad-5ea2119252c2",
+  "device_id": "00:0a:95:9d:68:16",
+  "x": 0.98,
+  "y": -0.45,
+  "z": 0.12,
+  "timestamp": "2024-05-11T22:40:00Z",
+  "created_at": "2025-05-12T22:53:42.847885711Z"
+}
+```
+
+---
+
+### 2. `POST /gps`
+
+Registra dados de localização GPS.
+
+#### 🧾 Requisição (JSON)
+
+```json
+{
+  "latitude": -23.55052,
+  "longitude": -46.633308,
+  "timestamp": 1715467200,
+  "deviceId": "00:0a:95:9d:68:16"
+}
+```
+
+#### ✅ Resposta
+
+```json
+{
+  "id": "dc3eac84-2cc5-4269-91ad-5ea2119252c2",
+  "device_id": "00:0a:95:9d:68:16",
+  "latitude": -23.55052,
+  "longitude": -46.633308,
+  "timestamp": "2024-05-11T22:40:00Z",
+  "created_at": "2025-05-12T22:53:42.847885711Z"
+}
+```
+
+---
+
+### 3. `POST /photo`
+
+Envia uma foto como parte de um formulário multipart.
+
+#### 🧾 Requisição (`multipart/form-data`)
+
+| Campo       | Tipo               | Descrição                         |
+| ----------- | ------------------ | --------------------------------- |
+| `photo`     | Arquivo (PNG/JPEG) | Imagem capturada pelo dispositivo |
+| `deviceId`  | string             | Identificador do dispositivo      |
+| `timestamp` | inteiro (UNIX)     | Tempo do registro da imagem       |
+
+#### 📦 Exemplo com `curl`
+
+```bash
+curl -X POST http://localhost:8080/api/telemetry/photo \
+  -F "photo=@/caminho/para/imagem.jpg" \
+  -F "deviceId=00:0a:95:9d:68:16" \
+  -F "timestamp=1715467202"
+```
+
+#### ✅ Resposta
+
+```json
+{
+  "id": "9cc4ab46-3924-4093-99aa-711f95cc8dbe",
+  "deviceId": "00:0a:95:9d:68:16",
+  "file_path": "00:0a:95:9d:68:16/1715467202.png",
+  "recognized": true,
+  "timestamp": "2024-05-11T22:40:02Z",
+  "created_at": "2025-05-12T22:53:39.130518853Z"
+}
+```
+
+---
+
+## 🧾 Formato dos dados
+
+| Campo                    | Tipo    | Descrição                            |
+| ------------------------ | ------- | ------------------------------------ |
+| `deviceId`               | string  | MAC address ou identificador único   |
+| `timestamp`              | inteiro | Data/hora em formato UNIX (segundos) |
+| `latitude` / `longitude` | float   | Coordenadas geográficas              |
+| `x`, `y`, `z`            | float   | Eixos do sensor giroscópio           |
+| `photo`                  | arquivo | Imagem em `.png` ou `.jpeg`          |
+
+---
+
+
 
 ## Docker Compose e Estrutura dos Containers
 
@@ -378,12 +512,6 @@ Esses testes são essenciais para garantir que os casos de uso de criação de d
 
 ### Segunda Opção
 ![alt text](image.png)
-
-
-
-
-
-
 
 
 
