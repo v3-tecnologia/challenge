@@ -4,63 +4,86 @@
 
 <h1 align="center" style="font-weight: bold;">Desafio Técnico da V3</h1>
 
-## ❤️ Bem vindos
+## Dados para contato
 
-Olá, tudo certo?
+LinkedIn := [https://www.linkedin.com/in/ricardoraposoo](https://www.linkedin.com/in/ricardoraposoo)
+<br/>
+Email := raposo.bomtempo@gmail.com
 
-Seja bem vindo ao teste de seleção para novos colaboradores na V3!
+## 📝 Descrição
 
-Estamos honrados que você tenha chegado até aqui!
+Este projeto tem como objetivo criar um sistema de registro e armazenamento de dados de telemetria, incluindo dados de giroscópio, GPS e fotos de usuários.
 
-Prepare aquele ☕️, e venha conosco codar e se divertir!
+A aplicação foi desenvolvida em Go, utilizando o framework web [Fiber](https://gofiber.io/), e armazena os dados em um banco de dados PostgreSQL. Para gerar os métodos de acesso ao banco, utilizei o [sqlc](https://docs.sqlc.dev/), que permite manter a clareza do SQL com tipagem forte no Go e organização por repositórios. 
 
-## 📚 Desafios Disponíveis
+As migrações são gerenciadas com o [golang-migrate](https://github.com/golang-migrate/migrate), garantindo consistência no schema do banco de dados.
 
-Este repositório contém três desafios diferentes, cada um focado em uma área específica:
+As imagens dos usuários são armazenadas em um bucket S3 da AWS, integrando com o [AWS Rekognition](https://aws.amazon.com/rekognition/) para análise de imagens, conforme exigido pelo desafio.
 
-1. [Suporte Técnico](SUPPORT.md)
-2. [Desafio Backend](CLOUD.md)
-3. [Desafio Firmware](FIRMWARE.md)
-   
-## Poxa, outro teste?
+Acredito que todos os requisitos do desafio foram atendidos.
 
-Nós sabemos que os processos de seleção podem ser ingratos! Você investe um tempão e no final pode não ser aprovado!
+## 🛠 Tecnologias utilizadas
 
-Aqui, nós presamos pela **transparência**!
+- [Go](https://golang.org/) – linguagem principal do projeto
+- [Fiber](https://gofiber.io/) – framework web para Go
+- [PostgreSQL](https://www.postgresql.org/) – banco de dados relacional
+- [sqlc](https://docs.sqlc.dev/) – geração de código a partir de SQL
+- [golang-migrate](https://github.com/golang-migrate/migrate) – controle de migrações do banco de dados
+- [AWS S3](https://aws.amazon.com/s3/) – armazenamento de arquivos
+- [AWS Rekognition](https://aws.amazon.com/rekognition/) – análise de imagens
+- [Testify](https://github.com/stretchr/testify) – framework de testes
+- [Docker](https://www.docker.com/) – containerização da aplicação
 
-Este teste tem um **propósito** bastante simples:
+## Pré Requisitos
 
-> Nós queremos avaliar como você consegue transformar problemas em soluções através de código!
+- Docker
+- AWS S3 Bucket
+- AWS IAM User
 
-**🚨 IMPORTANTE!** Se você entende que já possui algum projeto pessoal, ou contribuição em um projeto _open-source_ que contemple conhecimentos equivalentes aos que existem neste desafio, então, basta submeter o repositório explicando essa correlação!
+## 🚀 Executando o projeto
 
-## 🚀 Bora nessa!
+Como a configuração com a AWS possa ser um pouco exaustiva, eu gravei o vídeo abaixo demonstrando as funcionalidades de upload de imagem e detecção de rostos:
 
-Este é um teste para analisarmos como você desempenha ao entender, traduzir, resolver e entregar um código que resolve um problema.
 
-### Dicas
+https://github.com/user-attachments/assets/03b5a114-d2b7-418b-98ad-528c814de55f
 
-- Documente seu projeto;
-- Faça perguntas sobre os pontos que não ficaram claros para você;
-- Mostre a sua linha de raciocínio;
-- Trabalhe bem o seu README.md;
-  - Explique até onde implementou;
-  - Como o projeto pode ser executado;
-  - Como pode-se testar o projeto;
 
-### Como você deverá desenvolver?
+Os dois outros endpoints podem ser facilmente executados apenas com o banco de dados configurado.
 
-1. Faça um _fork_ deste projeto em seu GitHub pessoal;
-2. Realize as implementações de acordo com cada um dos níveis;
-3. Faça pequenos _commits_;
-4. Depois de sentir que fez o seu máximo, faça um PR para o repositório original.
+### Configuração de ambiente
 
-🚨 **IMPORTANTE!** Não significa que você precisa implementar **todos os níveis** para ser aprovado no processo! Faça até onde se sentir confortável.
+Crie um arquivo `.env` a partir do `.env.example` e preencha os campos de acordo com suas credenciais AWS e configurações do S3.
+Algumas variáveis já estão pré preenchidas, para facilitar a execução do projeto.
 
-## ⏰ Tempo para Entrega
+### Migrações
 
-Quanto antes você enviar, mais cuidado podemos ter na revisão do seu teste. Faça no seu tempo, mas mantenha a qualidade!
+Para controle das migrações, é necessário ter instalado a ferramenta [golang-migrate](https://github.com/golang-migrate/migrate).
+Comando para executar as migrações:
+```bash
+migrate -database "postgres://postgres:password@localhost:5432/postgres?sslmode=disable" -path db/migrations up
+```
 
-**Mas não desista! Envie até onde conseguir.**
+### Execução do projeto
 
-Boa sorte! 🍀
+Para executar o projeto, é necessário ter instalado o [Docker](https://docs.docker.com/get-docker/).
+Tendo feito as configurações prévias, para executar o projeto, basta executar o comando:
+```bash
+docker-compose up
+```
+
+
+##  📝 Executando os testes
+
+Para execução dos testes, é necessário ter instalado as dependências do projeto.
+Para isso, basta executar o comando:
+```bash
+go mod download
+go mod tidy
+```
+
+Para executar os testes, basta executar o comando:
+```bash
+go test ./...
+# ou 
+make test
+```
