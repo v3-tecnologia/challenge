@@ -1,0 +1,62 @@
+package domain
+
+import (
+	"errors"
+	"math"
+	"time"
+
+	"v3/internal/adapter/uuid"
+)
+
+var (
+	ErrDeviceIDGPS             = errors.New("device ID not found")
+	ErrTimestampGPS            = errors.New("timestamp not found")
+	ErrInvalidGPSValues        = errors.New("invalid GPS values")
+	ErrSaveGPSData             = errors.New("failed to save GPS data")
+	ErrMissingGPSInvalidFields = errors.New("missing or invalid fields")
+)
+
+type GPSDto struct {
+	DeviceID  string  `json:"deviceId" binding:"required"`
+	Timestamp int64   `json:"timestamp" binding:"required"`
+	Latitude  float64 `json:"latitude" binding:"required"`
+	Longitude float64 `json:"longitude" binding:"required"`
+}
+
+type GPS struct {
+	ID        string    `json:"id" gorm:"primaryKey"`
+	DeviceID  string    `json:"device_id" gorm:"index;not null"`
+	Latitude  float64   `json:"latitude" gorm:"not null"`
+	Longitude float64   `json:"longitude" gorm:"not null"`
+	Timestamp time.Time `json:"timestamp" gorm:"not null"`
+	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
+}
+
+func NewGPSData(d *GPSDto) (*GPS, error) {
+	id := uuid.NewAdapter().Generate()
+
+	dev, err := NewDevice(d.DeviceID)
+	if err != nil {
+		return nil, ErrDeviceIDGPS
+	}
+
+	if d.Timestamp <= 0 {
+		return nil, ErrTimestampGPS
+	}
+	timestamp := time.Unix(d.Timestamp, 0)
+
+	if math.IsNaN(d.Latitude) || math.IsInf(d.Latitude, 0) || math.IsNaN(d.Longitude) || math.IsInf(d.Longitude, 0) {
+		return nil, ErrInvalidGPSValues
+	}
+	if d.Latitude < -90 || d.Latitude > 90 || d.Longitude < -180 || d.Longitude > 180 {
+		return nil, ErrInvalidGPSValues
+	}
+
+	return &GPS{
+		ID:        id,
+		DeviceID:  dev.ID,
+		Latitude:  d.Latitude,
+		Longitude: d.Longitude,
+		Timestamp: timestamp,
+	}, nil
+}
