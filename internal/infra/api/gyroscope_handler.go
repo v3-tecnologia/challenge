@@ -28,7 +28,7 @@ func (h *GyroscopeHandlers) SetupRoutes(router *gin.Engine) {
 func (h *GyroscopeHandlers) CreateGyroscopeHandler(c *gin.Context) {
 	var input domain.GyroscopeDto
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrMissingGyroscopeInvalidFields})
+		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrMissingGyroscopeInvalidFields.Error()})
 		return
 	}
 

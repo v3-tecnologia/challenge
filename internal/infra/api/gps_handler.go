@@ -28,7 +28,7 @@ func (h *GPSHandlers) SetupRoutes(router *gin.Engine) {
 func (h *GPSHandlers) CreateGPSHandler(c *gin.Context) {
 	var input domain.GPSDto
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrMissingGPSInvalidFields})
+		c.JSON(http.StatusBadRequest, gin.H{"error": domain.ErrMissingGPSInvalidFields.Error()})
 		return
 	}
 
