@@ -1,66 +1,120 @@
-<p align="center">
-    <img src="./.github/logo.png" width="200px">
-</p>
+# Go Telemetry API
 
-<h1 align="center" style="font-weight: bold;">Desafio Técnico da V3</h1>
+This is a simple Go application that provides an API for receiving telemetry data from a device. The API has three endpoints for gyroscope data, GPS data, and photo data.
 
-## ❤️ Bem vindos
+### Requirements/Setup
 
-Olá, tudo certo?
+1. Download and install Go following the steps in the official documentation: [Go Installation Guide](https://go.dev/doc/install#install).
 
-Seja bem vindo ao teste de seleção para novos colaboradores na V3!
+2. Navigate to the project folder `go_app` and run the application:
 
-Estamos honrados que você tenha chegado até aqui!
+   ```bash
+   go run main.go
 
-Prepare aquele ☕️, e venha conosco codar e se divertir!
+The server will start and run with a local connection on port :8080
 
-## 📚 Desafios Disponíveis
+### Test endpoints
 
-Este repositório contém três desafios diferentes, cada um focado em uma área específica:
+Test endpoints using following curl commands via terminal:
 
-1. [Suporte Técnico](SUPPORT.md)
-2. [Desafio Backend](CLOUD.md)
-3. [Desafio Firmware](FIRMWARE.md)
-   
-## Poxa, outro teste?
+#### Endpoint: /telemetry/gyroscope
+```
+curl -X POST http://localhost:8080/telemetry/gyroscope \
+-H "Content-Type: application/json" \
+-d '{"x": 1.0, "y": 2.0, "z": 3.0}'
+```
+Expected success Message:
+{"message":"Gyroscope data received successfully"}
 
-Nós sabemos que os processos de seleção podem ser ingratos! Você investe um tempão e no final pode não ser aprovado!
 
-Aqui, nós presamos pela **transparência**!
+##### Error Cenario:
+```
+curl -X POST http://localhost:8080/telemetry/gyroscope \
+-H "Content-Type: application/json" \
+-d '{"x": 0, "y": 0, "z": 0}'
+```
 
-Este teste tem um **propósito** bastante simples:
+Expected error Message:
+"Missing or invalid gyroscope data"
 
-> Nós queremos avaliar como você consegue transformar problemas em soluções através de código!
 
-**🚨 IMPORTANTE!** Se você entende que já possui algum projeto pessoal, ou contribuição em um projeto _open-source_ que contemple conhecimentos equivalentes aos que existem neste desafio, então, basta submeter o repositório explicando essa correlação!
+#### Endpoint: /telemetry/gps
+```
+curl -X POST http://localhost:8080/telemetry/gps \
+-H "Content-Type: application/json" \
+-d '{"latitude": 37.7749, "longitude": -122.4194, "altitude": 30.0}'
+```
 
-## 🚀 Bora nessa!
+Expected success Message:
+{"message":"Gyroscope data received successfully"}
 
-Este é um teste para analisarmos como você desempenha ao entender, traduzir, resolver e entregar um código que resolve um problema.
 
-### Dicas
+##### Error Cenario:
+```
+curl -X POST http://localhost:8080/telemetry/gps \
+-H "Content-Type: application/json" \
+-d '{"latitude": 0, "longitude": 0, "altitude": 30.0}'
+```
+Expected error Message:
+"Missing or invalid GPS data"
 
-- Documente seu projeto;
-- Faça perguntas sobre os pontos que não ficaram claros para você;
-- Mostre a sua linha de raciocínio;
-- Trabalhe bem o seu README.md;
-  - Explique até onde implementou;
-  - Como o projeto pode ser executado;
-  - Como pode-se testar o projeto;
 
-### Como você deverá desenvolver?
+#### Endpoint: /telemetry/photo
+```
+curl -X POST http://localhost:8080/telemetry/photo \
+-H "Content-Type: application/json" \
+-d '{"filename": "image.png", "data": "base64encodeddata"}'
+```
 
-1. Faça um _fork_ deste projeto em seu GitHub pessoal;
-2. Realize as implementações de acordo com cada um dos níveis;
-3. Faça pequenos _commits_;
-4. Depois de sentir que fez o seu máximo, faça um PR para o repositório original.
+Expected success Message:
+{"message":"Photo data received successfully"}
 
-🚨 **IMPORTANTE!** Não significa que você precisa implementar **todos os níveis** para ser aprovado no processo! Faça até onde se sentir confortável.
 
-## ⏰ Tempo para Entrega
+##### Error Cenario:
+```
+curl -X POST http://localhost:8080/telemetry/photo \
+-H "Content-Type: application/json" \
+-d '{"filename": "", "data": ""}'
+```
 
-Quanto antes você enviar, mais cuidado podemos ter na revisão do seu teste. Faça no seu tempo, mas mantenha a qualidade!
+Expected error Message:
+"Missing photo data fields"
 
-**Mas não desista! Envie até onde conseguir.**
 
-Boa sorte! 🍀
+## Nível 2
+
+Salve cada uma das informações em um banco de dados a sua escolha.
+
+Salve estes dados de forma identificável e consistente;
+
+## Nível 3
+
+Crie testes unitários para cada arquivo da aplicação. Para cada nova implementação a seguir, também deve-se criar os testes.
+
+## Nível 4
+
+Crie um _container_ em _Docker_ que contenha a sua aplicação e o banco de dados utilizado nos testes.
+
+## Nível 5
+
+A cada foto recebida, deve-se utilizar o AWS Rekognition para comparar se a foto enviada é reconhecida com base nas fotos anteriores enviadas.
+
+Se a foto enviada for reconhecida, retorne como resposta do `POST` um atributo que indique isso.
+
+Utilize as fotos iniciais para realizar o treinamento da IA.
+
+
+# Go Telemetry API
+
+This is a simple Go application that provides an API for receiving telemetry data from a device. The API has three endpoints for gyroscope data, GPS data, and photo data.
+
+## Requirements
+
+1. Download and install Go following the steps in the official documentation: [Go Installation Guide](https://go.dev/doc/install#install).
+
+2. Navigate to the project folder and run the application:
+
+   ```bash
+   go run main.go
+
+
