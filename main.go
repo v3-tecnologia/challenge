@@ -66,7 +66,7 @@ func photoHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	var err error
 	// Connect to the PostgreSQL database
-	connStr := "user=yourusername dbname=yourdbname sslmode=disable" // Update with your credentials
+	connStr := "user=postgres password=postgres dbname=telemetry host=postgres sslmode=disable"
 	db, err = sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)

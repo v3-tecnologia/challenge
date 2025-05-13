@@ -4,29 +4,33 @@ FROM golang:1.24.3 AS builder
 # Set the Current Working Directory inside the container
 WORKDIR /app
 
+# Set environment variables for Go build (to target the correct architecture)
+ENV GOARCH=amd64
+ENV GOOS=linux
+
 # Copy go.mod and go.sum files
 COPY go.mod go.sum ./
 
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+# Download dependencies
 RUN go mod download
 
 # Copy the source code into the container
 COPY . .
 
-# Build the Go app
+# Build the Go app (this should create `main`)
 RUN go build -o main .
 
-# Start a new stage from scratch
-FROM alpine:3.21.3
+# Start a new stage with Debian
+FROM debian:12
 
-# Set the Current Working Directory inside the container
+# Set the Working Directory inside the container
 WORKDIR /app
 
-# Copy the Pre-built binary file from the previous stage
+# Copy the pre-built binary from the previous stage
 COPY --from=builder /app/main .
 
-# Install PostgreSQL client
-RUN apk add --no-cache postgresql-client
+# Ensure the binary is executable
+RUN chmod +x /app/main
 
 # Command to run the executable
-CMD ["./main"]
+CMD ["/app/main"]
