@@ -1,5 +1,5 @@
 # Use the official Golang image as a build stage
-FROM public.ecr.aws/docker/library/alpine:latest AS builder
+FROM golang:1.24.3 AS builder
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . .
 RUN go build -o main .
 
 # Start a new stage from scratch
-FROM public.ecr.aws/docker/library/alpine:latest
+FROM alpine:3.21.3
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
