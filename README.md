@@ -378,3 +378,19 @@ Esses testes são essenciais para garantir que os casos de uso de criação de d
 
 ### Segunda Opção
 ![alt text](image.png)
+
+
+
+
+
+
+
+
+
+Nos últimos dias, estive focado em duas apresentações do projeto SUSA,veja o post no LinkedIn [Musseketech Conclave](https://www.linkedin.com/posts/iamrosada_musseketechconclave-inovaaexaeto-educaaexao-activity-7327611871757320192-WZ2p)
+
+Durante essas atividades, demonstrei o sistema, desenvolvido em Go e Next.js ,[assista à apresentação](https://www.youtube.com/watch?v=gqxzIGSFgNw&t=318s)
+
+ sou o jovem de óculos, mostrei o sistema no final. Por conta dessas demandas, pausei a programação por dois dias, o que causou um pequeno atraso na entrega do desafio. Apesar disso, dei meu melhor para cumprir todos os compromissos com qualidade.
+
+
