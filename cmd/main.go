@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"v3/internal/domain"
 	"v3/internal/infra/api"
 	"v3/internal/infra/aws"
@@ -26,7 +27,7 @@ func main() {
 		log.Fatalf("erro ao fazer AutoMigrate: %v", err)
 	}
 
-	awsService, err := aws.NewAWSService("telemetry-photos")
+	awsService, err := aws.NewAWSService(os.Getenv("S3_BUCKET"))
 	if err != nil {
 		log.Fatalf("failed to initialize AWS service: %v", err)
 	}
