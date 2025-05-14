@@ -4,7 +4,7 @@ FROM golang:1.24.3 AS builder
 # Set the Current Working Directory inside the container
 WORKDIR /app
 
-# Set environment variables for Go build (to target the correct architecture)
+# Set environment variables for Go build
 ENV GOARCH=amd64
 ENV GOOS=linux
 
@@ -14,11 +14,11 @@ COPY go.mod go.sum ./
 # Download dependencies
 RUN go mod download
 
-# Copy the source code into the container
+# Copy the entire source code into the container
 COPY . .
 
-# Build the Go app (this should create `main`)
-RUN go build -o main .
+# Build the Go app from the new entrypoint path
+RUN go build -o main ./cmd/server
 
 # Start a new stage with Debian
 FROM debian:12
