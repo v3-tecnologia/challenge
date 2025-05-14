@@ -4,14 +4,30 @@ This is a simple Go application that provides an API for receiving telemetry dat
 
 ### Requirements/Setup
 
-1. Download and install Go following the steps in the official documentation: [Go Installation Guide](https://go.dev/doc/install#install).
+1. GO Version 1.24.3
+Download and install Go following the steps in the official documentation: [Go Installation Guide](https://go.dev/doc/install#install).
 
-2. Navigate to the project folder `go_app` and run the application:
+2. Docker (28.1.1+) and docker-compose (v2.6.0+)
+Install Docker engine https://docs.docker.com/engine/install/
 
-   ```bash
-   go run main.go
 
-The server will start and run with a local connection on port :8080
+### Setup
+
+##### Clone your repo (if needed)
+```
+git clone [<your-repo-url>](https://github.com/martinsrenan/challenge)
+```
+
+```
+cd challenge
+```
+
+##### Start services
+```
+docker-compose up -d
+```
+
+This will start containers for the app and postgres database.
 
 ### Test endpoints
 
@@ -102,19 +118,4 @@ A cada foto recebida, deve-se utilizar o AWS Rekognition para comparar se a foto
 Se a foto enviada for reconhecida, retorne como resposta do `POST` um atributo que indique isso.
 
 Utilize as fotos iniciais para realizar o treinamento da IA.
-
-
-# Go Telemetry API
-
-This is a simple Go application that provides an API for receiving telemetry data from a device. The API has three endpoints for gyroscope data, GPS data, and photo data.
-
-## Requirements
-
-1. Download and install Go following the steps in the official documentation: [Go Installation Guide](https://go.dev/doc/install#install).
-
-2. Navigate to the project folder and run the application:
-
-   ```bash
-   go run main.go
-
 
