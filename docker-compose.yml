@@ -1,9 +1,24 @@
-version: '3.8'
+version: "3.8"
 
 services:
+  app:
+    build:
+      context: .
+    container_name: challenge-app-1
+    depends_on:
+      - postgres
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - DB_SSLMODE=${DB_SSLMODE}
+    ports:
+      - "8080:8080"
+
   postgres:
-    image: postgres:latest
-    restart: always
+    image: postgres:17
+    container_name: challenge-postgres-1
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -11,17 +26,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  app:
-    build: .
-    restart: always
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/telemetry?sslmode=disable
-    depends_on:
-      - postgres
-    ports:
-      - "8080:8080"
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
+  pgdata:
