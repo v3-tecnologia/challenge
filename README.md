@@ -1,6 +1,6 @@
 # Go Telemetry API
 
-This is a simple Go application that provides an API for receiving telemetry data from a device. The API has three endpoints for gyroscope data, GPS data, and photo data.
+This is a Go application that provides an API for receiving telemetry data from a device. It has three endpoints for gyroscope data, GPS data, and photo data.
 
 ### Requirements/Setup
 
@@ -15,7 +15,7 @@ Install Docker engine https://docs.docker.com/engine/install/
 
 ##### Clone your repo (if needed)
 ```
-git clone [<your-repo-url>](https://github.com/martinsrenan/challenge)
+git clone [<repo-url>](https://github.com/martinsrenan/challenge)
 ```
 
 ```
@@ -97,21 +97,14 @@ Expected error Message:
 "Missing photo data fields"
 
 
-## Nível 2
+# TO DO List
 
-Salve cada uma das informações em um banco de dados a sua escolha.
-
-Salve estes dados de forma identificável e consistente;
-
-## Nível 3
+### Nível 3
 
 Crie testes unitários para cada arquivo da aplicação. Para cada nova implementação a seguir, também deve-se criar os testes.
+Improve doc with unity test information
 
-## Nível 4
-
-Crie um _container_ em _Docker_ que contenha a sua aplicação e o banco de dados utilizado nos testes.
-
-## Nível 5
+### Nível 5
 
 A cada foto recebida, deve-se utilizar o AWS Rekognition para comparar se a foto enviada é reconhecida com base nas fotos anteriores enviadas.
 

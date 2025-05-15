@@ -14,7 +14,7 @@ services:
       - "8080:8080"
 
   postgres:
-    image: postgres:17
+    image: postgres:15
     container_name: challenge-postgres-1
     environment:
       POSTGRES_USER: ${DB_USER}
