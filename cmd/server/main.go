@@ -4,12 +4,14 @@ import (
 	"github.com/KaiRibeiro/challenge/internal/config"
 	"github.com/KaiRibeiro/challenge/internal/db"
 	"github.com/KaiRibeiro/challenge/internal/routes"
+	"github.com/KaiRibeiro/challenge/internal/s3"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	db.InitDb()
 	db.SetupDb()
+	s3.InitS3()
 	defer db.DB.Close()
 	router := gin.Default()
 	api := router.Group("/telemetry/")

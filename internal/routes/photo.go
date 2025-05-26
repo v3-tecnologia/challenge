@@ -1,10 +1,11 @@
 package routes
 
 import (
+	"net/http"
+
 	"github.com/KaiRibeiro/challenge/internal/models"
 	"github.com/KaiRibeiro/challenge/internal/services"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 var photoService = services.AddPhoto

@@ -3,9 +3,10 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"log"
+
 	"github.com/KaiRibeiro/challenge/internal/config"
 	_ "github.com/lib/pq"
-	"log"
 )
 
 var DB *sql.DB
@@ -50,7 +51,8 @@ func SetupDb() {
 	photoTable := `
 	CREATE TABLE IF NOT EXISTS photo (
 		id SERIAL PRIMARY KEY,
-		image_base64 TEXT NOT NULL,
+		filename TEXT NOT NULL,
+		file_url TEXT NOT NULL,
 		mac TEXT NOT NULL,
 		timestamp TIMESTAMPTZ NOT NULL
 	);`
