@@ -10,7 +10,7 @@ import (
 
 var photoService = services.AddPhoto
 
-func SetPhotoService(service func(model models.PhotoModel) error) {
+func SetPhotoService(service func(model models.PhotoModel) (bool, error)) {
 	photoService = service
 }
 
@@ -22,11 +22,11 @@ func SavePhoto(c *gin.Context) {
 		return
 	}
 
-	err := photoService(photo)
+	recognized, err := photoService(photo)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving photo to database: " + err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"status": "Photo Saved Successfully"})
+	c.JSON(http.StatusCreated, gin.H{"status": "Photo Saved Successfully", "recognized": recognized})
 }
