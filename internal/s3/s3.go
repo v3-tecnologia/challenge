@@ -2,7 +2,6 @@ package s3
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -22,5 +21,4 @@ func InitS3() {
 	}
 
 	S3Client = s3.NewFromConfig(awsCfg)
-	fmt.Println("Connected to S3")
 }

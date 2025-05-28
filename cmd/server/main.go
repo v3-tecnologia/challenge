@@ -16,13 +16,16 @@ func main() {
 	rekognition.InitRekognition()
 	defer db.DB.Close()
 
+	uploader := &s3.S3Uploader{}
+	faceComparer := rekognition.NewRekognitionComparer(db.DB)
+
 	gyroscopeService := services.NewGyroscopeDBService(db.DB)
 	gyroscopeHandler := routes.NewGyroscopeHandler(gyroscopeService)
 
 	gpsService := services.NewGPSDBService(db.DB)
 	gpsHandler := routes.NewGpsHandler(gpsService)
 
-	photoService := services.NewPhotoDBService(db.DB)
+	photoService := services.NewPhotoDBService(db.DB, uploader, faceComparer)
 	photoHandler := routes.NewPhotoHandler(photoService)
 
 	router := gin.Default()
