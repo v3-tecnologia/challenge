@@ -3,12 +3,14 @@ package services
 import (
 	"bytes"
 	"context"
+	"database/sql"
 	"encoding/base64"
-	"errors"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/KaiRibeiro/challenge/internal/config"
+	"github.com/KaiRibeiro/challenge/internal/custom_errors"
 	"github.com/KaiRibeiro/challenge/internal/db"
 	"github.com/KaiRibeiro/challenge/internal/models"
 	rekognitionConfig "github.com/KaiRibeiro/challenge/internal/rekognition"
@@ -19,14 +21,26 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
-func AddPhoto(photo models.PhotoModel) (bool, error) {
+type PhotoService interface {
+	AddPhoto(photo models.PhotoModel) (bool, error)
+}
+
+type PhotoDBService struct {
+	DB *sql.DB
+}
+
+func NewPhotoDBService(dbConn *sql.DB) *PhotoDBService {
+	return &PhotoDBService{DB: dbConn}
+}
+
+func (s *PhotoDBService) AddPhoto(photo models.PhotoModel) (bool, error) {
 	ctx := context.Background()
 
 	timestamp := time.UnixMilli(photo.Timestamp)
 
 	imageBytes, err := base64.StdEncoding.DecodeString(photo.ImageBase64)
 	if err != nil {
-		return false, errors.New("Failed to decode base64 image: " + err.Error())
+		return false, fmt.Errorf("failed to decode base64: %w", custom_errors.NewPhotoError(err, http.StatusInternalServerError))
 	}
 
 	filename := fmt.Sprintf("%s-%d-photo.jpg", timestamp.Format("20060102150405"), time.Now().UnixNano())
@@ -38,7 +52,7 @@ func AddPhoto(photo models.PhotoModel) (bool, error) {
 		ContentType: awsString("image/jpeg"),
 	})
 	if err != nil {
-		return false, errors.New("Failed to upload image to s3: " + err.Error())
+		return false, fmt.Errorf("failed to upload image to s3: %w", custom_errors.NewS3Error(err, http.StatusInternalServerError))
 	}
 
 	file_url := "https://" + config.BucketName + ".s3." + config.AwsRegion + ".amazonaws.com/" + filename
@@ -46,8 +60,10 @@ func AddPhoto(photo models.PhotoModel) (bool, error) {
 	query := `INSERT INTO photo (filename, file_url, mac, timestamp)
     VALUES ($1, $2, $3, $4)`
 
-	_, err = db.DB.Exec(query, filename, file_url, photo.MAC, timestamp)
-
+	_, err = s.DB.Exec(query, filename, file_url, photo.MAC, timestamp)
+	if err != nil {
+		return false, fmt.Errorf("failed to insert photo data into database: %w", custom_errors.NewDBError(err, http.StatusInternalServerError))
+	}
 	recognized, err := CompareWithPreviousFaces(ctx, photo.MAC, filename)
 
 	return recognized, err
@@ -56,7 +72,7 @@ func AddPhoto(photo models.PhotoModel) (bool, error) {
 func CompareWithPreviousFaces(ctx context.Context, mac string, filename string) (bool, error) {
 	rows, err := db.DB.Query(`SELECT filename FROM photo WHERE mac = $1 AND filename != $2`, mac, filename)
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("failed to find previous photos: %w", custom_errors.NewDBError(err, http.StatusInternalServerError))
 	}
 	defer rows.Close()
 
@@ -84,19 +100,15 @@ func CompareWithPreviousFaces(ctx context.Context, mac string, filename string) 
 
 		output, err := rekognitionConfig.RekognitionClient.CompareFaces(ctx, input)
 		if err != nil {
-			fmt.Printf("Rekognition error: %v\n", err)
-			continue
+			return false, fmt.Errorf("rekognition error: %w", custom_errors.NewRekognitionError(err, http.StatusInternalServerError))
 		}
 
 		if len(output.FaceMatches) > 0 {
-			fmt.Printf("Face match found: %+v\n", output.FaceMatches)
 			return true, nil
-		} else {
-			fmt.Println("No face match for this pair.")
 		}
 	}
 
-	return false, nil
+	return false, err
 }
 
 func awsString(s string) *string { return &s }

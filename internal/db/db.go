@@ -4,8 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/KaiRibeiro/challenge/internal/config"
+	"github.com/KaiRibeiro/challenge/internal/custom_errors"
 	_ "github.com/lib/pq"
 )
 
@@ -16,14 +18,14 @@ func InitDb() {
 
 	DB, err = sql.Open("postgres", config.DbUrl)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(custom_errors.NewDBError(err, http.StatusInternalServerError))
 	}
 
 	err = DB.Ping()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(custom_errors.NewDBError(err, http.StatusInternalServerError))
 	}
-	fmt.Println("Connected to database")
+	log.Println("Connected to database")
 }
 
 func SetupDb() {
@@ -61,7 +63,7 @@ func SetupDb() {
 
 	for _, stmt := range statements {
 		if _, err := DB.Exec(stmt); err != nil {
-			log.Fatalf("Error creating table: %v\n", err)
+			log.Fatal(custom_errors.NewDBError(err, http.StatusInternalServerError))
 		}
 	}
 

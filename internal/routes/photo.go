@@ -1,30 +1,51 @@
 package routes
 
 import (
+	"errors"
+	"log"
 	"net/http"
 
 	"github.com/KaiRibeiro/challenge/internal/models"
 	"github.com/KaiRibeiro/challenge/internal/services"
+	"github.com/KaiRibeiro/challenge/internal/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
-var photoService = services.AddPhoto
-
-func SetPhotoService(service func(model models.PhotoModel) (bool, error)) {
-	photoService = service
+type PhotoService interface {
+	AddPhoto(photo models.PhotoModel) error
 }
 
-func SavePhoto(c *gin.Context) {
+type PhotoHandler struct {
+	Service services.PhotoService
+}
+
+func NewPhotoHandler(s services.PhotoService) *PhotoHandler {
+	return &PhotoHandler{Service: s}
+}
+
+func (h *PhotoHandler) SavePhoto(c *gin.Context) {
 	var photo models.PhotoModel
 
 	if err := c.ShouldBindJSON(&photo); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Incorrect or missing parameters"})
+		var ve validator.ValidationErrors
+		if errors.As(err, &ve) {
+			out := make([]string, len(ve))
+			for i, fe := range ve {
+				out[i] = utils.FormatFieldError(fe)
+			}
+			c.JSON(http.StatusBadRequest, gin.H{"errors": out})
+			return
+		}
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	recognized, err := photoService(photo)
+	recognized, err := h.Service.AddPhoto(photo)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving photo to database: " + err.Error()})
+		log.Printf("Error processing SavePhoto: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error processing photo: " + err.Error()})
 		return
 	}
 

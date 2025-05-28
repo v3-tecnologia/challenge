@@ -1,29 +1,60 @@
+// package routes
+
 package routes
 
 import (
+	"errors"
+	"log"
+	"net/http"
+
+	"github.com/KaiRibeiro/challenge/internal/custom_errors"
 	"github.com/KaiRibeiro/challenge/internal/models"
 	"github.com/KaiRibeiro/challenge/internal/services"
+	"github.com/KaiRibeiro/challenge/internal/utils"
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"github.com/go-playground/validator/v10"
 )
 
-var gyroscopeService = services.AddGyroscope
-
-func SetGyroscopeService(service func(model models.GyroscopeModel) error) {
-	gyroscopeService = service
+type GyroscopeService interface {
+	AddGyroscope(gyroscope models.GyroscopeModel) error
 }
 
-func SaveGyroscope(c *gin.Context) {
+type GyroscopeHandler struct {
+	Service services.GyroscopeService
+}
+
+func NewGyroscopeHandler(s services.GyroscopeService) *GyroscopeHandler {
+	return &GyroscopeHandler{Service: s}
+}
+
+func (h *GyroscopeHandler) SaveGyroscope(c *gin.Context) {
 	var gyroscope models.GyroscopeModel
 
 	if err := c.ShouldBindJSON(&gyroscope); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Incorrect or missing parameters"})
+		var ve validator.ValidationErrors
+		if errors.As(err, &ve) {
+			out := make([]string, len(ve))
+			for i, fe := range ve {
+				out[i] = utils.FormatFieldError(fe)
+			}
+			c.JSON(http.StatusBadRequest, gin.H{"errors": out})
+			return
+		}
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	err := gyroscopeService(gyroscope)
+	err := h.Service.AddGyroscope(gyroscope)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving gyroscope to database: " + err.Error()})
+		log.Printf("Error processing SaveGyroscope: %v", err)
+		var dbErr *custom_errors.DBError
+
+		if errors.As(err, &dbErr) {
+			c.JSON(dbErr.Status(), gin.H{"error": "A database error occurred", "details": "Please try again later."})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "An unexpected server error occurred", "details": "Please try again later."})
+		}
 		return
 	}
 
