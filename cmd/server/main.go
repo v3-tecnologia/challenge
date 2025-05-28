@@ -12,7 +12,6 @@ import (
 
 func main() {
 	db.InitDb()
-	db.SetupDb()
 	s3.InitS3()
 	rekognition.InitRekognition()
 	defer db.DB.Close()
