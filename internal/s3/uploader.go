@@ -7,6 +7,7 @@ import (
 
 	"github.com/KaiRibeiro/challenge/internal/config"
 	"github.com/KaiRibeiro/challenge/internal/custom_errors"
+	"github.com/KaiRibeiro/challenge/internal/logs"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
@@ -23,6 +24,7 @@ func (u *S3Uploader) PutPhoto(ctx context.Context, filename string, image []byte
 	if err != nil {
 		return "", custom_errors.NewS3Error(err, http.StatusInternalServerError)
 	}
+	logs.Logger.Info("Image uploaded to s3 bucket")
 	url := "https://" + config.BucketName + ".s3." + config.AwsRegion + ".amazonaws.com/" + filename
 	return url, nil
 }

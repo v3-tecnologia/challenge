@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/KaiRibeiro/challenge/internal/custom_errors"
+	"github.com/KaiRibeiro/challenge/internal/logs"
 	"github.com/KaiRibeiro/challenge/internal/models"
 	"github.com/KaiRibeiro/challenge/internal/services"
 	"github.com/KaiRibeiro/challenge/internal/utils"
@@ -38,10 +39,15 @@ func (h *GyroscopeHandler) SaveGyroscope(c *gin.Context) {
 				out[i] = utils.FormatFieldError(fe)
 			}
 			c.JSON(http.StatusBadRequest, gin.H{"errors": out})
+			logs.Logger.Error("Bad gps request",
+				"error", err,
+			)
 			return
 		}
-
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		logs.Logger.Error("Bad gps request",
+			"error", err,
+		)
 		return
 	}
 

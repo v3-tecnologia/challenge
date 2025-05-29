@@ -3,9 +3,9 @@ package rekognition
 import (
 	"context"
 	"fmt"
-	"log"
 
 	env "github.com/KaiRibeiro/challenge/internal/config"
+	"github.com/KaiRibeiro/challenge/internal/logs"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/rekognition"
 )
@@ -13,12 +13,17 @@ import (
 var RekognitionClient *rekognition.Client
 
 func InitRekognition() {
+	logs.Logger.Info("Creating Rekognition client")
 	ctx := context.Background()
 	AwsCfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(env.AwsRegion))
+
 	if err != nil {
-		log.Fatalf("Failed to load AWS config: %v", err)
+		wrappedErr := fmt.Errorf("failed to load AWS Rekognition config: %w", err)
+		logs.Logger.Error("failed to load AWS config",
+			"error", wrappedErr,
+		)
 	}
 
 	RekognitionClient = rekognition.NewFromConfig(AwsCfg)
-	fmt.Println("Connected to S3")
+	logs.Logger.Info("Rekognition client created")
 }

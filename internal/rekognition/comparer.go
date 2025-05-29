@@ -7,6 +7,7 @@ import (
 
 	"github.com/KaiRibeiro/challenge/internal/config"
 	"github.com/KaiRibeiro/challenge/internal/custom_errors"
+	"github.com/KaiRibeiro/challenge/internal/logs"
 	rekognition "github.com/aws/aws-sdk-go-v2/service/rekognition"
 	rekognitionTypes "github.com/aws/aws-sdk-go-v2/service/rekognition/types"
 	"github.com/aws/aws-sdk-go/aws"
@@ -55,8 +56,11 @@ func (c *RekognitionComparer) Compare(ctx context.Context, mac, filename string)
 		}
 
 		if len(output.FaceMatches) > 0 {
+			logs.Logger.Info("Image match found")
 			return true, nil
 		}
 	}
+
+	logs.Logger.Info("Image match not found")
 	return false, nil
 }

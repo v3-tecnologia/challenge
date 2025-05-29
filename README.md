@@ -2,20 +2,32 @@
 
 # Descrição
 
-Projeto realizado utilizando o framework GIN para a API rest.\
-Dados salvos em um database postgres dockerizado.\
-Testes unitários da api com httptest e do database com sqlmock
+Projeto desenvolvido utilizando o framework **GIN** para a API REST.  
+Os dados são armazenados em um banco PostgreSQL dockerizado.  
 
-Checagem de requisição com gin. Timestamps são enviados como UNIX int64 e convertidos ao salvar no database, somente MACs validos podem ser enviados.\
-Fotos são arquivadas como base64
+A aplicação usa o serviço **migrate** no `docker-compose.yml` para aplicar as migrações do banco automaticamente durante o start.  
 
+Testes completos foram implementados utilizando:  
+- `httptest` para handlers HTTP,  
+- `sqlmock` para simular o banco de dados,  
+- `testify` para asserções,  
+- `validator/v10` para garantir a integridade e validação dos dados.  
+
+As requisições são validadas pelo Gin, com timestamps enviados no formato UNIX int64 e convertidos para datetime no banco.  
+Somente MAC addresses válidos são aceitos.  
+
+As fotos são armazenadas em um bucket S3, com as URLs salvas no banco de dados. Novas fotos enviadas são comparadas com as já existentes utilizando AWS Rekognition para reconhecimento facial.  
+
+O tratamento de erros é realizado via erros customizados que permitem diferenciar falhas na API, banco de dados e serviços externos, garantindo mensagens claras e consistentes para o cliente.
+
+Implementação de logging estruturado com o pacote log/slog, registrando eventos em formato JSON no terminal, facilitando a análise de requisições e erros em produção ou durante o desenvolvimento.
 
 # Rodando Projeto
 
-## Configure o arquivo de ambiente:
-Pode utilizar .example.env removendo .example do nome do arquivo. Ou crie seu arquivo .env seguindo o exemplo.
+## Configuração do arquivo de ambiente  
+Crie seu próprio arquivo `.env` seguindo o exemplo `.example.env` .
 
-## Rode o container
+## Iniciar containers  
 ```bash
 docker compose up --build
 ```
@@ -49,7 +61,7 @@ curl -X POST http://127.0.0.1:8080/telemetry/gyroscope \
 
 ```
 
-### 3. Photo
+### 3. Photo (Deve ser um base64 valid de uma imagem com rosto, o abaixo é somente um exemplo)
 ```bash
 curl -X POST http://127.0.0.1:8080/telemetry/photo \
   -H "Content-Type: application/json" \

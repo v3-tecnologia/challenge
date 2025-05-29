@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/KaiRibeiro/challenge/internal/custom_errors"
+	"github.com/KaiRibeiro/challenge/internal/logs"
 	"github.com/KaiRibeiro/challenge/internal/models"
 )
 
@@ -23,6 +24,13 @@ func NewGPSDBService(dbConn *sql.DB) *GpsDBService {
 }
 
 func (s *GpsDBService) AddGps(gps models.GpsModel) error {
+	logs.Logger.Info("adding gps data to database",
+		"latitude", gps.Latitude,
+		"longitude", gps.Longitude,
+		"mac", gps.MAC,
+		"timestamp", gps.Timestamp,
+	)
+
 	timestamp := time.UnixMilli(gps.Timestamp)
 
 	query := `INSERT INTO gps (latitude, longitude, mac, timestamp)
@@ -31,7 +39,11 @@ func (s *GpsDBService) AddGps(gps models.GpsModel) error {
 	_, err := s.DB.Exec(query, gps.Latitude, gps.Longitude, gps.MAC, timestamp)
 
 	if err != nil {
-		return fmt.Errorf("failed to insert gps data into database: %w", custom_errors.NewDBError(err, http.StatusInternalServerError))
+		wrappedErr := fmt.Errorf("failed to insert gps data into database: %w", custom_errors.NewDBError(err, http.StatusInternalServerError))
+		logs.Logger.Error("failed to add gps data",
+			"error", wrappedErr,
+		)
+		return wrappedErr
 	}
 
 	return err
