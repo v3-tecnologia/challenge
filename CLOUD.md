@@ -42,7 +42,7 @@ Você deverá criar uma aplicação que irá receber os dados enviados pelo apli
 
 Lembre-se essa aplicação precisa ser em GO!
 
-## Nível 1
+## Nível 1 - API e Validação
 
 Deve-se criar uma API que receba requisições de acordo com os endpoints:
 
@@ -54,24 +54,74 @@ Deve-se garantir que os dados recebidos estão preenchidos corretamente.
 
 Caso algum dado esteja faltando, então retorne uma mensagem de erro e um Status 400.
 
-## Nível 2
+## Nível 2 - Persistência e Testes
 
-Salve cada uma das informações em um banco de dados a sua escolha.
+1. Salve cada uma das informações em um banco de dados a sua escolha.
+2. Salve estes dados de forma identificável e consistente.
+3. Crie testes unitários para cada arquivo da aplicação.
+4. Implemente testes de integração para validar o fluxo completo.
 
-Salve estes dados de forma identificável e consistente;
+## Nível 3 - Containerização e CI/CD
 
-## Nível 3
+1. Crie um _container_ em _Docker_ que contenha a sua aplicação e o banco de dados.
+2. Configure um pipeline de CI/CD (pode usar GitHub Actions, GitLab CI, ou similar).
+3. Implemente testes automatizados no pipeline.
+4. Configure o processo de build e deploy da aplicação.
 
-Crie testes unitários para cada arquivo da aplicação. Para cada nova implementação a seguir, também deve-se criar os testes.
+## Nível 4 - Processamento de Imagens
 
-## Nível 4
+1. Implemente a integração com AWS Rekognition para análise de fotos.
+2. Compare cada nova foto com as fotos anteriores enviadas.
+3. Retorne um atributo indicando se a foto foi reconhecida.
+4. Implemente um sistema de cache para otimizar as consultas ao Rekognition.
+5. Adicione logs detalhados do processo de análise.
 
-Crie um _container_ em _Docker_ que contenha a sua aplicação e o banco de dados utilizado nos testes.
+## Nível 5 - Arquitetura com Filas
 
-## Nível 5
+### Por que usar Filas?
 
-A cada foto recebida, deve-se utilizar o AWS Rekognition para comparar se a foto enviada é reconhecida com base nas fotos anteriores enviadas.
+Em um sistema de telemetria, o uso de filas é crucial por vários motivos:
 
-Se a foto enviada for reconhecida, retorne como resposta do `POST` um atributo que indique isso.
+1. **Desacoplamento**: Separa a coleta de dados do processamento, permitindo que cada parte evolua independentemente.
+2. **Resiliência**: Se o processamento falhar, os dados não são perdidos, pois ficam na fila.
+3. **Escalabilidade**: Permite processar mais dados adicionando mais consumidores.
+4. **Pico de Carga**: Absorve picos de tráfego sem sobrecarregar o sistema.
+5. **Processamento Assíncrono**: Permite que operações demoradas (como análise de imagens) não bloqueiem a coleta de dados.
 
-Utilize as fotos iniciais para realizar o treinamento da IA.
+### Implementação
+
+- Implemente um sistema de mensageria (RabbitMQ, Apache Kafka, AWS SQS, NATS (usamos este)):
+  - Crie filas separadas para cada tipo de telemetria
+  - Implemente o padrão Producer-Consumer
+  - Configure retry policies para mensagens com erro
+  - Implemente dead letter queues para mensagens problemáticas
+
+## Nível 6 - Monitoramento e Documentação
+
+1. Implemente monitoramento e observabilidade:
+   - Métricas de performance (Prometheus/Grafana)
+   - Logs estruturados (ELK Stack ou similar)
+   - Tracing distribuído
+   - Alertas para condições anormais
+
+2. Documentação Completa do Sistema:
+   - Diagramas da arquitetura
+   - Documentação técnica detalhada
+   - Guia de operação e manutenção
+   - Procedimentos de backup e recuperação
+   - Guia de troubleshooting
+   - Documentação de APIs usando OpenAPI/Swagger
+   - Guia de segurança e boas práticas
+   - Procedimentos de escalabilidade e resiliência
+   - Documentação de configuração e variáveis de ambiente
+   - Guia de contribuição e desenvolvimento
+
+## Nível 7 - Segurança e Governança
+
+Implemente camadas de segurança e governança:
+
+1. Autenticação e autorização para todos os endpoints
+2. Criptografia de dados sensíveis
+3. Rate limiting para proteger a API
+4. Validação de schema para todas as mensagens
+5. Auditoria de todas as operações no sistema
