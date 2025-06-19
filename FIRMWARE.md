@@ -62,7 +62,7 @@ Precisamos validar se smartphones Android podem substituir dispositivos IoT na c
 * Java/Kotlin
 * Android SDK (API 21-34) - Foreground Services, Permissões
 * Banco de dados local - Qualquer solução (Room, SQLite, ObjectBox, etc.)
-* Pense fora da caixa (Modelo de Atores, Coroutines, EDA)
+* Pense fora da caixa (Modelo de Atores, Coroutines, EDA, gRPc, etc...)
 
 ---
 
