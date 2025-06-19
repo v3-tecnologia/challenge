@@ -1,132 +1,94 @@
 # Desafio Firmware
 
-## 💻 O Problema
+Desafio: MVP para Coleta de Dados de Dispositivo Móvel
 
-Um dos nossos clientes ainda não consegue comprar o equipamento para colocar nos veículos de sua frota, mas ele quer muito utilizar a nossa solução.
+## 📌 Contexto do Negócio
 
-Por isso, vamos fazer um MVP bastante simples para testar se o celular do motorista poderia ser utilizado como o dispositivo de obtenção das informações.
+Precisamos validar se smartphones Android podem substituir dispositivos IoT na coleta de dados de frotas. Seu objetivo é criar uma solução que:
 
-> Parece fazer sentido certo? Ele possui vários mecanismos parecidos com o equipamento que oferecemos!
+* Rode continuamente em segundo plano, sem interface gráfica;
 
-Sua missão é ajudar na criação deste MVP para que possamos testar as frotas deste cliente.
+* Capture giroscópio (x,y,z), GPS (lat/long) e fotos a cada 10 segundos, ou baseado em eventos (Ex: Quando a posição mudar);
 
-Essa versão do produto será bastante simplificada. Queremos apenas criar as estruturas para obter algumas informações do seu dispositivo (Android) e armazená-la em um Banco de Dados.
+* Associe um identificador único do dispositivo (ex: MAC);
 
-Essas informações, depois de armazenadas devem estar disponíveis através de uma API para que este cliente integre com um Front-end já existente!
+* Armazene e disponibilize os dados para integração
 
-### Quais serão as informações que deverão ser coletadas?
+* Capture uma foto do Motorista quando o sistema for acionado
 
-1. **Dados de Giroscópio** - Estes dados devem retornar 3 valores (`x`, `y`, `z`). E devem ser armazenados juntamente com o `TIMESTAMP` do momento em que foi coletado;
-2. **Dados de GPS** - Estes dados devem retornar 2 valores (`latitude` , `longitude`). E também devem ser armazenados juntamente com o `TIMESTAMP` do momento em que foram coletados;
-3. **Uma foto** - Obter uma foto de uma das câmeras do dispositivo e enviá-la também junto com o `TIMESTAMP` em que foi coletada;
-
-**🚨 É importante que se envie junto à essas informações um campo adicional, contendo uma identificação única do dispositivo, que pode ser seu endereço MAC.**
-
-### Funcionamento
-
-A aplicação Android deverá rodar em Background, e coletar e enviar as informações descritas a cada 10 segundos.
-
-### Qual parte do desafio devo realizar?
-
-Você deve realizar somente o desafio para a vaga que se candidatou.
-
-Caso tenha sido a vaga de Android Embarcado, então resolva somente esta sessão.
-
-Caso tenha sido a vaga de Backend, então resolva somente esta sessão.
+* A Nuvem deve ser capaz de se comunicar com todos ou com um dispositivo específico para o envio de configuração e/ou comandos de qualquer tipo (***Diferencial***) (Ex: Mudar o tempo de envio das informações, mudar regra de envio de posicionamento, desativar um recurso, etc...)
 
 ---
 
-# 🚀 Bora nessa!
+## ✅ Requisitos Essenciais
 
-Você deverá criar uma aplicação que deverá coletar os dados e enviá-los para o servidor Back-end;
+1. **Coleta Contínua**
 
-Lembre-se que essa é uma aplicação Android nativa, e não deve possuir qualquer tipo de interface com o usuário.
+    * Funcionamento em background com intervalo fixo de 10s
 
-## 📋 **Requisitos Técnicos Obrigatórios**
+    * Resiliência contra interrupções do sistema
 
-- **Java 17** - Linguagem principal
-- **Android SDK** (API 21-34) - Foreground Services, Permissões
-- **Banco de dados local** - Qualquer solução (Room, SQLite, ObjectBox, etc.)
-- **Sistema de eventos/comunicação** - Qualquer solução (EventBus, RxJava, LiveData, etc.)
-- **Multi-threading** - Threads, executors, sincronização
-- **Testing** - Qualquer framework (JUnit, Robolectric, MockK, etc.)
+2. **Dados Obrigatórios**
+
+    * Giroscópio + timestamp
+
+    * Coordenadas GPS + timestamp
+
+    * Foto + timestamp
+
+    * Identificador único do dispositivo
+
+3. **Armazenamento**
+
+    * Persistência local confiável
+
+    * Recuperação segura após falhas
+
+4. **Disponibilização**
+
+    * Os dados armazenados devem ser enviados para a Nuvem de maneira confiável
+
+    * Como se trata de um dispositivo embarcado a comunicação deve ser performática
+
+    * Escolha o melhor protocolo ou tipo integração para atender aos requisitos acima
+
+    * Todos os dados obrigatórios após coletados devem ser enviados em um mesmo payload. 
+      Deve-se garantir que os dados enviados se refiram ao mesmo momento (exige coordenação dos eventos)
+
+--- 
+
+## Requisitos de Tecnologia 
+
+* Java/Kotlin
+* Android SDK (API 21-34) - Foreground Services, Permissões
+* Banco de dados local - Qualquer solução (Room, SQLite, ObjectBox, etc.)
+* Pense fora da caixa (Modelo de Atores, Coroutines, EDA)
 
 ---
 
 ## 🎯 **Níveis do Desafio**
 
-### **Nível 1 - MVP Básico**
-**Expectativa de Negócio:** Demonstrar que é possível coletar dados básicos do dispositivo e armazená-los localmente.
+### Nível 1: Validação do Conceito
+- Prove que os dados podem ser coletados e persistidos localmente
+- Garanta funcionamento contínuo em segundo plano
 
-**Tarefas:**
-1. Configurar projeto Android com Java 17
-2. Implementar Foreground Service para coleta em background
-3. Configurar permissões (LOCATION, CAMERA)
-4. Criar entidades para giroscópio, GPS e foto
-5. Implementar coleta básica dos sensores
-6. Armazenar dados no banco local
+### Nível 2: Confiabilidade Industrial
+- Implemente tratamento de erros robusto
+- Adicione testes automatizados críticos
+- Documente estratégias de recuperação de falhas
 
----
+### Nível 3: Preparação para Escala
+- Crie um mecanismo de envio dos dados para a Nuvem
+- Otimize consumo de recursos (bateria, rede)
+- Implemente segurança básica na comunicação
 
-### **Nível 2 - Arquitetura e Testes**
-**Expectativa de Negócio:** Garantir que o sistema seja robusto, testável e mantenha qualidade em produção.
+### Nível 4: Inteligência Embarcada (***Diferencial***)
+- Adicione validação automática de fotos (Ex: Validar se há um rosto em frente a camera)
+- Implemente filtros para dados inconsistentes (Ex: Lat/Long zerados)
 
-**Tarefas:**
-1. **Implementar sistema de eventos/comunicação** entre componentes:
-   - Criar eventos/mensagens para cada sensor
-   - Usar o sistema escolhido para notificar quando novos dados são coletados
-   - Implementar processamento assíncrono dos dados
-   - **Objetivo:** Desacoplar componentes, facilitar testes, permitir processamento paralelo
-2. Criar Repository Pattern para acesso aos dados
-3. Implementar testes unitários
-4. Adicionar testes de componentes Android
-5. Implementar logs estruturados
-6. Adicionar retry logic para falhas
-
----
-
-### **Nível 3 - Comunicação e Performance**
-**Expectativa de Negócio:** Permitir que os dados sejam enviados para o servidor de forma eficiente e confiável.
-
-**Tarefas:**
-1. Implementar upload HTTP para as APIs:
-   - `POST /telemetry/gyroscope`
-   - `POST /telemetry/gps`
-   - `POST /telemetry/photo`
-2. Implementar upload paralelo das requisições
-3. Adicionar retry logic para falhas de rede
-4. Otimizar uso de memória e CPU
-5. Implementar compressão de dados
-
----
-
-### **Nível 4 - Visão Computacional**
-**Expectativa de Negócio:** Adicionar inteligência ao sistema para processar e validar imagens automaticamente.
-
-**Tarefas:**
-1. Integrar biblioteca de processamento de imagem (OpenCV, ML Kit, etc.)
-2. Implementar detecção de rosto
-3. Realizar crop automático da foto para extrair apenas o rosto
-4. Só enviar fotos com rosto detectado
-
----
-
-### **Nível 5 - Comunicação IoT e Serialização**
-**Expectativa de Negócio:** Implementar comunicação em tempo real via MQTT e otimizar serialização de dados para IoT.
-
-**Tarefas:**
-1. **Implementar comunicação MQTT** com AWS IoT Core:
-   - Configurar conexão MQTT segura com AWS
-   - Criar tópicos para cada tipo de sensor
-   - Implementar QoS adequado para cada tipo de dado
-2. **Usar Protocol Buffers** para serialização:
-   - Definir schemas .proto para cada tipo de telemetria
-   - Serializar dados antes do envio MQTT
-   - Implementar deserialização no lado servidor
-3. **Manter comunicação HTTP** como fallback
-4. **Implementar retry logic** específico para MQTT
-5. **Otimizar payload** para reduzir uso de banda
-6. **Implementar compressão** adicional se necessário
+### Nível 5: Otimização Avançada (***Diferencial***)
+- Explore protocolos alternativos para envio eficiente
+- Implemente serialização otimizada para IoT
 
 ---
 
@@ -137,12 +99,6 @@ Lembre-se que essa é uma aplicação Android nativa, e não deve possuir qualqu
 - Padrões arquiteturais adequados
 - Separação de responsabilidades
 
-### **Conhecimento Técnico**
-- Java 17 e Android SDK
-- Banco de dados e persistência
-- Sistema de eventos e multi-threading
-- Testing e debugging
-
 ### **Performance e Robustez**
 - Otimização de memória e CPU
 - Tratamento de erros robusto
@@ -150,10 +106,4 @@ Lembre-se que essa é uma aplicação Android nativa, e não deve possuir qualqu
 
 ---
 
-## 🚀 **Bônus (Diferencial)**
-
-- Implementar todos os 5 níveis
-- Adicionar CI/CD
-- Criar documentação técnica
-- Implementar métricas de performance
-- Adicionar sistema de configuração remota
+***Boa sorte <3***
