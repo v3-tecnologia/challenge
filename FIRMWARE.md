@@ -140,5 +140,3 @@ Lembre-se que essa é uma aplicação Android nativa, e não deve possuir qualqu
 - Criar documentação técnica
 - Implementar métricas de performance
 - Adicionar sistema de configuração remota
-
----
