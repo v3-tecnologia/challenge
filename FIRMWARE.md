@@ -100,16 +100,33 @@ Lembre-se que essa é uma aplicação Android nativa, e não deve possuir qualqu
 
 ---
 
-### **Nível 4 - Visão Computacional e Cloud**
-**Expectativa de Negócio:** Adicionar inteligência ao sistema e integrar com serviços cloud para escalabilidade.
+### **Nível 4 - Visão Computacional**
+**Expectativa de Negócio:** Adicionar inteligência ao sistema para processar e validar imagens automaticamente.
 
 **Tarefas:**
 1. Integrar biblioteca de processamento de imagem (OpenCV, ML Kit, etc.)
 2. Implementar detecção de rosto
 3. Realizar crop automático da foto para extrair apenas o rosto
 4. Só enviar fotos com rosto detectado
-5. Integrar serviço cloud para comunicação (AWS IoT, Firebase, etc.)
-6. Implementar upload para storage cloud das imagens
+
+---
+
+### **Nível 5 - Comunicação IoT e Serialização**
+**Expectativa de Negócio:** Implementar comunicação em tempo real via MQTT e otimizar serialização de dados para IoT.
+
+**Tarefas:**
+1. **Implementar comunicação MQTT** com AWS IoT Core:
+   - Configurar conexão MQTT segura com AWS
+   - Criar tópicos para cada tipo de sensor
+   - Implementar QoS adequado para cada tipo de dado
+2. **Usar Protocol Buffers** para serialização:
+   - Definir schemas .proto para cada tipo de telemetria
+   - Serializar dados antes do envio MQTT
+   - Implementar deserialização no lado servidor
+3. **Manter comunicação HTTP** como fallback
+4. **Implementar retry logic** específico para MQTT
+5. **Otimizar payload** para reduzir uso de banda
+6. **Implementar compressão** adicional se necessário
 
 ---
 
@@ -135,7 +152,7 @@ Lembre-se que essa é uma aplicação Android nativa, e não deve possuir qualqu
 
 ## 🚀 **Bônus (Diferencial)**
 
-- Implementar todos os 4 níveis
+- Implementar todos os 5 níveis
 - Adicionar CI/CD
 - Criar documentação técnica
 - Implementar métricas de performance
