@@ -1,4 +1,4 @@
-# Desafio Firmware - Projeto R2
+# Desafio Firmware
 
 ## 💻 O Problema
 
