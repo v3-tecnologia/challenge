@@ -16,5 +16,11 @@ https://dev.to/booscaaa/implementando-clean-architecture-com-golang-4n0a
 Um ponto relevante foi a validação, tive que pesquisar e o giroscópio pode retornar 0 que seria o norte além da latitude e longitude então a utilização do * no float64 para comparar se é nulo
 
 ## Nível 2
-Comecei Fazendo os primeiros testes e esse artigo é ótimo para se basear, interessante adicionar o -cover para ser possível analisar a cobertura de testes
+Comecei Fazendo os primeiros testes e tem um artigo que é ótimo para se basear, interessante adicionar o -cover para ser possível analisar a cobertura de testes, é interessante que no primeiro momento os testes sejam o fluxo básico (fluxo feliz) e os erros mais comnus, 100% não é o número mágico, não é garantia de nada. por isso que 60% já é ótimo para este MVP e 80% num sistema real.
+
 https://medium.com/@habbema/golang-testes-86da3e5e0602
+
+Já estava convicto de fazer em com o postgres porém se a vaga é para dev cloud seria importante mostrar essas compentêcias então a melhor escolha era utilizar DynamoDB. Mas utilizar os produtos aws sempre causam temor de ter gastos exorbitantes então utilizarei o dynamo local neste primeiro momento, para isso o artigo abaixo mostra como começar.
+
+https://medium.com/@snassr/dynamodb-with-go-golang-quickstart-e0e005b88e8f
+

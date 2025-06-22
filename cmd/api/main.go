@@ -1,13 +1,23 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 
+	"github.com/yanvic/challenge/infra/database/dynamo"
 	"github.com/yanvic/challenge/internal/handler"
 )
 
 func main() {
+	ctx := context.TODO()
+	client, err := dynamo.InitDynamoClient(ctx)
+	if err != nil {
+		log.Fatalf("failed to initialize dynamodb client: %v", err)
+	}
+
+	_ = client
+
 	http.HandleFunc("/telemetry/gyroscope", handler.HandlerGyroscope)
 	http.HandleFunc("/telemetry/gps", handler.HandlerGPS)
 	http.HandleFunc("/telemetry/photo", handler.HandlerPhoto)

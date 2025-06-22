@@ -6,6 +6,7 @@ import (
 
 	"github.com/yanvic/challenge/core/entity"
 	"github.com/yanvic/challenge/core/usecase"
+	"github.com/yanvic/challenge/infra/database/dynamo"
 )
 
 func HandlerGyroscope(w http.ResponseWriter, r *http.Request) {
@@ -22,8 +23,15 @@ func HandlerGyroscope(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	err := dynamo.SaveGyro(*data.X, *data.Y, *data.Z, data.DeviceID, data.Timestamp, data)
+	if err != nil {
+		http.Error(w, "Failed to save data", http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Gyroscope data received"))
+	w.Write([]byte("Gyroscope data saved"))
 }
 
 func HandlerGPS(w http.ResponseWriter, r *http.Request) {
@@ -40,6 +48,13 @@ func HandlerGPS(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	err := dynamo.SaveGps(*data.Latitude, *data.Longitude, data.DeviceID, data.Timestamp, data)
+	if err != nil {
+		http.Error(w, "Failed to save data", http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("GPS data received"))
 }
@@ -58,6 +73,13 @@ func HandlerPhoto(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	err := dynamo.SavePhoto(data.ImageBase64, data.DeviceID, data.Timestamp, data)
+	if err != nil {
+		http.Error(w, "Failed to save data", http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Photo data received"))
 }
