@@ -11,12 +11,11 @@ import (
 
 func main() {
 	ctx := context.TODO()
-	client, err := dynamo.InitDynamoClient(ctx)
+
+	_, err := dynamo.InitDynamoClient(ctx)
 	if err != nil {
 		log.Fatalf("failed to initialize dynamodb client: %v", err)
 	}
-
-	_ = client
 
 	http.HandleFunc("/telemetry/gyroscope", handler.HandlerGyroscope)
 	http.HandleFunc("/telemetry/gps", handler.HandlerGPS)

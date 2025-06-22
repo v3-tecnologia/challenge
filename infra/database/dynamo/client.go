@@ -30,6 +30,6 @@ func InitDynamoClient(ctx context.Context) (*dynamodb.Client, error) {
 		return nil, err
 	}
 
-	client := dynamodb.NewFromConfig(cfg)
-	return client, nil
+	Client = dynamodb.NewFromConfig(cfg)
+	return Client, nil
 }

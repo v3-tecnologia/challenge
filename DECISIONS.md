@@ -24,3 +24,6 @@ Já estava convicto de fazer em com o postgres porém se a vaga é para dev clou
 
 https://medium.com/@snassr/dynamodb-with-go-golang-quickstart-e0e005b88e8f
 
+## Nível 3
+Referencias sobre o assunto de docker e golang, sempre ter um foco que sua imagem docker precisa ser a mais otimizada possível 
+https://dev.to/rflpazini/go-docker-como-criar-as-melhores-imagens-docker-para-aplicacoes-golang-ikj
