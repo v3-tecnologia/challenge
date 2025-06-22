@@ -8,9 +8,11 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
-var tableGps = "GpsTable"
-var tableGyro = "GpsTable"
-var tablePhoto = "GpsTable"
+// var Client *dynamodb.Client
+
+var tableGps = "GPSTable"
+var tableGyro = "GyroscopeTable"
+var tablePhoto = "PhotoTable"
 
 func SaveGps(latitude float64, longitude float64, deviceID string, timestamp string, payload interface{}) error {
 	jsonData, err := json.Marshal(payload)

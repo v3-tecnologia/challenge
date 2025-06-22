@@ -15,6 +15,8 @@ func main() {
 		log.Fatalf("failed to initialize dynamodb client: %v", err)
 	}
 
+	dynamo.Client = client
+
 	if err := dynamo.CreateTable(ctx, client, "GyroscopeTable", "DeviceID", "Timestamp"); err != nil {
 		log.Fatalf("error creating GyroscopeTable: %v", err)
 	}

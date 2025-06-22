@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/yanvic/challenge/core/entity"
@@ -26,6 +27,7 @@ func HandlerGyroscope(w http.ResponseWriter, r *http.Request) {
 
 	err := dynamo.SaveGyro(*data.X, *data.Y, *data.Z, data.DeviceID, data.Timestamp, data)
 	if err != nil {
+		log.Printf("Erro ao salvar no DynamoDB: %v\n", err)
 		http.Error(w, "Failed to save data", http.StatusInternalServerError)
 		return
 	}
@@ -51,6 +53,7 @@ func HandlerGPS(w http.ResponseWriter, r *http.Request) {
 
 	err := dynamo.SaveGps(*data.Latitude, *data.Longitude, data.DeviceID, data.Timestamp, data)
 	if err != nil {
+		log.Printf("Erro ao salvar no DynamoDB: %v\n", err)
 		http.Error(w, "Failed to save data", http.StatusInternalServerError)
 		return
 	}
@@ -76,6 +79,7 @@ func HandlerPhoto(w http.ResponseWriter, r *http.Request) {
 
 	err := dynamo.SavePhoto(data.ImageBase64, data.DeviceID, data.Timestamp, data)
 	if err != nil {
+		log.Printf("Erro ao salvar no DynamoDB: %v\n", err)
 		http.Error(w, "Failed to save data", http.StatusInternalServerError)
 		return
 	}

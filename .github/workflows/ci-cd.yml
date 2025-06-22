@@ -28,6 +28,11 @@ jobs:
       - name: Install dependencies
         run: go mod tidy
 
+      - name: Create DynamoDB tables
+        run: go run cmd/setupdynamodb/main.go
+        env:
+          DYNAMO_ENDPOINT: http://localhost:8000
+
       - name: Run tests
         env:
           DYNAMO_ENDPOINT: http://localhost:8000

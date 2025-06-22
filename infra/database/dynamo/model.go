@@ -3,8 +3,8 @@ package dynamo
 type GpsItem struct {
 	Latitude  *float64 `dynamodbav:"Latitude"`
 	Longitude *float64 `dynamodbav:"Longitude"`
-	Timestamp string   `dynamodbav:"Timestamp"`
 	DeviceID  string   `dynamodbav:"DeviceID"`
+	Timestamp string   `dynamodbav:"Timestamp"`
 }
 
 type GyroscopeItem struct {
