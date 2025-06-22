@@ -18,10 +18,10 @@ func InitDynamoClient(ctx context.Context) (*dynamodb.Client, error) {
 	region := os.Getenv("AWS_REGION")
 	accessKey := os.Getenv("AWS_ACCESS_KEY_ID")
 	secretKey := os.Getenv("AWS_SECRET_ACCESS_KEY")
-	sessionToken := os.Getenv("AWS_SESSION_TOKEN") // opcional para local
+	sessionToken := os.Getenv("AWS_SESSION_TOKEN")
 
 	if accessKey == "" || secretKey == "" || region == "" || endpoint == "" {
-		fmt.Println("⚠️ AWS credentials are missing")
+		fmt.Println("AWS credentials are missing")
 	}
 
 	cfg, err := config.LoadDefaultConfig(ctx,

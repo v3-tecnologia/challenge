@@ -10,7 +10,7 @@ import (
 func main() {
 	ctx := context.TODO()
 
-	client, err := dynamo.InitDynamoClient(ctx)
+	client, err := dynamo.InitDynamoClientTest(ctx)
 	if err != nil {
 		log.Fatalf("failed to initialize dynamodb client: %v", err)
 	}

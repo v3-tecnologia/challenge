@@ -27,3 +27,7 @@ https://medium.com/@snassr/dynamodb-with-go-golang-quickstart-e0e005b88e8f
 ## Nível 3
 Referencias sobre o assunto de docker e golang, sempre ter um foco que sua imagem docker precisa ser a mais otimizada possível 
 https://dev.to/rflpazini/go-docker-como-criar-as-melhores-imagens-docker-para-aplicacoes-golang-ikj
+
+O .env não setava nos testes passei alguns bons minutos, como é test coloquei as variáveis no código e funcionou, como é test e são apenas vatiáveis fakes não tem grand eimpacto
+
+## Nível 4
