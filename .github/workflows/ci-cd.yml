@@ -31,17 +31,18 @@ jobs:
       - name: Create DynamoDB tables
         run: go run cmd/setupdynamodb/main.go
         env:
-          DYNAMO_ENDPOINT: http://localhost:8000
-          env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: dummy
+          AWS_SECRET_ACCESS_KEY: dummy
           AWS_REGION: us-east-1
-
+          DYNAMO_ENDPOINT: http://localhost:8000
 
       - name: Run tests
-        env:
-          DYNAMO_ENDPOINT: http://localhost:8000
         run: go test ./... -cover
+        env:
+          AWS_ACCESS_KEY_ID: dummy
+          AWS_SECRET_ACCESS_KEY: dummy
+          AWS_REGION: us-east-1
+          DYNAMO_ENDPOINT: http://localhost:8000
 
   simulate-deploy:
     needs: test
