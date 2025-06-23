@@ -7,6 +7,7 @@ import (
 
 	"github.com/yanvic/challenge/infra/database/dynamo"
 	"github.com/yanvic/challenge/internal/handler"
+	"github.com/yanvic/challenge/internal/queue"
 )
 
 func main() {
@@ -17,6 +18,10 @@ func main() {
 		log.Fatalf("failed to initialize dynamodb client: %v", err)
 	}
 	dynamo.Client = client
+
+	queue.InitNATS()
+
+	go queue.StartImageConsumer()
 
 	http.HandleFunc("/telemetry/gyroscope", handler.HandlerGyroscope)
 	http.HandleFunc("/telemetry/gps", handler.HandlerGPS)

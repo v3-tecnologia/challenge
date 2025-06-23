@@ -36,8 +36,8 @@ jobs:
           AWS_REGION: us-east-1
           DYNAMO_ENDPOINT: http://localhost:8000
 
-      - name: Run tests
-        run: go test ./... -cover
+      - name: Run tests unit + integration
+        run: go test ./test/... -v -cover
         env:
           AWS_ACCESS_KEY_ID: dummy
           AWS_SECRET_ACCESS_KEY: dummy

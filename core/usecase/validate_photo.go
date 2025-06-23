@@ -1,7 +1,9 @@
 package usecase
 
 import (
+	"bytes"
 	"errors"
+	"image"
 
 	"github.com/yanvic/challenge/core/entity"
 )
@@ -13,8 +15,14 @@ func ValidatePhoto(data entity.Photo) error {
 	if data.Timestamp == "" {
 		return errors.New("timestamp is required")
 	}
-	if data.ImageBase64 == "" {
-		return errors.New("image_base64 is required")
+	if len(data.Image) == 0 {
+		return errors.New("image data is required")
 	}
+
+	_, _, err := image.Decode(bytes.NewReader(data.Image))
+	if err != nil {
+		return errors.New("image data is not a valid image format")
+	}
+
 	return nil
 }

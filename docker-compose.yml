@@ -7,11 +7,19 @@ services:
       - "8000:8000"
     command: -jar DynamoDBLocal.jar -inMemory -sharedDb
 
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+
   app:
     build: .
     ports:
       - "8080:8080"
     env_file:
       - .env
+    environment:
+      - NATS_URL=nats://nats:4222
     depends_on:
       - dynamodb-local
+      - nats

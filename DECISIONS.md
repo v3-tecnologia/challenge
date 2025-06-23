@@ -31,3 +31,11 @@ https://dev.to/rflpazini/go-docker-como-criar-as-melhores-imagens-docker-para-ap
 O .env não setava nos testes passei alguns bons minutos, como é test coloquei as variáveis no código e funcionou, como é test e são apenas vatiáveis fakes não tem grand eimpacto
 
 ## Nível 4
+
+https://docs.aws.amazon.com/rekognition/latest/dg/faces-comparefaces.html
+
+## Nível 5
+
+https://www.synadia.com/blog/building-a-job-queue-with-nats-io-and-go
+
+https://dev.to/aleksk1ng/go-nats-grpc-and-postgresql-clean-architecture-microservice-with-monitoring-and-tracing-2kka

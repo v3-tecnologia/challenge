@@ -2,12 +2,15 @@ package handler
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/yanvic/challenge/core/entity"
 	"github.com/yanvic/challenge/core/usecase"
 	"github.com/yanvic/challenge/infra/database/dynamo"
+	"github.com/yanvic/challenge/internal/queue"
 )
 
 func HandlerGyroscope(w http.ResponseWriter, r *http.Request) {
@@ -63,27 +66,49 @@ func HandlerGPS(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandlerPhoto(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-	var data entity.Photo
-	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
-		http.Error(w, "Invalid JSON", http.StatusBadRequest)
-		return
-	}
-	if err := usecase.ValidatePhoto(data); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	err := r.ParseMultipartForm(10 << 20) // 10 MB
+	if err != nil {
+		http.Error(w, "Erro ao processar a imagem", http.StatusBadRequest)
 		return
 	}
 
-	err := dynamo.SavePhoto(data.ImageBase64, data.DeviceID, data.Timestamp, data)
+	file, _, err := r.FormFile("image")
 	if err != nil {
-		log.Printf("Erro ao salvar no DynamoDB: %v\n", err)
-		http.Error(w, "Failed to save data", http.StatusInternalServerError)
+		http.Error(w, "Imagem não enviada", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	image, err := io.ReadAll(file)
+	if err != nil {
+		http.Error(w, "Erro ao ler a imagem", http.StatusInternalServerError)
+		return
+	}
+
+	deviceID := r.FormValue("device_id")
+	timestamp := r.FormValue("timestamp")
+	if timestamp == "" {
+		timestamp = time.Now().UTC().Format(time.RFC3339)
+	}
+
+	payload := entity.Photo{
+		Image:     image,
+		DeviceID:  deviceID,
+		Timestamp: timestamp,
+	}
+
+	jsonPayload, err := json.Marshal(payload)
+	if err != nil {
+		http.Error(w, "Erro ao serializar payload", http.StatusInternalServerError)
+		return
+	}
+
+	err = queue.PublishImage(jsonPayload)
+	if err != nil {
+		http.Error(w, "Erro ao enviar para fila", http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Photo data received"))
+	w.Write([]byte("Imagem enviada com sucesso"))
 }
