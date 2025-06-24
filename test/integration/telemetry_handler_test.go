@@ -20,7 +20,7 @@ import (
 	"github.com/yanvic/challenge/core/entity"
 	"github.com/yanvic/challenge/infra/database/dynamo"
 	"github.com/yanvic/challenge/internal/handler"
-	"github.com/yanvic/challenge/queue"
+	"github.com/yanvic/challenge/internal/queue"
 )
 
 func TestMain(m *testing.M) {
