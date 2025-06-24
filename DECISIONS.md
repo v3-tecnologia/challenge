@@ -39,3 +39,14 @@ https://docs.aws.amazon.com/rekognition/latest/dg/faces-comparefaces.html
 https://www.synadia.com/blog/building-a-job-queue-with-nats-io-and-go
 
 https://dev.to/aleksk1ng/go-nats-grpc-and-postgresql-clean-architecture-microservice-with-monitoring-and-tracing-2kka
+
+Poderia utilizar design baseado a eventos mais precisamente baseado em mensagens
+
+
+Recapitulação hora de revisar os pontos já feitos
+- adicionar a integração com o dynamo normal
+- testes colocar os testes todos
+- mock testes rekognition
+- redis e integração rekognition 
+
+- criar um para enviar a cada 10 segundos 

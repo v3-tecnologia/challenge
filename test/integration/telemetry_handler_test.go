@@ -1,16 +1,26 @@
 package integration
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
+	"errors"
+	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"strings"
 	"testing"
+	"time"
 
+	"bou.ke/monkey"
+	"github.com/stretchr/testify/assert"
+	"github.com/yanvic/challenge/core/entity"
 	"github.com/yanvic/challenge/infra/database/dynamo"
 	"github.com/yanvic/challenge/internal/handler"
+	"github.com/yanvic/challenge/queue"
 )
 
 func TestMain(m *testing.M) {
@@ -31,33 +41,153 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-func TestHandlerGPS_Success(t *testing.T) {
-	body := `{
-		"latitude": -23.55,
-		"longitude": -46.63,
-		"timestamp": "2025-06-21T15:00:00Z",
-		"device_id": "device-1235"
-	}`
-
-	req := httptest.NewRequest(http.MethodPost, "/telemetry/gps", strings.NewReader(body))
-	req.Header.Set("Content-Type", "application/json")
-
-	rr := httptest.NewRecorder()
-	handler.HandlerGPS(rr, req)
-
-	if rr.Code != http.StatusOK {
-		t.Errorf("expected status 200, got %d", rr.Code)
+func TestHandlerGyroscope_Success(t *testing.T) {
+	x, y, z := 1.0, 2.0, 3.0
+	data := entity.Gyroscope{
+		X:         &x,
+		Y:         &y,
+		Z:         &z,
+		DeviceID:  "device-gyroscope",
+		Timestamp: time.Now().UTC().Format(time.RFC3339),
 	}
+	payload, _ := json.Marshal(data)
+
+	req := httptest.NewRequest(http.MethodPost, "/telemetry/gyroscope", bytes.NewReader(payload))
+	req.Header.Set("Content-Type", "application/json")
+	rr := httptest.NewRecorder()
+
+	handler.HandlerGyroscope(rr, req)
+	assert.Equal(t, http.StatusOK, rr.Code)
+	assert.Contains(t, rr.Body.String(), "Gyroscope data saved")
+}
+
+func TestHandlerGyroscope_InvalidJSON(t *testing.T) {
+	req := httptest.NewRequest(http.MethodPost, "/telemetry/gyroscope", strings.NewReader("invalid json"))
+	req.Header.Set("Content-Type", "application/json")
+	rr := httptest.NewRecorder()
+
+	handler.HandlerGyroscope(rr, req)
+	assert.Equal(t, http.StatusBadRequest, rr.Code)
+	assert.Contains(t, rr.Body.String(), "Invalid JSON")
+}
+
+func TestHandlerGyroscope_MissingFields(t *testing.T) {
+	data := entity.Gyroscope{DeviceID: "dev-1", Timestamp: time.Now().Format(time.RFC3339)}
+	payload, _ := json.Marshal(data)
+
+	req := httptest.NewRequest(http.MethodPost, "/telemetry/gyroscope", bytes.NewReader(payload))
+	req.Header.Set("Content-Type", "application/json")
+	rr := httptest.NewRecorder()
+
+	handler.HandlerGyroscope(rr, req)
+	assert.Equal(t, http.StatusBadRequest, rr.Code)
+	assert.Contains(t, rr.Body.String(), "missing required")
+}
+
+func TestHandlerGPS_Success(t *testing.T) {
+	lat, lon := -23.5, -46.6
+	data := entity.GPS{
+		Latitude:  &lat,
+		Longitude: &lon,
+		DeviceID:  "device-gps",
+		Timestamp: time.Now().UTC().Format(time.RFC3339),
+	}
+	payload, _ := json.Marshal(data)
+
+	req := httptest.NewRequest(http.MethodPost, "/telemetry/gps", bytes.NewReader(payload))
+	req.Header.Set("Content-Type", "application/json")
+	rr := httptest.NewRecorder()
+
+	handler.HandlerGPS(rr, req)
+	assert.Equal(t, http.StatusOK, rr.Code)
+	assert.Contains(t, rr.Body.String(), "GPS data received")
 }
 
 func TestHandlerGPS_InvalidJSON(t *testing.T) {
-	req := httptest.NewRequest(http.MethodPost, "/telemetry/gps", strings.NewReader("invalid json"))
+	req := httptest.NewRequest(http.MethodPost, "/telemetry/gps", strings.NewReader("{"))
 	req.Header.Set("Content-Type", "application/json")
-
 	rr := httptest.NewRecorder()
-	handler.HandlerGPS(rr, req)
 
-	if rr.Code != http.StatusBadRequest {
-		t.Errorf("expected status 400, got %d", rr.Code)
-	}
+	handler.HandlerGPS(rr, req)
+	assert.Equal(t, http.StatusBadRequest, rr.Code)
+	assert.Contains(t, rr.Body.String(), "Invalid JSON")
+}
+
+func TestHandlerGPS_MissingFields(t *testing.T) {
+	data := entity.GPS{DeviceID: "dev-1"}
+	payload, _ := json.Marshal(data)
+
+	req := httptest.NewRequest(http.MethodPost, "/telemetry/gps", bytes.NewReader(payload))
+	req.Header.Set("Content-Type", "application/json")
+	rr := httptest.NewRecorder()
+
+	handler.HandlerGPS(rr, req)
+	assert.Equal(t, http.StatusBadRequest, rr.Code)
+}
+
+func TestHandlerGPS_MethodNotAllowed(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/telemetry/gps", nil)
+	rr := httptest.NewRecorder()
+
+	handler.HandlerGPS(rr, req)
+	assert.Equal(t, http.StatusMethodNotAllowed, rr.Code)
+	assert.Contains(t, rr.Body.String(), "Method not allowed")
+}
+
+func TestHandlerPhoto_Success(t *testing.T) {
+	// Mocka a função para simular sucesso no publish da fila
+	monkey.Patch(queue.PublishImage, func(data []byte) error {
+		return nil
+	})
+	defer monkey.Unpatch(queue.PublishImage)
+
+	var b bytes.Buffer
+	w := multipart.NewWriter(&b)
+
+	f, err := w.CreateFormFile("image", "test.jpg")
+	assert.NoError(t, err)
+	_, err = io.Copy(f, strings.NewReader("fakeimagecontent"))
+	assert.NoError(t, err)
+
+	w.WriteField("device_id", "photo-device")
+	w.WriteField("timestamp", time.Now().Format(time.RFC3339))
+	w.Close()
+
+	req := httptest.NewRequest(http.MethodPost, "/telemetry/photo", &b)
+	req.Header.Set("Content-Type", w.FormDataContentType())
+	rr := httptest.NewRecorder()
+
+	handler.HandlerPhoto(rr, req)
+
+	assert.Equal(t, http.StatusOK, rr.Code)
+	assert.Contains(t, rr.Body.String(), "Imagem enviada com sucesso")
+}
+
+func TestHandlerPhoto_FailPublish(t *testing.T) {
+	// Mocka a função para simular falha no publish da fila
+	monkey.Patch(queue.PublishImage, func(data []byte) error {
+		return errors.New("falha mockada")
+	})
+	defer monkey.Unpatch(queue.PublishImage)
+
+	var b bytes.Buffer
+	w := multipart.NewWriter(&b)
+
+	f, err := w.CreateFormFile("image", "test.jpg")
+	assert.NoError(t, err)
+	_, err = io.Copy(f, strings.NewReader("fakeimagecontent"))
+	assert.NoError(t, err)
+
+	w.WriteField("device_id", "photo-device")
+	w.WriteField("timestamp", time.Now().Format(time.RFC3339))
+	w.Close()
+
+	req := httptest.NewRequest(http.MethodPost, "/telemetry/photo", &b)
+	req.Header.Set("Content-Type", w.FormDataContentType())
+	rr := httptest.NewRecorder()
+
+	handler.HandlerPhoto(rr, req)
+
+	assert.Equal(t, http.StatusInternalServerError, rr.Code)
+	assert.Contains(t, rr.Body.String(), "Erro ao enviar para fila")
 }
