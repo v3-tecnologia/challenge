@@ -14,11 +14,11 @@ jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
 
-    services:
-      nats:
-        image: nats:latest
-        ports:
-          - 4222:4222
+    # services:
+    #   nats:
+    #     image: nats:latest
+    #     ports:
+    #       - 4222:4222
 
     env:
       DYNAMO_ENDPOINT: http://dynamodb-local:8000
