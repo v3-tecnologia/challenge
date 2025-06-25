@@ -11,7 +11,7 @@ on:
       - dev
 
 jobs:
-  build-test-deploy:
+  build-test:
     runs-on: ubuntu-latest
 
     env:
@@ -46,13 +46,3 @@ jobs:
 
       - name: Rodar testes
         run: go test ./... -v -cover
-
-      - name: Instalar Render CLI via npm
-        run: npm install -g render-cli
-
-      - name: Deploy no Render (somente na main)
-        if: github.ref == 'refs/heads/main'
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        run: |
-          render deploy service https://challenge-8sus.onrender.com --wait
