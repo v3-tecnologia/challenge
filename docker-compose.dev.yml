@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  go-api:
+    container_name: go-api
+    image: golang:1.21-alpine
+    volumes:
+      - .:/go/src/app
+    working_dir: /go/src/app
+    command: go run cmd/main.go
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+    driver: local
