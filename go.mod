@@ -1,10 +1,6 @@
 module github.com/yanvic/challenge
 
-go 1.23.0
-
-toolchain go1.24.4
-
-// toolchain go1.24.4
+go 1.24
 
 require (
 	github.com/aws/aws-sdk-go-v2 v1.36.5
@@ -16,6 +12,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/nats-io/nats.go v1.43.0
 	github.com/stretchr/testify v1.10.0
+	github.com/swaggo/http-swagger v1.3.4
 	github.com/swaggo/swag v1.16.4
 )
 
@@ -45,7 +42,6 @@ require (
 	github.com/nats-io/nuid v1.0.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/swaggo/files v0.0.0-20220610200504-28940afbdbfe // indirect
-	github.com/swaggo/http-swagger v1.3.4 // indirect
 	golang.org/x/crypto v0.39.0 // indirect
 	golang.org/x/net v0.41.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
