@@ -1,27 +1,40 @@
-# Etapa 1: build da aplicação
-FROM golang:1.23-alpine AS builder
-WORKDIR /app
-COPY . .
-RUN go mod download
-RUN go build -o app ./cmd/api
+# Build stage para a API Golang
+FROM golang:1.21-alpine AS builder
 
-# Etapa 2: imagem final
+WORKDIR /app
+
+# Copy go mod files
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN CGO_ENABLED=0 GOOS=linux go build -o api ./cmd/api/main.go
+
+# Final stage
 FROM alpine:latest
 
 # Instalar dependências
-RUN apk add --no-cache curl ca-certificates
+RUN apk --no-cache add ca-certificates tzdata curl netcat-openbsd
 
-# Instalar NATS
-RUN curl -L https://github.com/nats-io/nats-server/releases/download/v2.10.11/nats-server-v2.10.11-linux-amd64.tar.gz \
-    | tar xz && \
-    mv nats-server-v2.10.11-linux-amd64/nats-server /usr/local/bin/ && \
-    rm -rf nats-server-v2.10.11-linux-amd64
+# Baixar e instalar NATS Server
+RUN curl -L https://github.com/nats-io/nats-server/releases/download/v2.10.7/nats-server-v2.10.7-linux-amd64.zip -o nats.zip && \
+    unzip nats.zip && \
+    mv nats-server-v2.10.7-linux-amd64/nats-server /usr/local/bin/ && \
+    rm -rf nats* && \
+    chmod +x /usr/local/bin/nats-server
 
-# Copiar app compilado e script de start
-COPY --from=builder /app/app /usr/local/bin/app
-COPY start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
+WORKDIR /app
 
-EXPOSE 8080 4222
+# Copy da API e script
+COPY --from=builder /app/api .
+COPY start.sh .
+RUN chmod +x start.sh
 
-CMD ["/usr/local/bin/start.sh"]
+# Expor porta da API (NATS roda internamente)
+EXPOSE 8080
+
+# Usar o script de inicialização
+CMD ["./start.sh"]
