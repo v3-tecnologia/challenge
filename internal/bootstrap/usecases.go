@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	usecases "v3-test/internal/usecases/telemetries"
+	usecases "v3-test/internal/usecases/telemetriesUsecases"
 )
 
 type Usecases struct {

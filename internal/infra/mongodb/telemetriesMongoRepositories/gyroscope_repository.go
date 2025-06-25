@@ -1,9 +1,9 @@
-package mongoRepositories
+package telemetriesMongoRepositories
 
 import (
 	"context"
-	models "v3-test/internal/models/telemetries"
-	"v3-test/internal/repositories/telemetries"
+	models "v3-test/internal/models/telemetriesModels"
+	"v3-test/internal/repositories/telemetriesRepositories"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -13,7 +13,7 @@ type GyroscopeRepositoryMongo struct {
 	collection mongo.Collection
 }
 
-func NewGyroscopeRepositoryMongo(db *mongo.Database) telemetries.GyroscopeRepository {
+func NewGyroscopeRepositoryMongo(db *mongo.Database) telemetriesRepositories.GyroscopeRepository {
 	return &GyroscopeRepositoryMongo{
 		collection: *db.Collection("gyroscope"),
 	}

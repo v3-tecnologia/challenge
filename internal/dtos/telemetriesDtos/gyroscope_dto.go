@@ -1,4 +1,4 @@
-package dtos
+package telemetriesDtos
 
 type CreateGyroscopeDto struct {
 	X *float64 `json:"x" binding:"required"`

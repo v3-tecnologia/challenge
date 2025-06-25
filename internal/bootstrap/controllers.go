@@ -1,17 +1,17 @@
 package bootstrap
 
 import (
-	"v3-test/internal/controllers/telemetries"
+	"v3-test/internal/controllers/telemetriesControllers"
 )
 
 type Controllers struct {
-	GpsController       telemetries.GpsController
-	GyroscopeController telemetries.GyroscopeController
+	GpsController       telemetriesControllers.GpsController
+	GyroscopeController telemetriesControllers.GyroscopeController
 }
 
 func SetupControllers(usecases Usecases) Controllers {
 	return Controllers{
-		GpsController:       telemetries.NewGpsController(usecases.GpsUsecase),
-		GyroscopeController: telemetries.NewGyroscopeController(usecases.GyroscopeUsecase),
+		GpsController:       telemetriesControllers.NewGpsController(usecases.GpsUsecase),
+		GyroscopeController: telemetriesControllers.NewGyroscopeController(usecases.GyroscopeUsecase),
 	}
 }

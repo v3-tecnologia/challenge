@@ -1,16 +1,16 @@
-package usecases
+package telemetriesUsecases
 
 import (
-	dtos "v3-test/internal/dtos/telemetries"
-	models "v3-test/internal/models/telemetries"
-	"v3-test/internal/repositories/telemetries"
+	dtos "v3-test/internal/dtos/telemetriesDtos"
+	models "v3-test/internal/models/telemetriesModels"
+	"v3-test/internal/repositories/telemetriesRepositories"
 )
 
 type GyroscopeUsecase struct {
-	repo telemetries.GyroscopeRepository
+	repo telemetriesRepositories.GyroscopeRepository
 }
 
-func NewGyroscopeUsecase(repo telemetries.GyroscopeRepository) GyroscopeUsecase {
+func NewGyroscopeUsecase(repo telemetriesRepositories.GyroscopeRepository) GyroscopeUsecase {
 	return GyroscopeUsecase{repo: repo}
 }
 

@@ -1,7 +1,7 @@
 package routers
 
 import (
-	controllers "v3-test/internal/controllers/telemetries"
+	controllers "v3-test/internal/controllers/telemetriesControllers"
 
 	"github.com/gin-gonic/gin"
 )

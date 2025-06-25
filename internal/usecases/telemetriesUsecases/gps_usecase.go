@@ -1,10 +1,10 @@
-package usecases
+package telemetriesUsecases
 
 import (
 	"time"
-	dtos "v3-test/internal/dtos/telemetries"
-	models "v3-test/internal/models/telemetries"
-	repositories "v3-test/internal/repositories/telemetries"
+	dtos "v3-test/internal/dtos/telemetriesDtos"
+	models "v3-test/internal/models/telemetriesModels"
+	repositories "v3-test/internal/repositories/telemetriesRepositories"
 )
 
 type GpsUsecase struct {

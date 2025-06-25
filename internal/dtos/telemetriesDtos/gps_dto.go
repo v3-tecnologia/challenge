@@ -1,4 +1,4 @@
-package dtos
+package telemetriesDtos
 
 type CreateGpsDto struct {
 	Latitude  *float64 `json:"latitude"  binding:"required,gt=-90,lt=90"`

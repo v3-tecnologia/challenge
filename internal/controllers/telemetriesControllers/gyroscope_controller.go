@@ -1,9 +1,9 @@
-package telemetries
+package telemetriesControllers
 
 import (
 	"net/http"
-	dtos "v3-test/internal/dtos/telemetries"
-	usecases "v3-test/internal/usecases/telemetries"
+	dtos "v3-test/internal/dtos/telemetriesDtos"
+	usecases "v3-test/internal/usecases/telemetriesUsecases"
 	"v3-test/internal/validators"
 
 	"github.com/gin-gonic/gin"
