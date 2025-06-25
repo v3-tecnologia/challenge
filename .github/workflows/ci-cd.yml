@@ -42,13 +42,18 @@ jobs:
       - name: Build do app
         run: go build -tags netgo -ldflags '-s -w' -o app ./cmd/api
 
-      - name: Subir serviços com docker-compose (se necessário)
+      - name: Instalar Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+
+      - name: Subir serviços com docker-compose
         run: docker-compose up -d
 
       - name: Rodar testes
         run: go test ./... -v -cover
 
-      - name: Instalar Render CLI (para deploy)
+      - name: Instalar Render CLI
         run: |
           curl -fsSL https://cdn.render.com/cli/install.sh | bash
           echo "$HOME/.render/bin" >> $GITHUB_PATH
