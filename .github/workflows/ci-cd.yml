@@ -4,10 +4,25 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
+
+    services:
+      nats:
+        image: nats:latest
+        ports:
+          - 4222:4222
+
+    env:
+      NATS_URL: nats://localhost:4222
+      MONGO_URL: mongodb://localhost:27017
+      AWS_ACCESS_KEY_ID: dummy
+      AWS_SECRET_ACCESS_KEY: dummy
 
     steps:
       - name: Checkout código
@@ -24,15 +39,19 @@ jobs:
       - name: Build do app
         run: go build -tags netgo -ldflags '-s -w' -o app ./cmd/api
 
-      - name: Rodar testes
-        run: go test ./... -v
+      - name: Subir serviços com docker-compose (se necessário)
+        run: docker-compose up -d
 
-      - name: Instalar Render CLI
+      - name: Rodar testes
+        run: go test ./... -v -cover
+
+      - name: Instalar Render CLI (para deploy)
         run: |
           curl -fsSL https://cdn.render.com/cli/install.sh | bash
           echo "$HOME/.render/bin" >> $GITHUB_PATH
 
       - name: Deploy no Render
+        if: github.ref == 'refs/heads/main'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: |

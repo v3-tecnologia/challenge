@@ -13,6 +13,17 @@ import (
 	"github.com/yanvic/challenge/internal/queue"
 )
 
+// HandlerGyroscope godoc
+// @Summary Receive gyroscope data
+// @Description Receives X, Y, Z axis values with timestamp and device ID
+// @Accept json
+// @Produce plain
+// @Param gyroscope body entity.Gyroscope true "Gyroscope data"
+// @Success 200 {string} string "Gyroscope data saved"
+// @Failure 400 {string} string "Invalid JSON or validation error"
+// @Failure 405 {string} string "Method not allowed"
+// @Failure 500 {string} string "Failed to save data"
+// @Router /telemetry/gyroscope [post]
 func HandlerGyroscope(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -39,6 +50,17 @@ func HandlerGyroscope(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Gyroscope data saved"))
 }
 
+// HandlerGPS godoc
+// @Summary Receive GPS data
+// @Description Receives latitude, longitude, timestamp and device ID
+// @Accept json
+// @Produce plain
+// @Param gps body entity.GPS true "GPS data"
+// @Success 200 {string} string "GPS data received"
+// @Failure 400 {string} string "Invalid JSON or validation error"
+// @Failure 405 {string} string "Method not allowed"
+// @Failure 500 {string} string "Failed to save data"
+// @Router /telemetry/gps [post]
 func HandlerGPS(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -67,6 +89,19 @@ func HandlerGPS(w http.ResponseWriter, r *http.Request) {
 
 var PublishImageFunc = queue.PublishImage
 
+// HandlerPhoto godoc
+// @Summary Receive photo upload
+// @Description Receives photo as multipart form with device ID and timestamp
+// @Accept multipart/form-data
+// @Produce plain
+// @Param image formData file true "Photo image file"
+// @Param device_id formData string true "Device ID"
+// @Param timestamp formData string false "Timestamp (RFC3339), optional, defaults to now"
+// @Param Photo body entity.Photo true "Photo data"
+// @Success 200 {string} string "Image uploaded successfully"
+// @Failure 400 {string} string "Error processing image or missing fields"
+// @Failure 500 {string} string "Error serializing payload or publishing to queue"
+// @Router /telemetry/photo [post]
 func HandlerPhoto(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(10 << 20) // 10 MB
 	if err != nil {

@@ -33,14 +33,20 @@ https://dev.to/rflpazini/go-docker-como-criar-as-melhores-imagens-docker-para-ap
 O .env não setava nos testes passei alguns bons minutos, como é test coloquei as variáveis no código e funcionou, como é test e são apenas vatiáveis fakes não tem grande impacto.
 
 ## Nível 4
-
+Artigo utilizado para estudo
 https://docs.aws.amazon.com/rekognition/latest/dg/faces-comparefaces.html
 
 ## Nível 5
-
+Artigos utilizados para estudo
 https://www.synadia.com/blog/building-a-job-queue-with-nats-io-and-go
 
 https://dev.to/aleksk1ng/go-nats-grpc-and-postgresql-clean-architecture-microservice-with-monitoring-and-tracing-2kka
 
 Poderia utilizar design baseado a eventos mais precisamente baseado em mensagens, porém eu não pensei nem conhecia mas sempre é bom conversar com alguém mais experiente, tirar ideias que você desconhece, quem sabe eu não refaço esse teste focando nessa arquitetura.
 
+## Nível 6
+Artigo baseado para swagger
+https://dev.to/booscaaa/documentanto-uma-api-go-com-swagger-2k05
+
+Ótimo vídeo sobre c4 model
+https://www.youtube.com/watch?v=iWkXd0RJ2FA&t=3783s
