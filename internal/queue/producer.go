@@ -13,8 +13,9 @@ var conn *nats.Conn
 func InitNATS() {
 	natsURL := os.Getenv("NATS_URL")
 	if natsURL == "" {
-		natsURL = nats.DefaultURL // padrão: nats://127.0.0.1:4222
+		natsURL = nats.DefaultURL // nats://127.0.0.1:4222 para local
 	}
+	log.Printf("Tentando conectar no NATS em: %s", natsURL)
 
 	var err error
 	for i := 1; i <= 10; i++ {
