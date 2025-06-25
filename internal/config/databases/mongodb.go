@@ -16,13 +16,23 @@ func ConnectMongo() *mongo.Database {
 	uri := os.Getenv("MONGODB_URI")
 	dbName := os.Getenv("MONGODB_NAME")
 
+	// Cria um contexto com timeout para evitar bloqueios
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
+	// Conecta ao MongoDB
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
 		log.Fatalf("Failed to connect to MongoDB: %v", err)
 	}
+
+	// Verifica se o MongoDB está acessível com o Ping
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatalf("Failed to ping MongoDB: %v", err)
+	}
+
+	log.Println("MongoDB connected successfully!")
 
 	MongoClient = client
 	return client.Database(dbName)

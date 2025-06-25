@@ -1,4 +1,4 @@
-package controllers
+package telemetries
 
 import (
 	"net/http"
@@ -9,25 +9,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type gpsController struct {
+type GpsController struct {
 	usecase usecases.GpsUsecase
 }
 
-func NewGpsController() gpsController {
-	return gpsController{
-		usecase: usecases.NewGpsUsecase(),
-	}
+func NewGpsController(usecase usecases.GpsUsecase) GpsController {
+	return GpsController{usecase: usecase}
 }
 
-func (gpsController *gpsController) CreateGps(ctx *gin.Context) {
+func (c *GpsController) CreateGps(ctx *gin.Context) {
+
 	var gpsDto dtos.GpsDto
 
-	isValid := validators.BindAndValidate(ctx, &gpsDto)
-	if !isValid {
+	if !validators.BindAndValidate(ctx, &gpsDto) {
 		return
 	}
 
-	gpsModel, err := gpsController.usecase.CreateGps(gpsDto)
+	gpsModel, err := c.usecase.CreateGps(gpsDto)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create GPS data"})
 		return

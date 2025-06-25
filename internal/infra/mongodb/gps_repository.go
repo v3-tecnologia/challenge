@@ -1,25 +1,24 @@
-package mongodb
+package mongoRepositories
 
 import (
 	"context"
-	"time"
 	models "v3-test/internal/models/telemetries"
+	"v3-test/internal/repositories/telemetries"
 
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type MongoGpsRepository struct {
+type gpsRepositoryMongo struct {
 	collection *mongo.Collection
 }
 
-func NewMongoGpsRepository(col *mongo.Collection) *MongoGpsRepository {
-	return &MongoGpsRepository{collection: col}
+func NewGpsRepositoryMongo(db *mongo.Database) telemetries.GpsRepository {
+	return &gpsRepositoryMongo{
+		collection: db.Collection("gps"),
+	}
 }
 
-func (r *MongoGpsRepository) InsertGps(gps models.GpsModel) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	_, err := r.collection.InsertOne(ctx, gps)
+func (r *gpsRepositoryMongo) CreateGps(gps models.GpsModel) error {
+	_, err := r.collection.InsertOne(context.Background(), gps)
 	return err
 }

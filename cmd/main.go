@@ -2,16 +2,11 @@ package main
 
 import (
 	"log"
-	"v3-test/internal/config/databases"
-	"v3-test/internal/config/routers"
+	"v3-test/internal/bootstrap"
 )
 
 func main() {
-	databases.ConnectMongo()
-
-	server := routers.SetupRouter()
-
-	if err := server.Run(":8080"); err != nil {
-		log.Fatalf("Erro ao iniciar servidor: %v", err)
+	if err := bootstrap.Run(); err != nil {
+		log.Fatalf("Erro ao iniciar aplicação: %v", err)
 	}
 }

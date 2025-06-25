@@ -6,10 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func TelemetryRouter(r *gin.Engine) {
+func TelemetryRouter(r *gin.Engine, gpsController controllers.GpsController) {
 	api := r.Group("/telemetry")
 	{
-		gpsController := controllers.NewGpsController()
 		api.POST("/gps", gpsController.CreateGps)
 	}
 }
