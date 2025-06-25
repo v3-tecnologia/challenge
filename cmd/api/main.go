@@ -19,6 +19,19 @@ func main() {
 	}
 	dynamo.Client = client
 
+	// ✅ Espera o DynamoDB estar pronto antes de criar as tabelas
+	if err := dynamo.WaitForDynamoReady(ctx, client); err != nil {
+		log.Fatalf("erro esperando DynamoDB: %v", err)
+	}
+
+	tables := []string{"GyroscopeTable", "GPSTable", "PhotoTable", "PhotoAnalysisTable"}
+
+	for _, t := range tables {
+		if err := dynamo.EnsureTable(ctx, client, t); err != nil {
+			log.Fatalf("erro ao garantir tabela %s: %v", t, err)
+		}
+	}
+
 	queue.InitNATS()
 
 	go queue.StartImageConsumer()

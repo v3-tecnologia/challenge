@@ -17,15 +17,19 @@ func main() {
 
 	dynamo.Client = client
 
-	if err := dynamo.CreateTable(ctx, client, "GyroscopeTable", "DeviceID", "Timestamp"); err != nil {
+	if err := dynamo.CreateTable(ctx, client, "GyroscopeTable"); err != nil {
 		log.Fatalf("error creating GyroscopeTable: %v", err)
 	}
 
-	if err := dynamo.CreateTable(ctx, client, "GPSTable", "DeviceID", "Timestamp"); err != nil {
+	if err := dynamo.CreateTable(ctx, client, "GPSTable"); err != nil {
 		log.Fatalf("error creating GPSTable: %v", err)
 	}
 
-	if err := dynamo.CreateTable(ctx, client, "PhotoTable", "DeviceID", "Timestamp"); err != nil {
+	if err := dynamo.CreateTable(ctx, client, "PhotoTable"); err != nil {
 		log.Fatalf("error creating PhotoTable: %v", err)
+	}
+
+	if err := dynamo.CreateTable(ctx, client, "PhotoAnalysisTable"); err != nil {
+		log.Fatalf("error creating PhotoAnalysisTable: %v", err)
 	}
 }

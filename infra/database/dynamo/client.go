@@ -42,7 +42,7 @@ func InitDynamoClient(ctx context.Context) (*dynamodb.Client, error) {
 }
 
 func InitDynamoClientTest(ctx context.Context) (*dynamodb.Client, error) {
-	dynamoURL := "http://localhost:8000" // conexão local
+	dynamoURL := "http://localhost:8000"
 
 	cfg, err := config.LoadDefaultConfig(ctx,
 		config.WithRegion("us-east-1"),
@@ -59,8 +59,7 @@ func InitDynamoClientTest(ctx context.Context) (*dynamodb.Client, error) {
 			Value: aws.Credentials{
 				AccessKeyID:     "dummy",
 				SecretAccessKey: "dummy",
-				SessionToken:    "dummy",
-				Source:          "Hardcoded local credentials",
+				Source:          "local credentials",
 			},
 		}),
 	)

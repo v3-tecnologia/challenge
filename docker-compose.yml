@@ -1,16 +1,18 @@
-version: '3.8'
-
 services:
   dynamodb-local:
     image: amazon/dynamodb-local
     ports:
       - "8000:8000"
     command: -jar DynamoDBLocal.jar -inMemory -sharedDb
+    networks:
+      - appnet
 
   nats:
     image: nats:latest
     ports:
       - "4222:4222"
+    networks:
+      - appnet
 
   app:
     build: .
@@ -20,6 +22,12 @@ services:
       - .env
     environment:
       - NATS_URL=nats://nats:4222
+      - DYNAMO_ENDPOINT=http://dynamodb-local:8000
     depends_on:
       - dynamodb-local
       - nats
+    networks:
+      - appnet
+
+networks:
+  appnet:

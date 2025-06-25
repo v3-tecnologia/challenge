@@ -6,6 +6,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/google/uuid"
 )
 
 // var Client *dynamodb.Client
@@ -26,6 +27,7 @@ func SaveGps(latitude float64, longitude float64, deviceID string, timestamp str
 	lon := longitude
 
 	item := GpsItem{
+		UUID:      uuid.NewString(),
 		Latitude:  &lat,
 		Longitude: &lon,
 		DeviceID:  deviceID,
@@ -56,6 +58,7 @@ func SaveGyro(x float64, y float64, z float64, deviceID string, timestamp string
 	roll := z
 
 	item := GyroscopeItem{
+		UUID:      uuid.NewString(),
 		X:         &pitch,
 		Y:         &yaw,
 		Z:         &roll,
@@ -83,6 +86,7 @@ func SavePhoto(ImageBase64 string, deviceID string, timestamp string, payload in
 	println("Payload JSON:", string(jsonData))
 
 	item := PhotoItem{
+		UUID:        uuid.NewString(),
 		ImageBase64: ImageBase64,
 		DeviceID:    deviceID,
 		Timestamp:   timestamp,

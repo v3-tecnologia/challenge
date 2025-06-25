@@ -65,23 +65,25 @@ func HandlerGPS(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("GPS data received"))
 }
 
+var PublishImageFunc = queue.PublishImage
+
 func HandlerPhoto(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseMultipartForm(10 << 20) // 10 MB
 	if err != nil {
-		http.Error(w, "Erro ao processar a imagem", http.StatusBadRequest)
+		http.Error(w, "Error processing image", http.StatusBadRequest)
 		return
 	}
 
 	file, _, err := r.FormFile("image")
 	if err != nil {
-		http.Error(w, "Imagem não enviada", http.StatusBadRequest)
+		http.Error(w, "Image not uploaded", http.StatusBadRequest)
 		return
 	}
 	defer file.Close()
 
 	image, err := io.ReadAll(file)
 	if err != nil {
-		http.Error(w, "Erro ao ler a imagem", http.StatusInternalServerError)
+		http.Error(w, "Error reading image", http.StatusInternalServerError)
 		return
 	}
 
@@ -99,16 +101,16 @@ func HandlerPhoto(w http.ResponseWriter, r *http.Request) {
 
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
-		http.Error(w, "Erro ao serializar payload", http.StatusInternalServerError)
+		http.Error(w, "Error serializing payload", http.StatusInternalServerError)
 		return
 	}
 
-	err = queue.PublishImage(jsonPayload)
+	err = PublishImageFunc(jsonPayload)
 	if err != nil {
-		http.Error(w, "Erro ao enviar para fila", http.StatusInternalServerError)
+		http.Error(w, "Error publishing to queue", http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Imagem enviada com sucesso"))
+	w.Write([]byte("Image uploaded successfully"))
 }

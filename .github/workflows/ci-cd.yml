@@ -2,52 +2,38 @@ name: CI/CD
 
 on:
   push:
-    branches: [main, dev]
-  pull_request:
-    branches: [main, dev]
+    branches:
+      - main
 
 jobs:
-  test:
+  build-test-deploy:
     runs-on: ubuntu-latest
 
-    services:
-      dynamodb:
-        image: amazon/dynamodb-local
-        ports:
-          - 8000:8000
-
     steps:
-      - name: Checkout code
+      - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Set up Go
+      - name: Setup Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.22'
 
-      - name: Install dependencies
+      - name: Instalar dependências
         run: go mod tidy
 
-      - name: Create DynamoDB tables
-        run: go run cmd/setupdynamodb/main.go
+      - name: Build do app
+        run: go build -tags netgo -ldflags '-s -w' -o app ./cmd/api
+
+      - name: Rodar testes
+        run: go test ./... -v
+
+      - name: Instalar Render CLI
+        run: |
+          curl -fsSL https://cdn.render.com/cli/install.sh | bash
+          echo "$HOME/.render/bin" >> $GITHUB_PATH
+
+      - name: Deploy no Render
         env:
-          AWS_ACCESS_KEY_ID: dummy
-          AWS_SECRET_ACCESS_KEY: dummy
-          AWS_REGION: us-east-1
-          DYNAMO_ENDPOINT: http://localhost:8000
-
-      - name: Run tests unit + integration
-        run: go test ./test/... -v -cover
-        env:
-          AWS_ACCESS_KEY_ID: dummy
-          AWS_SECRET_ACCESS_KEY: dummy
-          AWS_REGION: us-east-1
-          DYNAMO_ENDPOINT: http://localhost:8000
-
-  simulate-deploy:
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: deploy
-        run: echo "Deploy com sucesso!"
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: |
+          render deploy service https://challenge-8sus.onrender.com --wait

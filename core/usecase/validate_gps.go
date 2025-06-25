@@ -13,7 +13,7 @@ func ValidateGPS(data entity.GPS) error {
 	if data.Timestamp == "" {
 		return errors.New("timestamp is required")
 	}
-	if data.Longitude == nil {
+	if data.Latitude == nil {
 		return errors.New("latitude is required")
 	}
 	if data.Longitude == nil {

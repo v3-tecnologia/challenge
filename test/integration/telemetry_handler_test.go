@@ -15,7 +15,6 @@ import (
 	"testing"
 	"time"
 
-	"bou.ke/monkey"
 	"github.com/stretchr/testify/assert"
 	"github.com/yanvic/challenge/core/entity"
 	"github.com/yanvic/challenge/infra/database/dynamo"
@@ -81,7 +80,7 @@ func TestHandlerGyroscope_MissingFields(t *testing.T) {
 
 	handler.HandlerGyroscope(rr, req)
 	assert.Equal(t, http.StatusBadRequest, rr.Code)
-	assert.Contains(t, rr.Body.String(), "missing required")
+	assert.Contains(t, rr.Body.String(), "x is required")
 }
 
 func TestHandlerGPS_Success(t *testing.T) {
@@ -135,11 +134,10 @@ func TestHandlerGPS_MethodNotAllowed(t *testing.T) {
 }
 
 func TestHandlerPhoto_Success(t *testing.T) {
-	// Mocka a função para simular sucesso no publish da fila
-	monkey.Patch(queue.PublishImage, func(data []byte) error {
+	handler.PublishImageFunc = func(data []byte) error {
 		return nil
-	})
-	defer monkey.Unpatch(queue.PublishImage)
+	}
+	defer func() { handler.PublishImageFunc = queue.PublishImage }()
 
 	var b bytes.Buffer
 	w := multipart.NewWriter(&b)
@@ -160,15 +158,45 @@ func TestHandlerPhoto_Success(t *testing.T) {
 	handler.HandlerPhoto(rr, req)
 
 	assert.Equal(t, http.StatusOK, rr.Code)
-	assert.Contains(t, rr.Body.String(), "Imagem enviada com sucesso")
+	assert.Contains(t, rr.Body.String(), "Image uploaded successfully")
 }
 
-func TestHandlerPhoto_FailPublish(t *testing.T) {
-	// Mocka a função para simular falha no publish da fila
-	monkey.Patch(queue.PublishImage, func(data []byte) error {
-		return errors.New("falha mockada")
-	})
-	defer monkey.Unpatch(queue.PublishImage)
+func TestHandlerPhoto_MissingImage(t *testing.T) {
+	var b bytes.Buffer
+	w := multipart.NewWriter(&b)
+
+	// Não adiciona campo "image"
+	w.WriteField("device_id", "photo-device")
+	w.WriteField("timestamp", time.Now().Format(time.RFC3339))
+	w.Close()
+
+	req := httptest.NewRequest(http.MethodPost, "/telemetry/photo", &b)
+	req.Header.Set("Content-Type", w.FormDataContentType())
+	rr := httptest.NewRecorder()
+
+	handler.HandlerPhoto(rr, req)
+
+	assert.Equal(t, http.StatusBadRequest, rr.Code)
+	assert.Contains(t, rr.Body.String(), "Image not uploaded")
+}
+
+func TestHandlerPhoto_BadMultipartForm(t *testing.T) {
+	// Request com corpo inválido que falha no ParseMultipartForm
+	req := httptest.NewRequest(http.MethodPost, "/telemetry/photo", strings.NewReader("invalid-data"))
+	req.Header.Set("Content-Type", "multipart/form-data; boundary=wrong")
+
+	rr := httptest.NewRecorder()
+	handler.HandlerPhoto(rr, req)
+
+	assert.Equal(t, http.StatusBadRequest, rr.Code)
+	assert.Contains(t, rr.Body.String(), "Error processing image")
+}
+
+func TestHandlerPhoto_PublishError(t *testing.T) {
+	handler.PublishImageFunc = func(data []byte) error {
+		return errors.New("publish error")
+	}
+	defer func() { handler.PublishImageFunc = queue.PublishImage }()
 
 	var b bytes.Buffer
 	w := multipart.NewWriter(&b)
@@ -189,5 +217,5 @@ func TestHandlerPhoto_FailPublish(t *testing.T) {
 	handler.HandlerPhoto(rr, req)
 
 	assert.Equal(t, http.StatusInternalServerError, rr.Code)
-	assert.Contains(t, rr.Body.String(), "Erro ao enviar para fila")
+	assert.Contains(t, rr.Body.String(), "Error publishing to queue")
 }

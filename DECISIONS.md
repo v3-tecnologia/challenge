@@ -17,6 +17,8 @@ Um ponto relevante foi a validação, tive que pesquisar e o giroscópio pode re
 
 ## Nível 2
 Comecei Fazendo os primeiros testes e tem um artigo que é ótimo para se basear, interessante adicionar o -cover para ser possível analisar a cobertura de testes, é interessante que no primeiro momento os testes sejam o fluxo básico (fluxo feliz) e os erros mais comnus, 100% não é o número mágico, não é garantia de nada. por isso que 60% já é ótimo para este MVP e 80% num sistema real.
+A importância de testes unitários, por conta de um teste encontrei um erro que deixei, estava verificando longitude duas vezes ao invés de latitude.
+Falando um pouquinho sobre mocks, eles são essênciais mas não podem ser tudo, devem ser utilizados com moderação para casos atipícos, horários e rotas diferente mas mockar todos os testes não é recomendável. Existe uma diferença entre mock e dados de testes. 
 
 https://medium.com/@habbema/golang-testes-86da3e5e0602
 
@@ -28,7 +30,7 @@ https://medium.com/@snassr/dynamodb-with-go-golang-quickstart-e0e005b88e8f
 Referencias sobre o assunto de docker e golang, sempre ter um foco que sua imagem docker precisa ser a mais otimizada possível 
 https://dev.to/rflpazini/go-docker-como-criar-as-melhores-imagens-docker-para-aplicacoes-golang-ikj
 
-O .env não setava nos testes passei alguns bons minutos, como é test coloquei as variáveis no código e funcionou, como é test e são apenas vatiáveis fakes não tem grand eimpacto
+O .env não setava nos testes passei alguns bons minutos, como é test coloquei as variáveis no código e funcionou, como é test e são apenas vatiáveis fakes não tem grande impacto.
 
 ## Nível 4
 
@@ -40,13 +42,5 @@ https://www.synadia.com/blog/building-a-job-queue-with-nats-io-and-go
 
 https://dev.to/aleksk1ng/go-nats-grpc-and-postgresql-clean-architecture-microservice-with-monitoring-and-tracing-2kka
 
-Poderia utilizar design baseado a eventos mais precisamente baseado em mensagens
+Poderia utilizar design baseado a eventos mais precisamente baseado em mensagens, porém eu não pensei nem conhecia mas sempre é bom conversar com alguém mais experiente, tirar ideias que você desconhece, quem sabe eu não refaço esse teste focando nessa arquitetura.
 
-
-Recapitulação hora de revisar os pontos já feitos
-- adicionar a integração com o dynamo normal
-- testes colocar os testes todos
-- mock testes rekognition
-- redis e integração rekognition 
-
-- criar um para enviar a cada 10 segundos 

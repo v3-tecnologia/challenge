@@ -10,27 +10,19 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-func CreateTable(ctx context.Context, client *dynamodb.Client, tableName, partitionKey, sortKey string) error {
+func CreateTable(ctx context.Context, client *dynamodb.Client, tableName string) error {
 	_, err := client.CreateTable(ctx, &dynamodb.CreateTableInput{
 		TableName: aws.String(tableName),
 		KeySchema: []types.KeySchemaElement{
 			{
-				AttributeName: aws.String(partitionKey),
-				KeyType:       types.KeyTypeHash, // Partition key
-			},
-			{
-				AttributeName: aws.String(sortKey),
-				KeyType:       types.KeyTypeRange, // Sort key
+				AttributeName: aws.String("uuid"),
+				KeyType:       types.KeyTypeHash,
 			},
 		},
 		AttributeDefinitions: []types.AttributeDefinition{
 			{
-				AttributeName: aws.String(partitionKey),
-				AttributeType: types.ScalarAttributeTypeS, // string
-			},
-			{
-				AttributeName: aws.String(sortKey),
-				AttributeType: types.ScalarAttributeTypeS, // string
+				AttributeName: aws.String("uuid"),
+				AttributeType: types.ScalarAttributeTypeS,
 			},
 		},
 		BillingMode: types.BillingModePayPerRequest,
