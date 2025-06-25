@@ -1,0 +1,134 @@
+basePath: /
+definitions:
+  entity.GPS:
+    properties:
+      device_id:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      timestamp:
+        type: string
+    type: object
+  entity.Gyroscope:
+    properties:
+      device_id:
+        type: string
+      timestamp:
+        type: string
+      x:
+        type: number
+      "y":
+        type: number
+      z:
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for telemetry challenge
+  title: Challenge API
+  version: "1.0"
+paths:
+  /telemetry/gps:
+    post:
+      consumes:
+      - application/json
+      description: Receives latitude, longitude, timestamp and device ID
+      parameters:
+      - description: GPS data
+        in: body
+        name: gps
+        required: true
+        schema:
+          $ref: '#/definitions/entity.GPS'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: GPS data received
+          schema:
+            type: string
+        "400":
+          description: Invalid JSON or validation error
+          schema:
+            type: string
+        "405":
+          description: Method not allowed
+          schema:
+            type: string
+        "500":
+          description: Failed to save data
+          schema:
+            type: string
+      summary: Receive GPS data
+  /telemetry/gyroscope:
+    post:
+      consumes:
+      - application/json
+      description: Receives X, Y, Z axis values with timestamp and device ID
+      parameters:
+      - description: Gyroscope data
+        in: body
+        name: gyroscope
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Gyroscope'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Gyroscope data saved
+          schema:
+            type: string
+        "400":
+          description: Invalid JSON or validation error
+          schema:
+            type: string
+        "405":
+          description: Method not allowed
+          schema:
+            type: string
+        "500":
+          description: Failed to save data
+          schema:
+            type: string
+      summary: Receive gyroscope data
+  /telemetry/photo:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Receives photo as multipart form with device ID and timestamp
+      parameters:
+      - description: Photo image file
+        in: formData
+        name: image
+        required: true
+        type: file
+      - description: Device ID
+        in: formData
+        name: device_id
+        required: true
+        type: string
+      - description: Timestamp (RFC3339), optional, defaults to now
+        in: formData
+        name: timestamp
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Image uploaded successfully
+          schema:
+            type: string
+        "400":
+          description: Error processing image or missing fields
+          schema:
+            type: string
+        "500":
+          description: Error serializing payload or publishing to queue
+          schema:
+            type: string
+      summary: Receive photo upload
+swagger: "2.0"

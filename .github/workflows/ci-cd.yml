@@ -1,0 +1,48 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    env:
+      DYNAMO_ENDPOINT: http://dynamodb-local:8000
+      # AWS_ACCESS_KEY_ID: dummy
+      # AWS_SECRET_ACCESS_KEY: dummy
+      # AWS_REGION: us-east-1
+      # NATS_URL: nats://localhost:4222
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24'
+
+      - name: Instalar dependências
+        run: go mod tidy
+
+      - name: Build do app
+        run: go build -tags netgo -ldflags '-s -w' -o app ./cmd/api
+
+      - name: Instalar Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+
+      - name: Subir serviços com docker-compose
+        run: docker-compose up -d
+
+      - name: Rodar testes
+        run: go test ./... -v -cover
