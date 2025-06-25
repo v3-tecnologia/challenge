@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - dev
   pull_request:
     branches:
       - main
+      - dev
 
 jobs:
   build-test-deploy:
@@ -19,10 +21,11 @@ jobs:
           - 4222:4222
 
     env:
-      NATS_URL: nats://localhost:4222
-      MONGO_URL: mongodb://localhost:27017
+      DYNAMO_ENDPOINT: http://dynamodb-local:8000
       AWS_ACCESS_KEY_ID: dummy
       AWS_SECRET_ACCESS_KEY: dummy
+      AWS_REGION: us-east-1
+      NATS_URL: nats://localhost:4222
 
     steps:
       - name: Checkout código
