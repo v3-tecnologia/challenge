@@ -5,11 +5,13 @@ import (
 )
 
 type Controllers struct {
-	GpsController telemetries.GpsController
+	GpsController       telemetries.GpsController
+	GyroscopeController telemetries.GyroscopeController
 }
 
 func SetupControllers(usecases Usecases) Controllers {
 	return Controllers{
-		GpsController: telemetries.NewGpsController(usecases.GpsUsecase),
+		GpsController:       telemetries.NewGpsController(usecases.GpsUsecase),
+		GyroscopeController: telemetries.NewGyroscopeController(usecases.GyroscopeUsecase),
 	}
 }

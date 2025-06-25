@@ -5,6 +5,7 @@ import (
 	models "v3-test/internal/models/telemetries"
 	"v3-test/internal/repositories/telemetries"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -18,7 +19,21 @@ func NewGpsRepositoryMongo(db *mongo.Database) telemetries.GpsRepository {
 	}
 }
 
-func (r *gpsRepositoryMongo) CreateGps(gps models.GpsModel) error {
-	_, err := r.collection.InsertOne(context.Background(), gps)
-	return err
+func (r *gpsRepositoryMongo) CreateGps(gps models.GpsModel) (models.GpsModel, error) {
+	result, err := r.collection.InsertOne(context.Background(), gps)
+	if err != nil {
+		return models.GpsModel{}, err
+	}
+
+	insertedID := result.InsertedID
+
+	var created models.GpsModel
+
+	err = r.collection.FindOne(context.Background(), bson.M{"_id": insertedID}).Decode(&created)
+
+	if err != nil {
+		return models.GpsModel{}, err
+	}
+
+	return created, nil
 }

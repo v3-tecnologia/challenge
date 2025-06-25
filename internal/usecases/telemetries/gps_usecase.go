@@ -1,4 +1,4 @@
-package telemetries
+package usecases
 
 import (
 	"time"
@@ -15,17 +15,17 @@ func NewGpsUsecase(repo repositories.GpsRepository) GpsUsecase {
 	return GpsUsecase{repo: repo}
 }
 
-func (u *GpsUsecase) CreateGps(gpsDto dtos.GpsDto) (models.GpsModel, error) {
+func (u *GpsUsecase) CreateGps(gpsDto dtos.CreateGpsDto) (models.GpsModel, error) {
 	gpsModel := models.GpsModel{
 		Latitude:  gpsDto.Latitude,
 		Longitude: gpsDto.Longitude,
 		Timestamp: time.Now(),
 	}
 
-	err := u.repo.CreateGps(gpsModel)
+	newGps, err := u.repo.CreateGps(gpsModel)
 	if err != nil {
 		return models.GpsModel{}, err
 	}
 
-	return gpsModel, nil
+	return newGps, nil
 }

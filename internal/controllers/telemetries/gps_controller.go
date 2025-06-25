@@ -19,7 +19,7 @@ func NewGpsController(usecase usecases.GpsUsecase) GpsController {
 
 func (c *GpsController) CreateGps(ctx *gin.Context) {
 
-	var gpsDto dtos.GpsDto
+	var gpsDto dtos.CreateGpsDto
 
 	if !validators.BindAndValidate(ctx, &gpsDto) {
 		return

@@ -8,11 +8,13 @@ import (
 )
 
 type Repositories struct {
-	GpsRepo telemetries.GpsRepository
+	GpsRepo       telemetries.GpsRepository
+	GyroscopeRepo telemetries.GyroscopeRepository
 }
 
 func SetupRepositories(db *mongo.Database) Repositories {
 	return Repositories{
-		GpsRepo: mongoRepositories.NewGpsRepositoryMongo(db),
+		GpsRepo:       mongoRepositories.NewGpsRepositoryMongo(db),
+		GyroscopeRepo: mongoRepositories.NewGyroscopeRepositoryMongo(db),
 	}
 }
