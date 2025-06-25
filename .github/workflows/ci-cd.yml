@@ -14,12 +14,6 @@ jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
 
-    # services:
-    #   nats:
-    #     image: nats:latest
-    #     ports:
-    #       - 4222:4222
-
     env:
       DYNAMO_ENDPOINT: http://dynamodb-local:8000
       AWS_ACCESS_KEY_ID: dummy
@@ -53,12 +47,10 @@ jobs:
       - name: Rodar testes
         run: go test ./... -v -cover
 
-      - name: Instalar Render CLI
-        run: |
-          curl -fsSL https://cdn.render.com/cli/install.sh | bash
-          echo "$HOME/.render/bin" >> $GITHUB_PATH
+      - name: Instalar Render CLI via npm
+        run: npm install -g render-cli
 
-      - name: Deploy no Render
+      - name: Deploy no Render (somente na main)
         if: github.ref == 'refs/heads/main'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
