@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug API",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd/server/main.go",
+      "env": {
+        "DB_HOST": "localhost",
+        "DB_USER": "telemetry_user",
+        "DB_PASSWORD": "telemetry_P0stgr3s_2025!",
+        "DB_NAME": "telemetry_db",
+        "DB_PORT": "5432",
+        "SERVER_PORT": "8080",
+        "JWT_SECRET": "secret-key-for-debug"
+      }
+    }
+  ]
+}

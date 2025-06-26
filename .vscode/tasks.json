@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "start-postgres",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["up", "-d", "postgres"],
+      "group": "build"
+    },
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "go",
+      "args": ["build", "./cmd/server"],
+      "group": "build"
+    }
+  ]
+}
