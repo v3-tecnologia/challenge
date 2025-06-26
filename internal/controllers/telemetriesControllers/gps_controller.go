@@ -2,24 +2,24 @@ package telemetriesControllers
 
 import (
 	"net/http"
-	dtos "v3-test/internal/dtos/telemetriesDtos"
-	usecases "v3-test/internal/usecases/telemetriesUsecases"
+	"v3-test/internal/dtos/telemetriesDtos"
+	"v3-test/internal/usecases/telemetriesUsecases"
 	"v3-test/internal/validators"
 
 	"github.com/gin-gonic/gin"
 )
 
 type GpsController struct {
-	usecase usecases.GpsUsecase
+	usecase telemetriesUsecases.IGpsUsecase
 }
 
-func NewGpsController(usecase usecases.GpsUsecase) GpsController {
+func NewGpsController(usecase telemetriesUsecases.IGpsUsecase) GpsController {
 	return GpsController{usecase: usecase}
 }
 
 func (c *GpsController) CreateGps(ctx *gin.Context) {
 
-	var gpsDto dtos.CreateGpsDto
+	var gpsDto telemetriesDtos.CreateGpsDto
 
 	if !validators.BindAndValidate(ctx, &gpsDto) {
 		return

@@ -6,6 +6,10 @@ import (
 	"v3-test/internal/repositories/telemetriesRepositories"
 )
 
+type IGyroscopeUsecase interface {
+	CreateGyroscope(gyroscopeDto dtos.CreateGyroscopeDto) (models.GyroscopeModel, error)
+}
+
 type GyroscopeUsecase struct {
 	repo telemetriesRepositories.GyroscopeRepository
 }

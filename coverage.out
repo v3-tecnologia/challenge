@@ -1,0 +1,26 @@
+mode: set
+v3-test/internal/controllers/telemetriesControllers/gps_controller.go:16.78,18.2 1 1
+v3-test/internal/controllers/telemetriesControllers/gps_controller.go:20.53,24.47 2 1
+v3-test/internal/controllers/telemetriesControllers/gps_controller.go:24.47,26.3 1 1
+v3-test/internal/controllers/telemetriesControllers/gps_controller.go:28.2,29.16 2 1
+v3-test/internal/controllers/telemetriesControllers/gps_controller.go:29.16,32.3 2 1
+v3-test/internal/controllers/telemetriesControllers/gps_controller.go:33.2,33.55 1 1
+v3-test/internal/controllers/telemetriesControllers/gyroscope_controller.go:16.96,20.2 1 1
+v3-test/internal/controllers/telemetriesControllers/gyroscope_controller.go:22.65,24.53 2 1
+v3-test/internal/controllers/telemetriesControllers/gyroscope_controller.go:24.53,26.3 1 1
+v3-test/internal/controllers/telemetriesControllers/gyroscope_controller.go:28.2,29.16 2 1
+v3-test/internal/controllers/telemetriesControllers/gyroscope_controller.go:29.16,32.3 2 1
+v3-test/internal/controllers/telemetriesControllers/gyroscope_controller.go:33.2,33.61 1 1
+v3-test/internal/controllers/telemetriesControllers/temeletries_test_helpers.go:3.30,5.2 1 1
+v3-test/internal/usecases/commonUsecases/photo_usecase.go:18.76,20.2 1 1
+v3-test/internal/usecases/commonUsecases/photo_usecase.go:22.124,26.16 3 1
+v3-test/internal/usecases/commonUsecases/photo_usecase.go:26.16,28.3 1 1
+v3-test/internal/usecases/commonUsecases/photo_usecase.go:30.2,37.35 2 1
+v3-test/internal/usecases/telemetriesUsecases/gps_usecase.go:18.75,20.2 1 1
+v3-test/internal/usecases/telemetriesUsecases/gps_usecase.go:22.105,30.16 3 1
+v3-test/internal/usecases/telemetriesUsecases/gps_usecase.go:30.16,32.3 1 1
+v3-test/internal/usecases/telemetriesUsecases/gps_usecase.go:34.2,34.20 1 1
+v3-test/internal/usecases/telemetriesUsecases/gyroscope_usecase.go:17.93,19.2 1 1
+v3-test/internal/usecases/telemetriesUsecases/gyroscope_usecase.go:21.113,29.16 3 1
+v3-test/internal/usecases/telemetriesUsecases/gyroscope_usecase.go:29.16,31.3 1 1
+v3-test/internal/usecases/telemetriesUsecases/gyroscope_usecase.go:33.2,33.26 1 1

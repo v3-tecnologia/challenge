@@ -2,25 +2,25 @@ package telemetriesControllers
 
 import (
 	"net/http"
-	dtos "v3-test/internal/dtos/telemetriesDtos"
-	usecases "v3-test/internal/usecases/telemetriesUsecases"
+	"v3-test/internal/dtos/telemetriesDtos"
+	"v3-test/internal/usecases/telemetriesUsecases"
 	"v3-test/internal/validators"
 
 	"github.com/gin-gonic/gin"
 )
 
 type GyroscopeController struct {
-	usecase usecases.GyroscopeUsecase
+	usecase telemetriesUsecases.IGyroscopeUsecase
 }
 
-func NewGyroscopeController(usecase usecases.GyroscopeUsecase) GyroscopeController {
+func NewGyroscopeController(usecase telemetriesUsecases.IGyroscopeUsecase) GyroscopeController {
 	return GyroscopeController{
 		usecase: usecase,
 	}
 }
 
 func (g *GyroscopeController) CreateGyroscope(ctx *gin.Context) {
-	var gyroscopeDto dtos.CreateGyroscopeDto
+	var gyroscopeDto telemetriesDtos.CreateGyroscopeDto
 	if !validators.BindAndValidate(ctx, &gyroscopeDto) {
 		return
 	}

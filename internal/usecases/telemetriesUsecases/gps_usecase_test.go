@@ -8,7 +8,6 @@ import (
 	"v3-test/internal/models/telemetriesModels"
 )
 
-// mockGpsRepo é um mock da interface GpsRepository
 type mockGpsRepo struct {
 	mockCreateFunc func(telemetriesModels.GpsModel) (telemetriesModels.GpsModel, error)
 }

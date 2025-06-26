@@ -7,6 +7,10 @@ import (
 	"v3-test/internal/repositories/telemetriesRepositories"
 )
 
+type IGpsUsecase interface {
+	CreateGps(gpsDto telemetriesDtos.CreateGpsDto) (telemetriesModels.GpsModel, error)
+}
+
 type GpsUsecase struct {
 	repo telemetriesRepositories.GpsRepository
 }
