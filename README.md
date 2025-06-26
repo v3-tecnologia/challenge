@@ -2,6 +2,10 @@
 
 Uma API minimalista para coleta de dados de telemetria de dispositivos, incluindo informações de giroscópio, GPS e fotos. Apresenta uma arquitetura orientada por eventos usando NATS JetStream, com um sistema de autenticação seguro usando JWT, tokens de atualização e controle de acesso baseado em funções.
 
+## Escopo do Desafio
+
+Este projeto foca em cumprir os níveis 1, 2, 3, 5, 6 e 7 do desafio proposto em `CLOUD.md`.
+
 ## Fluxo da Arquitetura
 
 O sistema é projetado com uma arquitetura assíncrona e desacoplada para garantir capacidade de processamento e resistência. A API atua como um gateway leve, publicando dados recebidos em uma fila NATS. Um serviço Worker separado processa os dados da fila e os persiste no banco de dados.
