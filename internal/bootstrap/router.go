@@ -8,6 +8,6 @@ import (
 
 func SetupRouter(controllers Controllers) *gin.Engine {
 	r := gin.Default()
-	routers.TelemetryRouter(r, controllers.GpsController, controllers.GyroscopeController)
+	routers.TelemetryRouter(r, controllers.GpsController, controllers.GyroscopeController, controllers.PhotoController)
 	return r
 }

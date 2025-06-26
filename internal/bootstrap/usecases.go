@@ -1,17 +1,20 @@
 package bootstrap
 
 import (
-	usecases "v3-test/internal/usecases/telemetriesUsecases"
+	"v3-test/internal/usecases/commonUsecases"
+	"v3-test/internal/usecases/telemetriesUsecases"
 )
 
 type Usecases struct {
-	GpsUsecase       usecases.GpsUsecase
-	GyroscopeUsecase usecases.GyroscopeUsecase
+	GpsUsecase       telemetriesUsecases.GpsUsecase
+	GyroscopeUsecase telemetriesUsecases.GyroscopeUsecase
+	PhotoUsecase     commonUsecases.PhotoUsecase
 }
 
 func SetupUsecases(repos Repositories) Usecases {
 	return Usecases{
-		GpsUsecase:       usecases.NewGpsUsecase(repos.GpsRepo),
-		GyroscopeUsecase: usecases.NewGyroscopeUsecase(repos.GyroscopeRepo),
+		GpsUsecase:       telemetriesUsecases.NewGpsUsecase(repos.GpsRepo),
+		GyroscopeUsecase: telemetriesUsecases.NewGyroscopeUsecase(repos.GyroscopeRepo),
+		PhotoUsecase:     commonUsecases.NewPhotoUsecase(repos.PhotoRepo),
 	}
 }
