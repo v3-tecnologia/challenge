@@ -2,21 +2,21 @@ package telemetriesUsecases
 
 import (
 	"time"
-	dtos "v3-test/internal/dtos/telemetriesDtos"
-	models "v3-test/internal/models/telemetriesModels"
-	repositories "v3-test/internal/repositories/telemetriesRepositories"
+	"v3-test/internal/dtos/telemetriesDtos"
+	"v3-test/internal/models/telemetriesModels"
+	"v3-test/internal/repositories/telemetriesRepositories"
 )
 
 type GpsUsecase struct {
-	repo repositories.GpsRepository
+	repo telemetriesRepositories.GpsRepository
 }
 
-func NewGpsUsecase(repo repositories.GpsRepository) GpsUsecase {
+func NewGpsUsecase(repo telemetriesRepositories.GpsRepository) GpsUsecase {
 	return GpsUsecase{repo: repo}
 }
 
-func (u *GpsUsecase) CreateGps(gpsDto dtos.CreateGpsDto) (models.GpsModel, error) {
-	gpsModel := models.GpsModel{
+func (u *GpsUsecase) CreateGps(gpsDto telemetriesDtos.CreateGpsDto) (telemetriesModels.GpsModel, error) {
+	gpsModel := telemetriesModels.GpsModel{
 		Latitude:  gpsDto.Latitude,
 		Longitude: gpsDto.Longitude,
 		Timestamp: time.Now(),
@@ -24,7 +24,7 @@ func (u *GpsUsecase) CreateGps(gpsDto dtos.CreateGpsDto) (models.GpsModel, error
 
 	newGps, err := u.repo.CreateGps(gpsModel)
 	if err != nil {
-		return models.GpsModel{}, err
+		return telemetriesModels.GpsModel{}, err
 	}
 
 	return newGps, nil
