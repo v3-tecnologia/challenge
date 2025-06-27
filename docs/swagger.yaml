@@ -1,0 +1,152 @@
+basePath: /
+definitions:
+  models.ErrorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  models.GPSData:
+    properties:
+      device_id:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      timestamp:
+        type: string
+    type: object
+  models.GyroscopeData:
+    properties:
+      device_id:
+        type: string
+      timestamp:
+        type: string
+      x:
+        type: number
+      "y":
+        type: number
+      z:
+        type: number
+    type: object
+  models.PhotoRequest:
+    properties:
+      device_id:
+        type: string
+      photo:
+        type: string
+      timestamp:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@exemplo.com
+    name: API Support
+  description: Esta é a API para ingestão de dados de telemetria do Desafio Cloud.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: API de Telemetria de Frota
+  version: "1.0"
+paths:
+  /telemetry/gps:
+    post:
+      consumes:
+      - application/json
+      description: Recebe um payload JSON com os dados de GPS, valida, e publica em
+        uma fila NATS para processamento assíncrono.
+      parameters:
+      - description: Dados de GPS
+        in: body
+        name: gps
+        required: true
+        schema:
+          $ref: '#/definitions/models.GPSData'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Enfileira dados de telemetria de GPS
+      tags:
+      - Telemetry
+  /telemetry/gyroscope:
+    post:
+      consumes:
+      - application/json
+      description: Recebe um payload JSON com os dados do giroscópio, valida, e publica
+        em uma fila NATS para processamento assíncrono.
+      parameters:
+      - description: Dados do Giroscópio
+        in: body
+        name: gyroscope
+        required: true
+        schema:
+          $ref: '#/definitions/models.GyroscopeData'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Enfileira dados de telemetria de giroscópio
+      tags:
+      - Telemetry
+  /telemetry/photo:
+    post:
+      consumes:
+      - application/json
+      description: Recebe um payload JSON com os dados da foto, valida, e publica
+        em uma fila NATS para processamento assíncrono.
+      parameters:
+      - description: Dados da Foto a serem enviados
+        in: body
+        name: photo
+        required: true
+        schema:
+          $ref: '#/definitions/models.PhotoRequest'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Enfileira dados de telemetria de foto
+      tags:
+      - Telemetry
+swagger: "2.0"
