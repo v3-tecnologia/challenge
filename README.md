@@ -94,3 +94,7 @@ Para um mergulho profundo em cada aspecto do projeto, acesse nossa documentaçã
 5. **Guia de Segurança e Boas Práticas**  
 
 📎 Acesse a **Documentação Interativa da API (Swagger UI)** (com o sistema em execução)
+
+## Repositório Original da Solução:
+
+https://github.com/emilioGdev/challenge-v3
