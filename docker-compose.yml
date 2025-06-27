@@ -1,0 +1,71 @@
+services:
+  app:
+    build: .
+    container_name: challenge_app_api
+    ports: 
+    - "8080:8080"
+    - "8081:8081"
+    env_file: [.env]
+    command: /app/api
+    depends_on:
+      - db
+      - nats
+
+  worker:
+    build: .
+    container_name: challenge_app_worker
+    ports:
+    - "8082:8082"
+    env_file: [.env]
+    command: /app/worker
+    depends_on:
+      - db
+      - nats
+
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: challenge_prometheus
+    ports: ["9090:9090"]
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+    command: --config.file=/etc/prometheus/prometheus.yml
+    depends_on:
+    - app
+    - worker
+
+  alertmanager:
+    image: prom/alertmanager:v0.25.0
+    container_name: challenge_alertmanager
+    ports: ["9093:9093"]
+    volumes:
+      - ./monitoring/alertmanager:/etc/alertmanager
+    command: --config.file=/etc/alertmanager/config.yml
+  
+  grafana:
+    image: grafana/grafana:9.5.3
+    container_name: challenge_grafana
+    ports: ["3000:3000"]
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+
+  nats:
+    image: nats:2.10-alpine
+    container_name: challenge_nats
+    ports: ["4222:4222", "8222:8222"]
+    command: "-js"
+
+  db:
+    image: postgres:15
+    container_name: challenge_db_postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

@@ -1,0 +1,38 @@
+groups:
+- name: geral
+  rules:
+  - alert: InstanciaForaDoAr
+    expr: up == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Instância {{ $labels.instance }} está fora do ar."
+      description: "O job '{{ $labels.job }}' não conseguiu fazer a coleta da instância {{ $labels.instance }} por mais de 1 minuto."
+
+  - alert: APIAltaTaxaDeErros5xx
+    expr: (sum(rate(http_requests_total{job="telemetry-api",status_code=~"5.."}[2m])) / sum(rate(http_requests_total{job="telemetry-api"}[2m]))) * 100 > 5
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: "API com alta taxa de erros 5xx ({{ $value | printf \"%.2f\" }}%)."
+      description: "A API de telemetria está retornando uma alta porcentagem de erros de servidor. Verificar os logs do container 'app'."
+
+  - alert: APILatenciaAltaP95
+    expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job="telemetry-api"}[2m])) by (le)) > 0.5
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Latência da API está alta (p95 > 0.5s)."
+      description: "95% das requisições para a API estão demorando mais de 500ms para responder. Valor atual: {{ $value }}s."
+
+  - alert: WorkerOciosoComFilaPendente
+    expr: (sum(rate(http_requests_total{job="telemetry-api"}[5m])) > 0) and (sum(rate(nats_messages_processed_total{job="telemetry-worker", status="success"}[5m])) == 0)
+    for: 3m
+    labels:
+      severity: critical
+    annotations:
+      summary: "O Worker parece estar travado ou ocioso."
+      description: "A API está recebendo dados, mas nenhuma mensagem foi processada com sucesso pelo worker nos últimos 3 minutos. Verificar os logs do container 'worker'."
