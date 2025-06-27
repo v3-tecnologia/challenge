@@ -13,8 +13,8 @@ type Controllers struct {
 
 func SetupControllers(usecases Usecases) Controllers {
 	return Controllers{
-		GpsController:       telemetriesControllers.NewGpsController(usecases.GpsUsecase),
-		GyroscopeController: telemetriesControllers.NewGyroscopeController(usecases.GyroscopeUsecase),
-		PhotoController:     commonController.NewPhotoController(usecases.PhotoUsecase),
+		GpsController:       telemetriesControllers.NewGpsController(&usecases.GpsUsecase),
+		GyroscopeController: telemetriesControllers.NewGyroscopeController(&usecases.GyroscopeUsecase),
+		PhotoController:     commonController.NewPhotoController(&usecases.PhotoUsecase),
 	}
 }

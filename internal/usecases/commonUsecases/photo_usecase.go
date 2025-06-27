@@ -10,6 +10,10 @@ import (
 	"v3-test/internal/repositories/commonRepositories"
 )
 
+type IPhotoUsecase interface {
+	UploadPhoto(file *multipart.FileHeader, entity enums.PhotoEntity) (commonModels.PhotoModel, error)
+}
+
 type PhotoUsecase struct {
 	repo    commonRepositories.PhotoRepository
 	storage interfaces.FileStorageInterface

@@ -9,10 +9,10 @@ import (
 )
 
 type PhotoController struct {
-	usecase commonUsecases.PhotoUsecase
+	usecase commonUsecases.IPhotoUsecase
 }
 
-func NewPhotoController(usecase commonUsecases.PhotoUsecase) PhotoController {
+func NewPhotoController(usecase commonUsecases.IPhotoUsecase) PhotoController {
 	return PhotoController{usecase: usecase}
 }
 
@@ -21,7 +21,7 @@ func (c *PhotoController) UploadTelemetryPhoto(ctx *gin.Context) {
 }
 
 func (c *PhotoController) uploadPhoto(ctx *gin.Context, entity enums.PhotoEntity) {
-	file, err := ctx.FormFile("photo")
+	file, err := ctx.FormFile("file")
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get file from form"})
 		return
