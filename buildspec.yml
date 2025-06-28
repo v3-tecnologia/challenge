@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build -t v3-api .
+      - docker tag v3-api:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest
+
+  post_build:
+    commands:
+      - echo Pushing Docker image to ECR...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest
+
+      - echo Preparing ECS task definition...
+      - IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest
+      - sed "s|<IMAGE_URI>|$IMAGE_URI|g" taskdef.yml > taskdef_processed.json
+      - sed "s|<AWS_ACCOUNT_ID>|$AWS_ACCOUNT_ID|g" taskdef.yml > taskdef.yml.tmp
+      - sed "s|<IMAGE_URI>|$IMAGE_URI|g" taskdef.yml.tmp > taskdef_processed.json
+
+
+artifacts:
+  files:
+    - taskdef_processed.json
+    - appspec.yaml
+    - imagedefinitions.json

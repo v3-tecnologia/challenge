@@ -1,0 +1,9 @@
+version: 1
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: taskdef_processed.json
+        LoadBalancerInfo:
+          ContainerName: v3-api
+          ContainerPort: 8080

@@ -1,0 +1,14 @@
+family: v3-test
+networkMode: awsvpc
+containerDefinitions:
+  - name: v3-api
+    image: <IMAGE_URI>
+    portMappings:
+      - containerPort: 8080
+    essential: true
+requiresCompatibilities:
+  - FARGATE
+cpu: 256
+memory: 512
+executionRoleArn: arn:aws:iam::<AWS_ACCOUNT_ID>:role/ecsTaskExecutionRole
+taskRoleArn: arn:aws:iam::<AWS_ACCOUNT_ID>:role/ecsTaskRole
