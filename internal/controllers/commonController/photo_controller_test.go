@@ -44,7 +44,7 @@ func TestUploadTelemetryPhoto_Success(t *testing.T) {
 	// Criando um arquivo fake para upload
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	part, _ := writer.CreateFormFile("photo", "test.jpg")
+	part, _ := writer.CreateFormFile("file", "test.jpg")
 	part.Write([]byte("fake image content"))
 	writer.Close()
 
@@ -91,7 +91,7 @@ func TestUploadTelemetryPhoto_UsecaseError(t *testing.T) {
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	part, _ := writer.CreateFormFile("photo", "test.jpg")
+	part, _ := writer.CreateFormFile("file", "test.jpg")
 	part.Write([]byte("fake image content"))
 	writer.Close()
 

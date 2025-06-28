@@ -1,4 +1,4 @@
-package commonmongorepositories
+package commonMongoRepositories
 
 import (
 	"context"

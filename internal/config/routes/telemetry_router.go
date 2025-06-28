@@ -1,15 +1,16 @@
-package routers
+package routes
 
 import (
 	"v3-test/internal/controllers/commonController"
-	controllers "v3-test/internal/controllers/telemetriesControllers"
+	"v3-test/internal/controllers/telemetriesControllers"
 
 	"github.com/gin-gonic/gin"
 )
 
 func TelemetryRouter(
-	r *gin.Engine, gpsController controllers.GpsController,
-	gyroscopeController controllers.GyroscopeController,
+	r *gin.Engine,
+	gpsController telemetriesControllers.GpsController,
+	gyroscopeController telemetriesControllers.GyroscopeController,
 	photoController commonController.PhotoController,
 ) {
 	api := r.Group("/telemetry")

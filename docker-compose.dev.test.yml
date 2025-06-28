@@ -1,0 +1,20 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-test-data:/data/db
+
+  api:
+    build: .
+    command: go test ./tests/integration/...
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/
+      - MONGODB_NAME=test_db
+
+volumes:
+  mongo-test-data:

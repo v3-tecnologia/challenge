@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	commonmongorepositories "v3-test/internal/infra/mongodb/commonMongoRepositories"
+	commonMongoRepositories "v3-test/internal/infra/mongodb/commonMongoRepositories"
 	"v3-test/internal/infra/mongodb/telemetriesMongoRepositories"
 	"v3-test/internal/repositories/commonRepositories"
 	"v3-test/internal/repositories/telemetriesRepositories"
@@ -19,6 +19,6 @@ func SetupRepositories(db *mongo.Database) Repositories {
 	return Repositories{
 		GpsRepo:       telemetriesMongoRepositories.NewGpsRepositoryMongo(db),
 		GyroscopeRepo: telemetriesMongoRepositories.NewGyroscopeRepositoryMongo(db),
-		PhotoRepo:     commonmongorepositories.NewPhotoMongoRepository(db),
+		PhotoRepo:     commonMongoRepositories.NewPhotoMongoRepository(db),
 	}
 }
