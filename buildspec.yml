@@ -17,12 +17,13 @@ phases:
       - echo Pushing Docker image to ECR...
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest
 
-      - echo Preparing ECS task definition...
-      - IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest
-      - sed "s|<IMAGE_URI>|$IMAGE_URI|g" taskdef.yml > taskdef_processed.json
-      - sed "s|<AWS_ACCOUNT_ID>|$AWS_ACCOUNT_ID|g" taskdef.yml > taskdef.yml.tmp
-      - sed "s|<IMAGE_URI>|$IMAGE_URI|g" taskdef.yml.tmp > taskdef_processed.json
+      - echo Generating imagedefinitions.json...
+      - printf '[{"name":"v3-api","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest > imagedefinitions.json
 
+      - echo Preparing ECS task definition (optional)...
+      - IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest
+      - sed "s|<IMAGE_URI>|$IMAGE_URI|g" taskdef.yml > taskdef.yml.tmp
+      - sed "s|<AWS_ACCOUNT_ID>|$AWS_ACCOUNT_ID|g" taskdef.yml.tmp > taskdef_processed.json
 
 artifacts:
   files:
