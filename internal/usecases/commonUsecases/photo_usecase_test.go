@@ -72,7 +72,7 @@ func TestUploadPhoto_ErrorOnStorage(t *testing.T) {
 		},
 	}
 
-	mockRepo := &mockPhotoRepo{} // não será chamado
+	mockRepo := &mockPhotoRepo{}
 
 	usecase := PhotoUsecase{
 		repo:    mockRepo,
@@ -91,7 +91,7 @@ func TestUploadPhoto_ErrorOnStorage(t *testing.T) {
 }
 
 func TestNewPhotoUsecase(t *testing.T) {
-	mockRepo := &mockPhotoRepo{} // Pode ser vazio
+	mockRepo := &mockPhotoRepo{}
 
 	usecase := NewPhotoUsecase(mockRepo)
 

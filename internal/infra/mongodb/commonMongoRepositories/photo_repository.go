@@ -2,7 +2,6 @@ package commonMongoRepositories
 
 import (
 	"context"
-	"fmt"
 	"v3-test/internal/models/commonModels"
 	"v3-test/internal/repositories/commonRepositories"
 
@@ -21,7 +20,6 @@ func NewPhotoMongoRepository(db *mongo.Database) commonRepositories.PhotoReposit
 }
 
 func (r *PhotoMongoRepository) CreatePhoto(photoModel commonModels.PhotoModel) (commonModels.PhotoModel, error) {
-	fmt.Println("Creating photo in MongoDB repository")
 	result, err := r.collection.InsertOne(context.Background(), photoModel)
 	if err != nil {
 		return commonModels.PhotoModel{}, err

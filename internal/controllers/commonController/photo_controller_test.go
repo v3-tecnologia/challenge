@@ -41,7 +41,6 @@ func TestUploadTelemetryPhoto_Success(t *testing.T) {
 	controller := NewPhotoController(mockUsecase)
 	router := setupPhotoRouter(controller)
 
-	// Criando um arquivo fake para upload
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	part, _ := writer.CreateFormFile("file", "test.jpg")
@@ -59,14 +58,14 @@ func TestUploadTelemetryPhoto_Success(t *testing.T) {
 }
 
 func TestUploadTelemetryPhoto_NoFile(t *testing.T) {
-	mockUsecase := &mockPhotoUsecase{} // Não será usado
+	mockUsecase := &mockPhotoUsecase{}
 
 	controller := NewPhotoController(mockUsecase)
 	router := setupPhotoRouter(controller)
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	// Não adiciona nenhum arquivo
+
 	writer.Close()
 
 	req := httptest.NewRequest("POST", "/telemetry/photo", body)

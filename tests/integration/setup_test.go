@@ -15,7 +15,6 @@ import (
 var app *gin.Engine
 var db *mongo.Database
 
-// TestMain roda antes de todos os testes no pacote
 func TestMain(m *testing.M) {
 	var err error
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
@@ -33,7 +32,6 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-// Limpa as coleções antes de cada teste
 func ClearDatabase(t *testing.T) {
 	collections := []string{"gps", "gyroscope", "photos"}
 

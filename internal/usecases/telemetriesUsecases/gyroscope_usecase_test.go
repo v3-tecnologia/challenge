@@ -8,7 +8,6 @@ import (
 	models "v3-test/internal/models/telemetriesModels"
 )
 
-// Mock da interface GyroscopeRepository
 type mockGyroscopeRepo struct {
 	mockCreateFunc func(models.GyroscopeModel) (models.GyroscopeModel, error)
 }
