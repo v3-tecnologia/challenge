@@ -17,12 +17,12 @@ var db *mongo.Database
 
 func TestMain(m *testing.M) {
 	var err error
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://mongodb:27017/"))
 	if err != nil {
 		log.Fatalf("Erro ao conectar ao MongoDB: %v", err)
 	}
 
-	db = client.Database("test-db")
+	db = client.Database("test_db")
 	app = bootstrap.BuildApp(db)
 
 	code := m.Run()
