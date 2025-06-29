@@ -22,6 +22,8 @@ phases:
       
       - echo Preparing ECS task definition...
       - export IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest
+      - export MONGODB_URI=$MONGODB_URI
+      - export MONGODB_NAME=$MONGODB_NAME
       - envsubst < taskdef.yml > taskdef_processed.json
 
 artifacts:
