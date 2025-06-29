@@ -15,7 +15,7 @@ phases:
   post_build:
     commands:
       - docker push $REPO_URL:$IMAGE_TAG
-      - printf '{"Version":"1.0","ImageURI":"%s"}' $REPO_URL:$IMAGE_TAG > imageDetail.json
+      - printf '[{"name":"%s","imageUri":"%s"}]' "$REPONAME" "$REPO_URL:$IMAGE_TAG" > imagedefinitions.json
       - export IMAGE_URI=$REPO_URL:$IMAGE_TAG
       - envsubst < taskdef-template.json > taskdef.json
       - cat taskdef.json  # (opcional) debug para verificar se substituiu as variáveis
@@ -24,4 +24,4 @@ artifacts:
   files:
     - taskdef.json
     - appspec.yaml
-    - imageDetail.json
+    - imagedefinitions.json
