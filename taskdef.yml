@@ -6,6 +6,11 @@ containerDefinitions:
     portMappings:
       - containerPort: 8080
     essential: true
+    environment:
+      - name: MONGODB_URI
+        value: <MONGODB_URI>
+      - name: MONGODB_NAME
+        value: <MONGODB_NAME>
 requiresCompatibilities:
   - FARGATE
 cpu: 256
