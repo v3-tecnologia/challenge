@@ -2,6 +2,7 @@ package databases
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -15,6 +16,8 @@ var MongoClient *mongo.Client
 func ConnectMongo() *mongo.Database {
 	uri := os.Getenv("MONGODB_URI")
 	dbName := os.Getenv("MONGODB_NAME")
+
+	fmt.Printf("Connecting to MongoDB at %s, database: %s\n", uri, dbName)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
