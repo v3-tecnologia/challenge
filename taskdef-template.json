@@ -1,0 +1,31 @@
+{
+  "family": "v3-api-task",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "name": "v3-api",
+      "image": "$REPO_URL:$IMAGE_TAG",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8080
+        }
+      ],
+      "environment": [
+        {
+          "name": "MONGODB_URI",
+          "value": "$MONGODB_URI"
+        },
+        {
+          "name": "MONGODB_NAME",
+          "value": "$MONGODB_NAME"
+        }
+      ]
+    }
+  ],
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::$AWS_ACCOUNT_ID:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::$AWS_ACCOUNT_ID:role/ecsTaskRole"
+}

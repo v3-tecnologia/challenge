@@ -4,30 +4,24 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
 
   build:
     commands:
-      - echo Building Docker image...
-      - docker build -t v3-api .
-      - docker tag v3-api:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest
+      - export REPO_URL=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$REPONAME
+      - export IMAGE_TAG=$CODEBUILD_BUILD_NUMBER
+      - docker build -t $REPO_URL:$IMAGE_TAG .
 
   post_build:
     commands:
-      - echo Pushing Docker image to ECR...
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest
-
-      - echo Generating imagedefinitions.json...
-      - printf '[{"name":"v3-api","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest > imagedefinitions.json
-      
-      - echo Preparing ECS task definition...
-      - export IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest
-      - export MONGODB_URI=$MONGODB_URI
-      - export MONGODB_NAME=$MONGODB_NAME
-      - envsubst < taskdef.yml > taskdef_processed.json
+      - docker push $REPO_URL:$IMAGE_TAG
+      - printf '{"Version":"1.0","ImageURI":"%s"}' $REPO_URL:$IMAGE_TAG > imageDetail.json
+      - export IMAGE_URI=$REPO_URL:$IMAGE_TAG
+      - envsubst < taskdef-template.json > taskdef.json
+      - cat taskdef.json  # (opcional) debug para verificar se substituiu as variáveis
 
 artifacts:
   files:
-    - taskdef_processed.json
+    - taskdef.json
     - appspec.yaml
-    - imagedefinitions.json
+    - imageDetail.json
