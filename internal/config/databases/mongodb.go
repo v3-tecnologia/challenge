@@ -17,6 +17,12 @@ func ConnectMongo() *mongo.Database {
 	uri := os.Getenv("MONGODB_URI")
 	dbName := os.Getenv("MONGODB_NAME")
 
+	// TODO - Aprender a configurar variáveis de ambiente na AWS
+	if uri == "" || dbName == "" {
+		uri = "mongodb+srv://Pedro_Lomba:lCdQyijr8V3AhjVi@v3-test.rxg1mio.mongodb.net/"
+		dbName = "v3-test"
+	}
+
 	fmt.Printf("Trying to connect to MongoDB at %s, database: %s\n", uri, dbName)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
