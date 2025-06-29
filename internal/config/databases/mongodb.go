@@ -17,6 +17,8 @@ func ConnectMongo() *mongo.Database {
 	uri := os.Getenv("MONGODB_URI")
 	dbName := os.Getenv("MONGODB_NAME")
 
+	fmt.Println("uri/dbName", uri, dbName)
+
 	// TODO - Aprender a configurar variáveis de ambiente na AWS
 	if uri == "" || dbName == "" {
 		uri = "mongodb+srv://Pedro_Lomba:lCdQyijr8V3AhjVi@v3-test.rxg1mio.mongodb.net/"
