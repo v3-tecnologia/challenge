@@ -1,6 +1,8 @@
 package bootstrap
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -15,5 +17,9 @@ func BuildApp(db *mongo.Database) *gin.Engine {
 func Run() error {
 	db := SetupDatabase()
 	router := BuildApp(db)
-	return router.Run(":8080")
+	port := os.Getenv("SERVER_PORT")
+	if port == "" {
+		port = "80" // Default port if not set
+	}
+	return router.Run(`:` + port)
 }
