@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"time"
 
@@ -12,6 +13,24 @@ import (
 )
 
 var MongoClient *mongo.Client
+
+func checkInternet() error {
+	client := http.Client{
+		Timeout: 5 * time.Second,
+	}
+
+	resp, err := client.Get("https://www.google.com")
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("HTTP status not OK: %d", resp.StatusCode)
+	}
+
+	return nil
+}
 
 func ConnectMongo() *mongo.Database {
 	uri := os.Getenv("MONGODB_URI")
@@ -26,6 +45,12 @@ func ConnectMongo() *mongo.Database {
 	}
 
 	fmt.Printf("Trying to connect to MongoDB at %s, database: %s\n", uri, dbName)
+
+	fmt.Println("Checking internet connectivity...")
+	if err := checkInternet(); err != nil {
+		log.Fatalf("Internet connectivity check failed: %v", err)
+	}
+	fmt.Println("Internet connectivity OK")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
