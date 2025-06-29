@@ -2,18 +2,18 @@ family: v3-test
 networkMode: awsvpc
 containerDefinitions:
   - name: v3-api
-    image: <IMAGE_URI>
+    image: $IMAGE_URI
     portMappings:
       - containerPort: 8080
     essential: true
     environment:
       - name: MONGODB_URI
-        value: <MONGODB_URI>
+        value: "$MONGODB_URI"
       - name: MONGODB_NAME
-        value: <MONGODB_NAME>
+        value: "$MONGODB_NAME"
 requiresCompatibilities:
   - FARGATE
 cpu: 256
 memory: 512
-executionRoleArn: arn:aws:iam::<AWS_ACCOUNT_ID>:role/ecsTaskExecutionRole
-taskRoleArn: arn:aws:iam::<AWS_ACCOUNT_ID>:role/ecsTaskRole
+executionRoleArn: arn:aws:iam::$AWS_ACCOUNT_ID:role/ecsTaskExecutionRole
+taskRoleArn: arn:aws:iam::$AWS_ACCOUNT_ID:role/ecsTaskRole

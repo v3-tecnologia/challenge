@@ -21,12 +21,8 @@ phases:
       - printf '[{"name":"v3-api","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest > imagedefinitions.json
       
       - echo Preparing ECS task definition...
-
-      - IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest
-      - sed "s|<IMAGE_URI>|$IMAGE_URI|g" taskdef.yml > taskdef.tmp
-      - sed "s|<AWS_ACCOUNT_ID>|$AWS_ACCOUNT_ID|g" taskdef.tmp > taskdef.tmp2
-      - sed "s|<MONGODB_URI>|$MONGODB_URI|g" taskdef.tmp2 > taskdef.tmp3
-      - sed "s|<MONGODB_NAME>|$MONGODB_NAME|g" taskdef.tmp3 > taskdef_processed.json
+      - export IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/v3-api:latest
+      - envsubst < taskdef.yml > taskdef_processed.json
 
 artifacts:
   files:
