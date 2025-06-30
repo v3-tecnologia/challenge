@@ -1,0 +1,133 @@
+basePath: /
+definitions:
+  main.GpsData:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+      timestamp:
+        type: string
+      unique_id:
+        type: string
+    type: object
+  main.GyroData:
+    properties:
+      timestamp:
+        type: string
+      unique_id:
+        type: string
+      x:
+        type: number
+      "y":
+        type: number
+      z:
+        type: number
+    type: object
+  main.PhotoData:
+    properties:
+      photo:
+        type: string
+      timestamp:
+        type: string
+      unique_id:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: recebe dados de sensores e publica via nats
+  title: api de telemetria
+  version: 0.0.1
+paths:
+  /telemetry/gps:
+    post:
+      consumes:
+      - application/json
+      description: valida e persiste dados de gps
+      parameters:
+      - description: dados do gps
+        in: body
+        name: gps
+        required: true
+        schema:
+          $ref: '#/definitions/main.GpsData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: erro de validação
+          schema:
+            type: string
+        "405":
+          description: método não permitido
+          schema:
+            type: string
+      summary: envia dados de gps
+  /telemetry/gyroscope:
+    post:
+      consumes:
+      - application/json
+      description: valida e persiste dados de giroscópio
+      parameters:
+      - description: dados do giroscópio
+        in: body
+        name: gps
+        required: true
+        schema:
+          $ref: '#/definitions/main.GyroData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: erro de validação
+          schema:
+            type: string
+        "405":
+          description: método não permitido
+          schema:
+            type: string
+      summary: envia dados de giroscópio
+  /telemetry/photo:
+    post:
+      consumes:
+      - application/json
+      description: valida e persiste fotos
+      parameters:
+      - description: foto
+        in: body
+        name: gps
+        required: true
+        schema:
+          $ref: '#/definitions/main.PhotoData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: erro de validação
+          schema:
+            type: string
+        "405":
+          description: método não permitido
+          schema:
+            type: string
+      summary: envia fotos
+swagger: "2.0"

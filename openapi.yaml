@@ -1,0 +1,120 @@
+openapi: 3.0.0
+info:
+  title: api de telemetria
+  version: 0.0.1
+servers:
+  - url: http://localhost:3000
+    description: servidor local
+paths:
+  /telemetry/gyroscope:
+    post:
+      summary: envia dados do giroscópio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GyroData'
+      responses:
+        '200':
+          description: dados recebidos com sucesso
+        '400':
+          description: erro de validação
+        '405':
+          description: método não permitido
+  /telemetry/gps:
+    post:
+      summary: envia dados de GPS
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GpsData'
+      responses:
+        '200':
+          description: dados recebidos com sucesso
+        '400':
+          description: erro de validação
+        '405':
+          description: método não permitido
+  /telemetry/photo:
+    post:
+      summary: envia imagem (png em base64)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhotoData'
+      responses:
+        '200':
+          description: dados recebidos com sucesso
+        '400':
+          description: erro de validação
+        '405':
+          description: método não permitido
+components:
+  schemas:
+    GyroData:
+      type: object
+      required:
+        - unique_id
+        - timestamp
+        - x
+        - y
+        - z
+      properties:
+        unique_id:
+          type: string
+          example: "a2dbb0e6-8ae6-4730-86f1-8de2bec0b90c"
+        timestamp:
+          type: string
+          example: "2025-06-22T15:30:00Z"
+        x:
+          type: number
+          example: 0.012
+        y:
+          type: number
+          example: -0.032
+        z:
+          type: number
+          example: 0.005
+    GpsData:
+      type: object
+      required:
+        - unique_id
+        - timestamp
+        - latitude
+        - longitude
+      properties:
+        unique_id:
+          type: string
+          example: "aa9471bc-ef44-4b24-9b07-272ff9c1718e"
+        timestamp:
+          type: string
+          example: "2025-06-22T15:30:00Z"
+        latitude:
+          type: number
+          example: -23.5505
+        longitude:
+          type: number
+          example: -46.6333
+    PhotoData:
+      type: object
+      required:
+        - unique_id
+        - timestamp
+        - photo
+      properties:
+        unique_id:
+          type: string
+          example: "a9c85bdb-cb41-4829-b106-0fec090c9c2e"
+        timestamp:
+          type: string
+          example: "2025-06-22T15:30:00Z"
+        photo:
+          type: string
+          format: byte
+          description: Imagem codificada em base64
+          example: "iVBORw0KGgoAAAANSUhEUgAAB4AAAAHgCAYAAAD... (truncado)"
