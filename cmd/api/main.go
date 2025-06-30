@@ -18,8 +18,13 @@ func main() {
 	gyroscopeService := service.NewGyroscopeService(gyroscopeRepository)
 	gyroscopeController := controller.NewGyroscopeController(gyroscopeService)
 
+	gpsRepository := repository.NewGPSRepository(db)
+	gpsService := service.NewGPSService(gpsRepository)
+	gpsController := controller.NewGPSController(gpsService)
+
 	c := router.Controllers{
 		Gyro: gyroscopeController,
+		GPS:  gpsController,
 	}
 	r := router.LoadRouter(c)
 	log.Println("🚀 Servidor rodando em http://localhost:5000")

@@ -1,0 +1,71 @@
+package controller
+
+import (
+	"challenge-cloud/internal/models"
+	service "challenge-cloud/internal/services"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"strconv"
+)
+
+type GPSController struct {
+	Service *service.GPSService
+}
+
+func NewGPSController(s *service.GPSService) *GPSController {
+	return &GPSController{Service: s}
+}
+
+func (c *GPSController) CreateGPS(w http.ResponseWriter, r *http.Request) {
+	var data models.GPS
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+		http.Error(w, "invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	if data.MAC == "" {
+		http.Error(w, "MAC address is required", http.StatusBadRequest)
+		return
+	}
+	if data.Latitude == 0 {
+		http.Error(w, "Latitude is required", http.StatusBadRequest)
+		return
+	}
+	if data.Longitude == 0 {
+		http.Error(w, "Longitude is required", http.StatusBadRequest)
+		return
+	}
+
+	if err := c.Service.Save(&data); err != nil {
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(data)
+}
+
+func (c *GPSController) GetGPS(w http.ResponseWriter, r *http.Request) {
+	page := r.URL.Query().Get("page")
+	size := r.URL.Query().Get("size")
+	pageInt, err := strconv.Atoi(page)
+	if err != nil {
+		pageInt = 1
+		fmt.Println("page invalid, n 1")
+	}
+	sizeInt, err := strconv.Atoi(size)
+	if err != nil {
+		sizeInt = 10
+		fmt.Println("limit invalid, n 10")
+	}
+
+	gyro, err := c.Service.GetAll(pageInt, sizeInt)
+	if err != nil {
+		http.Error(w, "GPS not found", http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(gyro)
+}

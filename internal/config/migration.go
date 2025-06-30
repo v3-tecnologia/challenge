@@ -11,6 +11,7 @@ import (
 func RunMigrations(db *gorm.DB) {
 	models := []interface{}{
 		&models.Gyroscope{},
+		&models.GPS{},
 	}
 	for _, m := range models {
 		if err := db.AutoMigrate(m); err != nil {

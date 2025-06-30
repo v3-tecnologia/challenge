@@ -18,5 +18,8 @@ func LoadRouter(c Controllers) *mux.Router {
 	api.HandleFunc("/telemetry/gyroscope", c.Gyro.CreateGyroscope).Methods("POST")
 	api.HandleFunc("/telemetry/gyroscope", c.Gyro.GetGyroscope).Methods("GET")
 
+	api.HandleFunc("/telemetry/gps", c.GPS.CreateGPS).Methods("POST")
+	api.HandleFunc("/telemetry/gps", c.GPS.GetGPS).Methods("GET")
+
 	return api
 }
