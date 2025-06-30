@@ -10,29 +10,26 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type MockGPSRepo struct {
+type MockPhotoRepo struct {
 	mock.Mock
 }
 
-func (m *MockGPSRepo) Create(data *models.GPS) error {
+func (m *MockPhotoRepo) Create(data *models.Photo) error {
 	args := m.Called(data)
 	return args.Error(0)
 }
 
-func (m *MockGPSRepo) GetAll(page, size int) ([]models.GPS, error) {
+func (m *MockPhotoRepo) GetAll(page, size int) ([]models.Photo, error) {
 	args := m.Called(page, size)
-	return args.Get(0).([]models.GPS), args.Error(1)
+	return args.Get(0).([]models.Photo), args.Error(1)
 }
 
-func TestGPSService_Save(t *testing.T) {
-	mockRepo := new(MockGPSRepo)
-	service := service.NewGPSService(mockRepo)
+func TestPhotoService_Save(t *testing.T) {
+	mockRepo := new(MockPhotoRepo)
+	service := service.NewPhotoService(mockRepo)
 
-	// timestamp, err := time.Parse(time.RFC3339, "2025-06-30T12:00:00Z")
-	// assert.Nil(t, err)
-	data := &models.GPS{
-		Longitude: 1.1,
-		Latitude:  2.2,
+	data := &models.Photo{
+		ImageURL:  "url",
 		Timestamp: time.Now(),
 		MAC:       "AA:BB:CC:DD:EE:FF",
 	}
