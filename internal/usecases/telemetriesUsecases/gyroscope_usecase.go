@@ -1,6 +1,7 @@
 package telemetriesUsecases
 
 import (
+	"time"
 	dtos "v3-test/internal/dtos/telemetriesDtos"
 	models "v3-test/internal/models/telemetriesModels"
 	"v3-test/internal/repositories/telemetriesRepositories"
@@ -20,9 +21,10 @@ func NewGyroscopeUsecase(repo telemetriesRepositories.GyroscopeRepository) Gyros
 
 func (u *GyroscopeUsecase) CreateGyroscope(gyroscopeDto dtos.CreateGyroscopeDto) (models.GyroscopeModel, error) {
 	gyroscopeModel := models.GyroscopeModel{
-		X: gyroscopeDto.X,
-		Y: gyroscopeDto.Y,
-		Z: gyroscopeDto.Z,
+		X:         gyroscopeDto.X,
+		Y:         gyroscopeDto.Y,
+		Z:         gyroscopeDto.Z,
+		Timestamp: time.Now(),
 	}
 
 	newGyroscope, err := u.repo.CreateGyroscope(gyroscopeModel)
