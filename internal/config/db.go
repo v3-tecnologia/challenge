@@ -11,8 +11,7 @@ import (
 var DB *gorm.DB
 
 func InitDB() {
-	// Exemplo: usuário root, senha 123, banco telemetry, rodando local na porta padrão
-	dsn := "root:@tcp(127.0.0.1:3306)/telemetry?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := StringConec
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
