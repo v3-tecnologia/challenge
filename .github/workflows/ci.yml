@@ -18,7 +18,7 @@ jobs:
           python-version: '3.11'
 
       - name: Configurar variaveis
-        run: export SECRETE_KEY=senha_falsa
+        run: export SECRET_KEY=senha_falsa
 
       - name: Instalar dependências
         run: |
