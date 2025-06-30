@@ -11,7 +11,7 @@ func SetupRouter(controllers Controllers) *gin.Engine {
 	routes.TelemetryRouter(r, controllers.GpsController, controllers.GyroscopeController, controllers.PhotoController)
 	// health check route
 	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{"status": "API ok"})
+		c.JSON(200, gin.H{"status": "OK"})
 	})
 	return r
 }
