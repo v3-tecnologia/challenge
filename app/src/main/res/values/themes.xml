@@ -1,0 +1,11 @@
+<resources>
+
+    <!-- Tema AppCompat sem ActionBar -->
+    <style name="Theme.V3MVP" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize o tema aqui, se quiser -->
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorPrimaryDark">#3700B3</item>
+        <item name="colorAccent">#03DAC5</item>
+    </style>
+
+</resources>
