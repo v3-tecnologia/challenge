@@ -1,5 +1,6 @@
 # Dockerfile
-FROM public.ecr.aws/docker/library/golang:1.21-alpine
+# FROM public.ecr.aws/docker/library/golang:1.21-alpine
+FROM golang:1.21-alpine
 
 # set working directory
 WORKDIR /go/src/app
