@@ -1,66 +1,71 @@
+# Resposta de Desafio Técnico
+
 <p align="center">
-    <img src="./.github/logo.png" width="200px">
+    <img src="./.github/logo.png" width="200px" alt="Logo do Projeto">
 </p>
 
-<h1 align="center" style="font-weight: bold;">Desafio Técnico da V3</h1>
+## Requisitos
 
-## ❤️ Bem vindos
+- **Python 3.12** ou superior
+- **pip** (gerenciador de pacotes Python)
+- **virtualenv** ou **venv** para ambiente virtual
 
-Olá, tudo certo?
+---
 
-Seja bem vindo ao teste de seleção para novos colaboradores na V3!
+## Configuração do Ambiente
 
-Estamos honrados que você tenha chegado até aqui!
+### 1. Clone o repositório
+```bash
+git clone <url-do-repositorio>
+cd <nome-do-repositorio>
+```
 
-Prepare aquele ☕️, e venha conosco codar e se divertir!
+### 2. Criação do ambiente virtual
 
-## 📚 Desafios Disponíveis
+#### Linux/macOS
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-Este repositório contém três desafios diferentes, cada um focado em uma área específica:
+#### Windows
+```bash
+python3 -m venv venv
+venv\Scripts\activate
+```
 
-1. [Suporte Técnico](SUPPORT.md)
-2. [Desafio Backend](CLOUD.md)
-3. [Desafio Firmware](FIRMWARE.md)
-   
-## Poxa, outro teste?
+### 3. Instalação das dependências
+```bash
+pip install -r requirements.txt
+```
 
-Nós sabemos que os processos de seleção podem ser ingratos! Você investe um tempão e no final pode não ser aprovado!
+### 4. Configuração do banco de dados
+```bash
+python manage.py migrate
+```
 
-Aqui, nós presamos pela **transparência**!
+### 5. Inicialização do servidor
+```bash
+python manage.py runserver
+```
 
-Este teste tem um **propósito** bastante simples:
+---
 
-> Nós queremos avaliar como você consegue transformar problemas em soluções através de código!
+## Documentação da API
 
-**🚨 IMPORTANTE!** Se você entende que já possui algum projeto pessoal, ou contribuição em um projeto _open-source_ que contemple conhecimentos equivalentes aos que existem neste desafio, então, basta submeter o repositório explicando essa correlação!
+Após iniciar o servidor, acesse a documentação interativa da API disponivel em `http://ip_da_aplicação:8000/swagger/`
+substitua ip_da_aplicação pelo ip que está executando o servidor, ou use localhost para acessar-lo a partir da sua propria maquina
 
-## 🚀 Bora nessa!
+---
 
-Este é um teste para analisarmos como você desempenha ao entender, traduzir, resolver e entregar um código que resolve um problema.
+## Notas
 
-### Dicas
+- Certifique-se de que o ambiente virtual está ativado antes de executar os comandos
+- O arquivo `requirements.txt` contém todas as dependências necessárias
+- Para parar o servidor, use `Ctrl+C` no terminal
+- 
+---
 
-- Documente seu projeto;
-- Faça perguntas sobre os pontos que não ficaram claros para você;
-- Mostre a sua linha de raciocínio;
-- Trabalhe bem o seu README.md;
-  - Explique até onde implementou;
-  - Como o projeto pode ser executado;
-  - Como pode-se testar o projeto;
-
-### Como você deverá desenvolver?
-
-1. Faça um _fork_ deste projeto em seu GitHub pessoal;
-2. Realize as implementações de acordo com cada um dos níveis;
-3. Faça pequenos _commits_;
-4. Depois de sentir que fez o seu máximo, faça um PR para o repositório original.
-
-🚨 **IMPORTANTE!** Não significa que você precisa implementar **todos os níveis** para ser aprovado no processo! Faça até onde se sentir confortável.
-
-## ⏰ Tempo para Entrega
-
-Quanto antes você enviar, mais cuidado podemos ter na revisão do seu teste. Faça no seu tempo, mas mantenha a qualidade!
-
-**Mas não desista! Envie até onde conseguir.**
-
-Boa sorte! 🍀
+## Agradecimentos
+Gostaria de agradecer à V3 pela oportunidade de demonstrar minhas habilidades técnicas através deste desafio.
+Espero muito conseguir avançar no processo seletivo e contribuir com meu conhecimento para esta incrível empresa.
