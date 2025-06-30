@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy # <-- Adicionado: app só inicia quando o MySQL estiver "saudável"
+    env_file:
+      - .env
+    restart: on-failure
+
+  mysql:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: telemetry
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"] 
+      interval: 5s 
+      timeout: 10s
+      retries: 10
+      start_period: 30s 
+
+volumes:
+  db_data:

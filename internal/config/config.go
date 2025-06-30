@@ -11,7 +11,7 @@ import (
 
 var (
 	StringConec = ""
-	Porta       = 0
+	Port        = 0
 )
 
 func LoadEnvGorm() {
@@ -20,9 +20,9 @@ func LoadEnvGorm() {
 	if err = godotenv.Load(); err != nil {
 		log.Fatal(err)
 	}
-	Porta, err = strconv.Atoi(os.Getenv("API_PORT"))
+	Port, err = strconv.Atoi(os.Getenv("API_PORT"))
 	if err != nil {
-		Porta = 9000
+		Port = 9000
 	}
 
 	StringConec = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
@@ -32,5 +32,8 @@ func LoadEnvGorm() {
 		os.Getenv("DB_PORT"),
 		os.Getenv("DB_NAME"),
 	)
+
+	fmt.Println(StringConec)
+	fmt.Println(StringConec)
 
 }

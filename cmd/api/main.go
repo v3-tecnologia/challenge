@@ -6,6 +6,7 @@ import (
 	repository "challenge-cloud/internal/repositories/gorm"
 	"challenge-cloud/internal/router"
 	service "challenge-cloud/internal/services"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -34,6 +35,8 @@ func main() {
 		Photo: photoController,
 	}
 	r := router.LoadRouter(c)
-	log.Println("🚀 Servidor rodando em http://localhost:5000")
-	log.Fatal(http.ListenAndServe(":5000", r))
+	port := fmt.Sprintf(":%d", config.Port)
+	log.Printf("🚀 Servidor rodando em http://localhost%s\n", port)
+	log.Fatal(http.ListenAndServe(port, r))
+
 }

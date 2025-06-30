@@ -35,7 +35,7 @@ func TestGyroscopeService_Save(t *testing.T) {
 		Y:         2.2,
 		Z:         3.3,
 		Timestamp: time.Now(),
-		MAC:       "abc123",
+		MAC:       "AA:BB:CC:DD:EE:FF",
 	}
 
 	mockRepo.On("Create", data).Return(nil)
