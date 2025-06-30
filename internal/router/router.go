@@ -9,7 +9,7 @@ import (
 type Controllers struct {
 	Gyro  *controller.GyroscopeController
 	GPS   *controller.GPSController
-	Photo *controller.GyroscopeController
+	Photo *controller.PhotoController
 }
 
 func LoadRouter(c Controllers) *mux.Router {
@@ -21,5 +21,7 @@ func LoadRouter(c Controllers) *mux.Router {
 	api.HandleFunc("/telemetry/gps", c.GPS.CreateGPS).Methods("POST")
 	api.HandleFunc("/telemetry/gps", c.GPS.GetGPS).Methods("GET")
 
+	api.HandleFunc("/telemetry/photo", c.Photo.CreatePhoto).Methods("POST")
+	api.HandleFunc("/telemetry/photo", c.Photo.GetPhoto).Methods("GET")
 	return api
 }

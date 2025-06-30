@@ -2,15 +2,20 @@ package service
 
 import (
 	"challenge-cloud/internal/models"
-	repository "challenge-cloud/internal/repositories"
+	repository "challenge-cloud/internal/repositories/contracts"
 )
 
 type GyroscopeService struct {
-	Repo *repository.GyroscopeRepository
+	Repo repository.GyroscopeRepositoryInterface
 }
 
-func NewGyroscopeService(r *repository.GyroscopeRepository) *GyroscopeService {
-	return &GyroscopeService{Repo: r}
+type GyroscopeServiceInterface interface {
+	Save(data *models.Gyroscope) error
+	GetAll(page, size int) ([]models.Gyroscope, error)
+}
+
+func NewGyroscopeService(repo repository.GyroscopeRepositoryInterface) *GyroscopeService {
+	return &GyroscopeService{Repo: repo}
 }
 
 func (s *GyroscopeService) Save(data *models.Gyroscope) error {

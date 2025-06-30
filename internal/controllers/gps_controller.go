@@ -12,10 +12,10 @@ import (
 )
 
 type GPSController struct {
-	Service *service.GPSService
+	Service service.GPSServiceInterface
 }
 
-func NewGPSController(s *service.GPSService) *GPSController {
+func NewGPSController(s service.GPSServiceInterface) *GPSController {
 	return &GPSController{Service: s}
 }
 

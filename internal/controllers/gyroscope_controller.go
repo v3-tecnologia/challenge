@@ -12,10 +12,10 @@ import (
 )
 
 type GyroscopeController struct {
-	Service *service.GyroscopeService
+	Service service.GyroscopeServiceInterface
 }
 
-func NewGyroscopeController(s *service.GyroscopeService) *GyroscopeController {
+func NewGyroscopeController(s service.GyroscopeServiceInterface) *GyroscopeController {
 	return &GyroscopeController{Service: s}
 }
 

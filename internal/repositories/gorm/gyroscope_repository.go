@@ -19,12 +19,6 @@ func (r *GyroscopeRepository) Create(data *models.Gyroscope) error {
 	return r.DB.Create(data).Error
 }
 
-// func (r *GyroscopeRepository) GetAll() ([]models.Gyroscope, error) {
-// 	var gyroscopes []models.Gyroscope
-// 	err := r.DB.Find(&gyroscopes).Error
-// 	return gyroscopes, err
-// }
-
 func (r *GyroscopeRepository) GetAll(page int, pageSize int) ([]models.Gyroscope, error) {
 	// Defaults
 	if page < 1 {
