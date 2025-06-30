@@ -1,4 +1,7 @@
+import json
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
+
 from rest_framework.test import APITestCase
 from . import models
 
@@ -55,6 +58,7 @@ class PhotoModelTest(APITestCase):
             content=b'\x47\x49\x46\x38\x89\x61',  # Simula conteúdo binário de imagem
             content_type='image/jpeg'
         )
+
         photo = models.Photo.objects.create(
             photo=test_image,
             device=self.device
@@ -62,3 +66,17 @@ class PhotoModelTest(APITestCase):
         self.assertTrue(photo.photo.name.startswith('telemetry/photos/test_image'))
         self.assertEqual(photo.device, self.device)
         self.assertIsNotNone(photo.moment)
+
+class IntegrationModelTest(APITestCase):
+    def setUp(self):
+        self.device = { "mac": "00:1B:44:11:3A:B7" }
+
+    def test_gyroscope_creation(self):
+        url = reverse('gyroscope')
+        self.client.post(url, data={"x": 1, "y": 2, "z": 3, "device": self.device}, format='json')
+        self.assertEqual(models.Gyroscope.objects.count(), 1)
+
+    def test_gpsdata_creation(self):
+        url = reverse('gps')
+        self.client.post(url, data={"latitude": 1, "longitude": 2, "device": self.device}, format='json')
+        self.assertEqual(models.GPSData.objects.count(), 1)

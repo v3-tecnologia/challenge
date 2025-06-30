@@ -3,3 +3,4 @@ photos/
 venv
 __pycache__/
 *.pyc
+.idea
