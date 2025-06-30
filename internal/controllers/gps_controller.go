@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type GPSController struct {
@@ -23,20 +25,33 @@ func (c *GPSController) CreateGPS(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid JSON", http.StatusBadRequest)
 		return
 	}
+	validate := validator.New()
+	if err := validate.Struct(&data); err != nil {
+		validationErrors, ok := err.(validator.ValidationErrors)
+		if !ok {
+			http.Error(w, "Unexpected validation error", http.StatusBadRequest)
+			return
+		}
 
-	if data.MAC == "" {
-		http.Error(w, "MAC address is required", http.StatusBadRequest)
-		return
-	}
-	if data.Latitude == 0 {
-		http.Error(w, "Latitude is required", http.StatusBadRequest)
-		return
-	}
-	if data.Longitude == 0 {
-		http.Error(w, "Longitude is required", http.StatusBadRequest)
-		return
-	}
+		messageMap := make(map[string]string)
+		errorMap := make(map[string]string)
 
+		for _, fieldErr := range validationErrors {
+			field := fieldErr.Field()
+			messageMap[field] = fmt.Sprintf("Field %s is require", field)
+			errorMap[field] = fieldErr.Error()
+		}
+
+		response := map[string]interface{}{
+			"message": messageMap,
+			"error":   errorMap,
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(response)
+		return
+	}
 	if err := c.Service.Save(&data); err != nil {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
