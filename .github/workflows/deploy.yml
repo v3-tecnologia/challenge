@@ -1,0 +1,43 @@
+name: 🚀 Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy via SSH
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to VPS via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no user@IP_DO_SERVIDOR << 'EOF'
+            cd /caminho/para/projeto
+            git pull origin main
+            docker compose down
+            docker compose up -d --build
+          EOF
+
+      - name: 📱 WhatsApp Success Notification
+        if: success()
+        run: |
+          MESSAGE="✅ Deploy realizado com sucesso! %0A 🌐 Site: higeia.fredemandu.com.br %0A 🔧 Repo: ${{ github.repository }} %0A 📝 Commit: ${{ github.sha }} %0A 👤 Por: ${{ github.actor }}"
+          ENCODED_MESSAGE=$(printf '%s' "$MESSAGE" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read()))")
+          curl --fail --max-time 30 "https://api.callmebot.com/whatsapp.php?phone=${{ github.phone }}&text=${ENCODED_MESSAGE}&apikey=${{ secrets.CALLMEBOT_API_KEY }}" || echo "Falha ao enviar WhatsApp"
+
+      - name: 📱 WhatsApp Failure Notification
+        if: failure()
+        run: |
+          MESSAGE="❌ Deploy falhou! 💥 - 🔧 Repo: ${{ github.repository }} %0A 📝 Commit: ${{ github.sha }} %0A 👤 Por: ${{ github.actor }}"
+          ENCODED_MESSAGE=$(printf '%s' "$MESSAGE" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read()))")
+          curl --fail --max-time 30 "https://api.callmebot.com/whatsapp.php?phone=${{ github.phone }}&text=${ENCODED_MESSAGE}&apikey=${{ secrets.CALLMEBOT_API_KEY }}" || echo "Falha ao enviar WhatsApp"
