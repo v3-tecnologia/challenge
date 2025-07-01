@@ -1,0 +1,180 @@
+basePath: /
+definitions:
+  dto.CreateUserInput:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.GetJWTInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.GetJWTOutput:
+    properties:
+      access_token:
+        type: string
+    type: object
+  dto.RegisterGpsInput:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+      mac_address:
+        type: string
+      timestamp:
+        type: string
+      user:
+        type: string
+    type: object
+  dto.RegisterGyroscopeInput:
+    properties:
+      mac_address:
+        type: string
+      timestamp:
+        type: string
+      user:
+        type: string
+      x:
+        type: number
+      "y":
+        type: number
+      z:
+        type: number
+    type: object
+  handlers.Error:
+    properties:
+      message:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact:
+    email: igorlopes.ilhabela@gmail.com
+    name: Igor Lopes
+  description: API + Authentication + Documentation
+  termsOfService: http://swagger.io/terms/
+  title: API Desafio V3 (Cloud)
+  version: "1.0"
+paths:
+  /telemetry/gps:
+    post:
+      consumes:
+      - application/json
+      description: Record GPS data
+      parameters:
+      - description: gps cordenate
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterGpsInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Register GPS
+      tags:
+      - telemetry
+  /telemetry/gyroscope:
+    post:
+      consumes:
+      - application/json
+      description: Record Gyroscope data
+      parameters:
+      - description: gyroscope cordenate
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterGyroscopeInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: Register gyroscope
+      tags:
+      - telemetry
+  /users/create:
+    post:
+      consumes:
+      - application/json
+      description: Create user
+      parameters:
+      - description: user request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Error'
+        "500":
+          description: Internal Server Error
+      summary: Create user
+      tags:
+      - users
+  /users/generate_token:
+    post:
+      consumes:
+      - application/json
+      description: Get a user JWT
+      parameters:
+      - description: user credentials
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.GetJWTInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetJWTOutput'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.Error'
+      summary: Get a user JWT
+      tags:
+      - users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

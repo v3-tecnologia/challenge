@@ -1,0 +1,38 @@
+services:
+  mysql:
+    image: mariadb
+    container_name: "mysql-v3"
+    command:
+      --innodb-use-native-aio=0
+      --ignore-db-dir=lost+found
+    volumes:
+      - .docker/db:/var/lib/mysql
+    ports:
+      - 3306:3306
+    tty: true
+    environment:
+      - MARIADB_DATABASE=desafio-v3
+      - MARIADB_ROOT_PASSWORD=root
+    restart: always
+    networks:
+      - redeinterna
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: "pma-v3"
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    links:
+      - mysql
+    restart: always
+    networks:
+      - redeinterna
+
+networks:
+  redeinterna:
+    driver: bridge

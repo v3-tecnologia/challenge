@@ -1,0 +1,280 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API + Authentication + Documentation",
+        "title": "API Desafio V3 (Cloud)",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Igor Lopes",
+            "email": "igorlopes.ilhabela@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8000",
+    "basePath": "/",
+    "paths": {
+        "/telemetry/gps": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Record GPS data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "telemetry"
+                ],
+                "summary": "Register GPS",
+                "parameters": [
+                    {
+                        "description": "gps cordenate",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.RegisterGpsInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/telemetry/gyroscope": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Record Gyroscope data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "telemetry"
+                ],
+                "summary": "Register gyroscope",
+                "parameters": [
+                    {
+                        "description": "gyroscope cordenate",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.RegisterGyroscopeInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/create": {
+            "post": {
+                "description": "Create user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create user",
+                "parameters": [
+                    {
+                        "description": "user request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateUserInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/users/generate_token": {
+            "post": {
+                "description": "Get a user JWT",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get a user JWT",
+                "parameters": [
+                    {
+                        "description": "user credentials",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetJWTInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.GetJWTOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.CreateUserInput": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetJWTInput": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.GetJWTOutput": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.RegisterGpsInput": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "mac_address": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.RegisterGyroscopeInput": {
+            "type": "object",
+            "properties": {
+                "mac_address": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                },
+                "x": {
+                    "type": "number"
+                },
+                "y": {
+                    "type": "number"
+                },
+                "z": {
+                    "type": "number"
+                }
+            }
+        },
+        "handlers.Error": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

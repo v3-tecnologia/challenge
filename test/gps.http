@@ -1,0 +1,13 @@
+POST http://localhost:8000/telemetry/gps HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer xxx 
+
+{
+    "user": "78aed56f-a85b-41a3-afa4-f16bf718a643",
+    "mac_address": "00:1A:2B:3C:4D:5E",
+    "latitude": -23.853345114882476,
+    "longitude": -45.28845610372027,
+    "timestamp": "2025-06-30 10:00:01"
+}
+
+###
