@@ -29,10 +29,13 @@ func main() {
 	photoService := service.NewPhotoService(photoRepository)
 	photoController := controller.NewPhotoController(photoService)
 
+	authController := controller.NewAuthController(db)
+
 	c := router.Controllers{
 		Gyro:  gyroscopeController,
 		GPS:   gpsController,
 		Photo: photoController,
+		Auth:  authController,
 	}
 	r := router.LoadRouter(c)
 	port := fmt.Sprintf(":%d", config.Port)

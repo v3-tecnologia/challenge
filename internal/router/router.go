@@ -10,10 +10,13 @@ type Controllers struct {
 	Gyro  *controller.GyroscopeController
 	GPS   *controller.GPSController
 	Photo *controller.PhotoController
+	Auth  *controller.AuthController
 }
 
 func LoadRouter(c Controllers) *mux.Router {
 	api := mux.NewRouter()
+
+	api.HandleFunc("/auth/login", c.Auth.LoginHandler).Methods("POST")
 
 	api.HandleFunc("/telemetry/gyroscope", c.Gyro.CreateGyroscope).Methods("POST")
 	api.HandleFunc("/telemetry/gyroscope", c.Gyro.GetGyroscope).Methods("GET")

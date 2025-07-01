@@ -1,6 +1,7 @@
 package config
 
 import (
+	seeder "challenge-cloud/internal/seeders"
 	"fmt"
 	"log"
 
@@ -18,6 +19,7 @@ func InitDB() {
 		log.Fatal("❌ Falha ao conectar com o banco MySQL:", err)
 	}
 	RunMigrations(db)
+	seeder.SeedUser(db)
 
 	DB = db
 	fmt.Println("✅ Banco de dados MySQL conectado com sucesso")
