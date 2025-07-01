@@ -1,4 +1,4 @@
-name: 🧪CI - Go Tests
+name: CI - Go Tests
 
 on:
   push:
@@ -8,22 +8,25 @@ on:
 
 jobs:
   test:
-    name: 🧪 Run Go tests with MySQL
+    name: 🧪CI - Go Tests
     runs-on: ubuntu-latest
 
     services:
       mysql:
         image: mysql:8
+        ports:
+          - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: telemetry_test
-        ports:
-          - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root --silent"
+          --health-cmd="mysqladmin ping --silent"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+
+    env:
+      DB_DSN: root:root@tcp(127.0.0.1:3306)/telemetry_test?charset=utf8mb4&parseTime=True&loc=Local
 
     steps:
       - name: Checkout do código
@@ -37,10 +40,5 @@ jobs:
       - name: Instalar dependências
         run: go mod tidy
 
-      - name: Esperar MySQL iniciar (sleep extra opcional)
-        run: sleep 10
-
       - name: Rodar testes
-        env:
-          DB_DSN: root:@tcp(127.0.0.1:3306)/telemetry_test?charset=utf8mb4&parseTime=True&loc=Local
         run: go test ./... -v
