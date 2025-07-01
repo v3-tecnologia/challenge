@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      SECRET_KEY: senha_falsa
+      SECRET_KEY:  ${{ secrets.SECRET_KEY }}
 
     steps:
       - uses: actions/checkout@v3
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: test  # só roda se os testes passarem
     env:
-      SECRET_KEY: senha_falsa
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
     steps:
       - name: Deploy via SSH
@@ -43,9 +43,11 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+
           script: |
             cd /home/${{ secrets.SERVER_USER }}/v3-test
             git pull origin main
             pip install -r requirements.txt
             source venv/bin/activate
+            export SECRET_KEY=${{ secrets.SECRET_KEY }}
             python manage.py migrate
