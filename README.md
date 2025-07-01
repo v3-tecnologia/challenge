@@ -34,11 +34,12 @@ python3 -m venv venv
 venv\Scripts\activate
 ```
 
-### 3. Instalação das dependências
+### 3. Instalação das dependências e configuração de dependencias
+
 ```bash
 pip install -r requirements.txt
 ```
-
+Após isso exporte as variaveis SECRET_KEY e configure seu agente do AWS Rekonation
 ### 4. Configuração do banco de dados
 ```bash
 python manage.py migrate
