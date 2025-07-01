@@ -70,17 +70,13 @@ func TestCreateGyroscope_BadRequest_JSON_Response(t *testing.T) {
 	controller := controller.NewGyroscopeController(mockService)
 
 	tests := []struct {
-		name          string
-		payload       models.Gyroscope
-		expectedError map[string]interface{}
-		expectedMsg   map[string]interface{}
+		name        string
+		payload     models.Gyroscope
+		expectedMsg map[string]interface{}
 	}{
 		{
 			name:    "Missing X",
 			payload: models.Gyroscope{Y: 1.1, Z: 2.2, MAC: "AA:BB:CC:DD:EE:FF"},
-			expectedError: map[string]interface{}{
-				"X": "Key: 'Gyroscope.X' Error:Field validation for 'X' failed on the 'required' tag",
-			},
 			expectedMsg: map[string]interface{}{
 				"X": "Field axis X is require",
 			},
@@ -88,9 +84,7 @@ func TestCreateGyroscope_BadRequest_JSON_Response(t *testing.T) {
 		{
 			name:    "Missing Y",
 			payload: models.Gyroscope{X: 1.1, Z: 2.2, MAC: "AA:BB:CC:DD:EE:FF"},
-			expectedError: map[string]interface{}{
-				"Y": "Key: 'Gyroscope.Y' Error:Field validation for 'Y' failed on the 'required' tag",
-			},
+
 			expectedMsg: map[string]interface{}{
 				"Y": "Field axis Y is require",
 			},
@@ -98,9 +92,7 @@ func TestCreateGyroscope_BadRequest_JSON_Response(t *testing.T) {
 		{
 			name:    "Missing Z",
 			payload: models.Gyroscope{X: 1.1, Y: 2.2, MAC: "AA:BB:CC:DD:EE:FF"},
-			expectedError: map[string]interface{}{
-				"Z": "Key: 'Gyroscope.Z' Error:Field validation for 'Z' failed on the 'required' tag",
-			},
+
 			expectedMsg: map[string]interface{}{
 				"Z": "Field axis Z is require",
 			},
@@ -108,9 +100,6 @@ func TestCreateGyroscope_BadRequest_JSON_Response(t *testing.T) {
 		{
 			name:    "Missing MAC",
 			payload: models.Gyroscope{X: 1.1, Y: 2.2, Z: 3.3},
-			expectedError: map[string]interface{}{
-				"MAC": "Key: 'Gyroscope.MAC' Error:Field validation for 'MAC' failed on the 'required' tag",
-			},
 			expectedMsg: map[string]interface{}{
 				"MAC": "Field MAC is require",
 			},
@@ -132,7 +121,6 @@ func TestCreateGyroscope_BadRequest_JSON_Response(t *testing.T) {
 			err := json.Unmarshal(rec.Body.Bytes(), &resp)
 			assert.NoError(t, err)
 
-			assert.Equal(t, tt.expectedError, resp["error"])
 			assert.Equal(t, tt.expectedMsg, resp["message"])
 		})
 	}

@@ -52,7 +52,7 @@ func TestIntegration_CreatePhoto(t *testing.T) {
 	}
 	body, _ := json.Marshal(payload)
 
-	req := httptest.NewRequest(http.MethodPost, "/telemetry/gyroscope", bytes.NewBuffer(body))
+	req := httptest.NewRequest(http.MethodPost, "/telemetry/photo", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
 	server.ServeHTTP(rec, req)

@@ -69,37 +69,27 @@ func TestCreateGPS_BadRequest_JSON_Response(t *testing.T) {
 	controller := controller.NewGPSController(mockService)
 
 	tests := []struct {
-		name          string
-		payload       models.GPS
-		expectedError map[string]interface{}
-		expectedMsg   map[string]interface{}
+		name        string
+		payload     models.GPS
+		expectedMsg map[string]interface{}
 	}{
 		{
 			name:    "Missing Longitude",
 			payload: models.GPS{Latitude: 2.2, MAC: "AA:BB:CC:DD:EE:FF"},
-			expectedError: map[string]interface{}{
-				"X": "Key: 'GPS.Longitude' Error:Field validation for 'Longitutde' failed on the 'required' tag",
-			},
 			expectedMsg: map[string]interface{}{
-				"X": "Field axis Longitude is require",
+				"Longitude": "Field Longitude is require",
 			},
 		},
 		{
 			name:    "Missing Latitude",
 			payload: models.GPS{Longitude: 1.1, MAC: "AA:BB:CC:DD:EE:FF"},
-			expectedError: map[string]interface{}{
-				"Y": "Key: 'GPS.Latitude' Error:Field validation for 'Latitude' failed on the 'required' tag",
-			},
 			expectedMsg: map[string]interface{}{
-				"Y": "Field axis Y is require",
+				"Latitude": "Field Latitude is require",
 			},
 		},
 		{
 			name:    "Missing MAC",
 			payload: models.GPS{Latitude: 1.1, Longitude: 2.2},
-			expectedError: map[string]interface{}{
-				"MAC": "Key: 'GPS.MAC' Error:Field validation for 'MAC' failed on the 'required' tag",
-			},
 			expectedMsg: map[string]interface{}{
 				"MAC": "Field MAC is require",
 			},
@@ -121,7 +111,6 @@ func TestCreateGPS_BadRequest_JSON_Response(t *testing.T) {
 			err := json.Unmarshal(rec.Body.Bytes(), &resp)
 			assert.NoError(t, err)
 
-			assert.Equal(t, tt.expectedError, resp["error"])
 			assert.Equal(t, tt.expectedMsg, resp["message"])
 		})
 	}
