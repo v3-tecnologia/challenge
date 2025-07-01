@@ -2,6 +2,8 @@ package router
 
 import (
 	controller "challenge-cloud/internal/controllers"
+	middleware "challenge-cloud/internal/middlewares"
+	"net/http"
 
 	"github.com/gorilla/mux"
 )
@@ -18,13 +20,14 @@ func LoadRouter(c Controllers) *mux.Router {
 
 	api.HandleFunc("/auth/login", c.Auth.LoginHandler).Methods("POST")
 
-	api.HandleFunc("/telemetry/gyroscope", c.Gyro.CreateGyroscope).Methods("POST")
-	api.HandleFunc("/telemetry/gyroscope", c.Gyro.GetGyroscope).Methods("GET")
+	api.Handle("/telemetry/gyroscope", middleware.JWTAuth(http.HandlerFunc(c.Gyro.CreateGyroscope))).Methods("POST")
+	api.Handle("/telemetry/gyroscope", middleware.JWTAuth(http.HandlerFunc(c.Gyro.GetGyroscope))).Methods("GET")
 
-	api.HandleFunc("/telemetry/gps", c.GPS.CreateGPS).Methods("POST")
-	api.HandleFunc("/telemetry/gps", c.GPS.GetGPS).Methods("GET")
+	api.Handle("/telemetry/gps", middleware.JWTAuth(http.HandlerFunc(c.GPS.CreateGPS))).Methods("POST")
+	api.Handle("/telemetry/gps", middleware.JWTAuth(http.HandlerFunc(c.GPS.GetGPS))).Methods("GET")
 
-	api.HandleFunc("/telemetry/photo", c.Photo.CreatePhoto).Methods("POST")
-	api.HandleFunc("/telemetry/photo", c.Photo.GetPhoto).Methods("GET")
+	api.Handle("/telemetry/photo", middleware.JWTAuth(http.HandlerFunc(c.Photo.CreatePhoto))).Methods("POST")
+	api.Handle("/telemetry/photo", middleware.JWTAuth(http.HandlerFunc(c.Photo.GetPhoto))).Methods("GET")
+
 	return api
 }
