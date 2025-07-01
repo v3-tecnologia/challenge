@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SECRET_KEY:  ${{ secrets.SECRET_KEY }}
+      FERNET_KEY: ${{ secrets.FERNET_KEY }}
 
     steps:
       - uses: actions/checkout@v3
@@ -35,6 +36,7 @@ jobs:
     needs: test  # só roda se os testes passarem
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      FERNET_KEY: ${{ secrets.FERNET_KEY }}
 
     steps:
       - name: Deploy via SSH
@@ -50,4 +52,5 @@ jobs:
             pip install -r requirements.txt
             source venv/bin/activate
             export SECRET_KEY=${{ secrets.SECRET_KEY }}
+            export FERNET_KEY=${{ secrets.FERNET_KEY }}
             python manage.py migrate
