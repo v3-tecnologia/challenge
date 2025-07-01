@@ -17,6 +17,8 @@ class GPSData(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
 
 class Photo(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.CASCADE)
     photo = models.ImageField('telemetry', upload_to='telemetry/photos')
     moment = models.DateTimeField(auto_now_add=True)
-    device = models.ForeignKey(Device, on_delete=models.CASCADE)
+    hash = models.CharField(max_length=64, null=True)
+    face_contains = models.BooleanField(default=False)

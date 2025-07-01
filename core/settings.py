@@ -1,7 +1,9 @@
 import os
+import logging
 from pathlib import Path
 
 from dotenv import load_dotenv
+import boto3
 
 load_dotenv()
 
@@ -9,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = True
 
-ALLOWED_HOSTS = ['18.228.189.63']
+ALLOWED_HOSTS = ['18.228.189.63', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -88,3 +90,19 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SIMILARITY_THRESHOLD = 90
+REKOGNATION_CLIENT = boto3.client('rekognition', region_name='us-east-1')
+FACE_DATABASE_CLIENT_ID = 'faces_database'
+response = REKOGNATION_CLIENT.list_collections()
+
+if FACE_DATABASE_CLIENT_ID not in response['CollectionIds']:
+    REKOGNATION_CLIENT.create_collection(CollectionId=FACE_DATABASE_CLIENT_ID)
+
+logging.basicConfig(
+    level=logging.INFO,  # ou DEBUG para mais detalhes
+    format='[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
+    datefmt='%d/%m/%Y %H:%M:%S'
+)
+
+LOGGER = logging.getLogger(__name__)
