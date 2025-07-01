@@ -1,8 +1,9 @@
 import hashlib
-import logging
 import json
-import uuid
 
+from django.contrib.contenttypes.models import ContentType
+
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status, parsers
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -12,11 +13,13 @@ from drf_yasg.utils import swagger_auto_schema
 from botocore.exceptions import ClientError
 
 from . import serializers, models
-from .serializers import PhotoSerializer
+from user import models as user_models
+
 from core.settings import REKOGNATION_CLIENT, FACE_DATABASE_CLIENT_ID, LOGGER
 
 
 class GyroscopeApiView(APIView):
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(
         operation_summary="Enviar dados de giroscopio",
         operation_description="Endpoint para enviar dados do giroscópio.",
@@ -29,10 +32,18 @@ class GyroscopeApiView(APIView):
     def post(self, request: Request) -> Response:
         gyroscope_serializer = serializers.GyroscopeSerializer(data=request.data)
         gyroscope_serializer.is_valid(raise_exception=True)
-        gyroscope_serializer.save(moment=None)
+        data_model:models.Gyroscope = gyroscope_serializer.save(moment=None)
+        user_models.Historical.objects.create(
+            user=request.user,
+            action="register gyroscope data",
+            content_type=ContentType.objects.get_for_model(data_model),
+            object_id=data_model.id,
+        )
+
         return Response(gyroscope_serializer.data, status=status.HTTP_201_CREATED)
 
 class GPSDataApiView(APIView):
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(
         operation_summary="Enviar dados de GPS",
         operation_description="Endpoint para enviar dados de GPS",
@@ -45,11 +56,19 @@ class GPSDataApiView(APIView):
     def post(self, request: Request) -> Response:
         gps_serializer = serializers.GPSDataSerializer(data=request.data)
         gps_serializer.is_valid(raise_exception=True)
-        gps_serializer.save(moment=None)
+        data_model = gps_serializer.save(moment=None)
+
+        user_models.Historical.objects.create(
+            user=request.user,
+            action="register gyroscope data",
+            content_type=ContentType.objects.get_for_model(data_model),
+            object_id=data_model.id,
+        )
+
         return Response(gps_serializer.data, status=status.HTTP_201_CREATED)
 
 class PhotoApiView(APIView):
-    parser_classes = [parsers.MultiPartParser]
+    permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
         operation_summary="Enviar Fotos",
@@ -68,10 +87,7 @@ class PhotoApiView(APIView):
             return Response({"error": ["requisicao mal formada"]}, status=status.HTTP_400_BAD_REQUEST)
 
         photo_serializer = serializers.PhotoSerializer(
-            data={
-                'device': json.loads(device),
-                'photo': photo
-            }
+            data={'device': json.loads(device), 'photo': photo}
         )
 
         photo_serializer.is_valid(raise_exception=True)
@@ -86,15 +102,15 @@ class PhotoApiView(APIView):
         if models.Photo.objects.filter(hash=hash_photo).exists():
             cached_model: models.Photo = models.Photo.objects.filter(hash=hash_photo)[0]
 
-            photo_serializer.save(moment=None, hash=hash_photo, photo=photo, face_contains=cached_model.face_contains)
-
-            return Response(
-                {
-                    **photo_serializer.data,
-                    **{"find": "cache"}
-                },
-                status=status.HTTP_201_CREATED
+            data_model = photo_serializer.save(moment=None, hash=hash_photo, photo=photo, face_contains=cached_model.face_contains)
+            user_models.Historical.objects.create(
+                user=request.user,
+                action="register gyroscope data",
+                content_type=ContentType.objects.get_for_model(data_model),
+                object_id=data_model.id,
             )
+
+            return Response({**photo_serializer.data, **{"find": "cache"}}, status=status.HTTP_201_CREATED)
 
 
         try:
@@ -104,13 +120,17 @@ class PhotoApiView(APIView):
                 FaceMatchThreshold=90,
                 MaxFaces=1
             )
-            photo_serializer.save(moment=None, hash=hash_photo, photo=photo, face_contains=True)
+            data_model = photo_serializer.save(moment=None, hash=hash_photo, photo=photo, face_contains=True)
 
         except ClientError:
             LOGGER.error('Rosto não encontrado')
-            photo_serializer.save(moment=None, hash=hash_photo, photo=photo, face_contains=False)
+            data_model = photo_serializer.save(moment=None, hash=hash_photo, photo=photo, face_contains=False)
 
-        return Response(
-            photo_serializer.data,
-            status=status.HTTP_201_CREATED
+        user_models.Historical.objects.create(
+            user=request.user,
+            action="register gyroscope data",
+            content_type=ContentType.objects.get_for_model(data_model),
+            object_id=data_model.id,
         )
+
+        return Response(photo_serializer.data, status=status.HTTP_201_CREATED)

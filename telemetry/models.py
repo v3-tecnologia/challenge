@@ -1,7 +1,8 @@
 from django.db import models
+from . import fields
 
 class Device(models.Model):
-    mac = models.CharField(max_length=17)
+    mac = fields.EncryptedTextField(max_length=32)
 
 class Gyroscope(models.Model):
     x = models.FloatField()

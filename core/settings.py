@@ -1,6 +1,7 @@
 import os
 import logging
 from pathlib import Path
+from datetime import timedelta
 
 from dotenv import load_dotenv
 import boto3
@@ -9,6 +10,8 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ['SECRET_KEY']
+FERNET_KEY = os.environ['FERNET_KEY']
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['18.228.189.63', 'localhost']
@@ -23,8 +26,11 @@ INSTALLED_APPS = [
     #my installed apps
     'rest_framework',
     'drf_yasg',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     #my apps
     'telemetry',
+    'user'
 ]
 
 MIDDLEWARE = [
@@ -106,3 +112,21 @@ logging.basicConfig(
 )
 
 LOGGER = logging.getLogger(__name__)
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '1000/day',
+        'anon': '100/hour',
+    }
+}
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
