@@ -42,3 +42,17 @@ jobs:
 
       - name: Rodar testes
         run: go test ./... -v
+
+      - name: 📱 WhatsApp Success Notification
+        if: success()
+        run: |
+          MESSAGE="✅ CI Tests Passed! %0A 🔧 Repo: ${{ github.repository }} %0A 📝 Commit: ${{ github.sha }} %0A 👤 Actor: ${{ github.actor }}"
+          ENCODED_MESSAGE=$(printf '%s' "$MESSAGE" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read()))")
+          curl --fail --max-time 30 "https://api.callmebot.com/whatsapp.php?phone=554398028767&text=${ENCODED_MESSAGE}&apikey=${{ secrets.CALLMEBOT_API_KEY }}" || echo "Falha ao enviar WhatsApp"
+
+      - name: 📱 WhatsApp Failure Notification
+        if: failure()
+        run: |
+          MESSAGE="❌ CI Tests Failed! 💥 %0A 🔧 Repo: ${{ github.repository }} %0A 📝 Commit: ${{ github.sha }} %0A 👤 Actor: ${{ github.actor }}"
+          ENCODED_MESSAGE=$(printf '%s' "$MESSAGE" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read()))")
+          curl --fail --max-time 30 "https://api.callmebot.com/whatsapp.php?phone=554398028767&text=${ENCODED_MESSAGE}&apikey=${{ secrets.CALLMEBOT_API_KEY }}" || echo "Falha ao enviar WhatsApp"
