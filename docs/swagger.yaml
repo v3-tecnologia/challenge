@@ -1,0 +1,135 @@
+definitions:
+  models.GPSDTO:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    required:
+    - latitude
+    - longitude
+    type: object
+  models.GyroscopeDTO:
+    properties:
+      x:
+        type: number
+      "y":
+        type: number
+      z:
+        type: number
+    required:
+    - x
+    - "y"
+    - z
+    type: object
+info:
+  contact: {}
+paths:
+  /telemetry/gps:
+    post:
+      consumes:
+      - application/json
+      description: Recebe dados do GPS e os salva no banco de dados
+      parameters:
+      - description: Dados do GPS
+        in: body
+        name: gps
+        required: true
+        schema:
+          $ref: '#/definitions/models.GPSDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Envia dados do GPS
+      tags:
+      - Telemetry
+  /telemetry/gyroscope:
+    post:
+      consumes:
+      - application/json
+      description: Recebe dados do giroscópio e os salva no banco de dados
+      parameters:
+      - description: Dados do Giroscópio
+        in: body
+        name: gyroscope
+        required: true
+        schema:
+          $ref: '#/definitions/models.GyroscopeDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Envia dados do giroscópio
+      tags:
+      - Telemetry
+  /telemetry/photo:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Recebe dados de uma foto e os salva no banco de dados
+      parameters:
+      - description: Arquivo da Foto
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Envia dados de uma foto
+      tags:
+      - Telemetry
+swagger: "2.0"
